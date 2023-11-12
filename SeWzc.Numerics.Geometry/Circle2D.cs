@@ -30,6 +30,19 @@ public readonly record struct Circle2D(Point2D Center, double Radius)
         return line.GetPoint(index == 0 ? position1 : position2);
     }
 
+    public Point2D? Intersection(Segment2D segment, int index)
+    {
+        var intersection = Intersection(segment.Line, index);
+        if (intersection == null)
+            return null;
+
+        var radio = segment.Line.Projection(intersection.Value) / segment.Length;
+        if (radio is < -1e-10 or > 1 + 1e-10)
+            return null;
+
+        return intersection;
+    }
+
     public Point2D? Intersection(Circle2D other, int index)
     {
         var centerVector = other.Center - Center;
@@ -43,5 +56,10 @@ public readonly record struct Circle2D(Point2D Center, double Radius)
         return index == 0
             ? Center + position * centerUnitVector + h * centerUnitVector.NormalVector
             : Center + position * centerUnitVector - h * centerUnitVector.NormalVector;
+    }
+
+    public AngularMeasure GetAngle(Point2D point)
+    {
+        return AngularMeasure.FromRadian(Math.Atan2(point.Y - Center.Y, point.X - Center.X));
     }
 }

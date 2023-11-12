@@ -1,12 +1,12 @@
 ﻿namespace SeWzc.Numerics.Geometry.GeometryDefinitions;
 
-partial class IntersectionBase
+partial class IntersectionDefinitionBase
 {
-    public sealed class SegmentIntersection : IntersectionBase
+    public sealed class SegmentIntersectionDefinition : IntersectionDefinitionBase
     {
         private bool _isValid;
 
-        public SegmentIntersection(Guid id, SegmentDefinitionBase segment1, SegmentDefinitionBase segment2) : base(id)
+        public SegmentIntersectionDefinition(Guid id, SegmentDefinitionBase segment1, SegmentDefinitionBase segment2) : base(id)
         {
             Segment1 = segment1;
             Segment2 = segment2;
@@ -15,6 +15,10 @@ partial class IntersectionBase
 
         public SegmentDefinitionBase Segment1 { get; }
         public SegmentDefinitionBase Segment2 { get; }
+
+        public override CurveDefinitionBase Geometry1 => Segment1;
+        public override CurveDefinitionBase Geometry2 => Segment2;
+        public override int Index => 0;
 
         protected override void UpdateValueCore()
         {

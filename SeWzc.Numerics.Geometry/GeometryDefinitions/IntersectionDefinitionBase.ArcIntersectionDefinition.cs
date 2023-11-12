@@ -2,13 +2,13 @@
 
 namespace SeWzc.Numerics.Geometry.GeometryDefinitions;
 
-partial class IntersectionBase
+partial class IntersectionDefinitionBase
 {
-    public sealed class ArcIntersection : IntersectionBase
+    public sealed class ArcIntersectionDefinition : IntersectionDefinitionBase
     {
         private bool _isValid;
 
-        public ArcIntersection(Guid id, ArcDefinitionBase arc1, ArcDefinitionBase arc2, int index) : base(id)
+        public ArcIntersectionDefinition(Guid id, ArcDefinitionBase arc1, ArcDefinitionBase arc2, int index) : base(id)
         {
             if (index is not (0 or 1))
                 throw new ArgumentException("交点索引必须是 0 或 1。", nameof(index));
@@ -21,7 +21,10 @@ partial class IntersectionBase
 
         public ArcDefinitionBase Arc1 { get; }
         public ArcDefinitionBase Arc2 { get; }
-        public int Index { get; }
+
+        public override CurveDefinitionBase Geometry1 => Arc1;
+        public override CurveDefinitionBase Geometry2 => Arc2;
+        public override int Index { get; }
 
         protected override void UpdateValueCore()
         {

@@ -24,6 +24,11 @@ public readonly record struct Interval(double Start, double End)
     {
         return Start <= value && value <= End;
     }
+
+    public static Interval Create(double a, double b)
+    {
+        return a > b ? new Interval(b, a) : new Interval(a, b);
+    }
 }
 
 public static class IntervalExtensions

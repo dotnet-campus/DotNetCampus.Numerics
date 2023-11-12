@@ -1,6 +1,6 @@
 ﻿namespace SeWzc.Numerics.Geometry.GeometryDefinitions;
 
-public abstract partial class ArcDefinitionBase : GeometryDefinitionBase
+public abstract partial class ArcDefinitionBase : CurveDefinitionBase
 {
     protected ArcDefinitionBase(Guid id) : base(id)
     {
