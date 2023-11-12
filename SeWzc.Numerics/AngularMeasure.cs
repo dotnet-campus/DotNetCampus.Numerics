@@ -26,6 +26,11 @@ public readonly record struct AngularMeasure
     public Vector2D UnitVector => new(Math.Cos(Radian), Math.Sin(Radian));
 
     /// <summary>
+    /// 将角转换为 0 到 2π 之间的角。
+    /// </summary>
+    public AngularMeasure Normalized => FromRadian(Radian >= 0 ? Radian % Math.Tau : Radian % Math.Tau + Math.Tau);
+
+    /// <summary>
     /// 从角度创建角。
     /// </summary>
     /// <param name="degree"></param>
