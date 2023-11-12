@@ -21,6 +21,11 @@ public readonly record struct AngularMeasure
     public double Degree => Radian * 180 / Math.PI;
 
     /// <summary>
+    /// 角对应的单位方向向量。
+    /// </summary>
+    public Vector2D UnitVector => new(Math.Cos(Radian), Math.Sin(Radian));
+
+    /// <summary>
     /// 从角度创建角。
     /// </summary>
     /// <param name="degree"></param>
