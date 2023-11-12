@@ -77,5 +77,10 @@ public readonly record struct AngularMeasure
         return new AngularMeasure(measure.Radian / scalar);
     }
 
+    public static double operator /(AngularMeasure measure1, AngularMeasure measure2)
+    {
+        return measure1.Radian / measure2.Radian;
+    }
+
     #endregion
 }

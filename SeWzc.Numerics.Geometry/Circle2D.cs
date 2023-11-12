@@ -16,4 +16,32 @@ public readonly record struct Circle2D(Point2D Center, double Radius)
     {
         return Center + Radius * angle.UnitVector;
     }
+
+    public Point2D? Intersection(Line2D line, int index)
+    {
+        var projection = line.Projection(Center);
+        var distance = line.Distance(Center);
+        if (distance > Radius)
+            return null;
+
+        var offset = Math.Sqrt(Radius * Radius - distance * distance);
+        var position1 = projection - offset;
+        var position2 = projection + offset;
+        return line.GetPoint(index == 0 ? position1 : position2);
+    }
+
+    public Point2D? Intersection(Circle2D other, int index)
+    {
+        var centerVector = other.Center - Center;
+        var centerDistance = centerVector.Length;
+        if (centerDistance > Radius + other.Radius || centerDistance < Math.Abs(Radius - other.Radius))
+            return null;
+
+        var centerUnitVector = centerVector / centerDistance;
+        var position = (Radius * Radius - other.Radius * other.Radius + centerDistance * centerDistance) / (2 * centerDistance);
+        var h = Math.Sqrt(Radius * Radius - position * position);
+        return index == 0
+            ? Center + position * centerUnitVector + h * centerUnitVector.NormalVector
+            : Center + position * centerUnitVector - h * centerUnitVector.NormalVector;
+    }
 }

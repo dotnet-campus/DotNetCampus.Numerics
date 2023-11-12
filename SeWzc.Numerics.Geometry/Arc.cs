@@ -22,4 +22,48 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
     /// 结束点坐标。
     /// </summary>
     public Point2D EndPoint => Circle.GetPoint(EndAngle);
+
+    public Point2D? Intersection(Line2D line, int index)
+    {
+        var intersections = Circle.Intersection(line, index);
+        if (intersections == null)
+            return null;
+
+        var intersection = intersections.Value;
+        var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / Angle;
+        if (angleRadio is < -1e-10 or > 1 + 1e-10)
+            return null;
+
+        return intersection;
+    }
+
+    public Point2D? Intersection(Segment2D segment, int index)
+    {
+        var intersections = Circle.Intersection(segment.Line, index);
+        if (intersections == null)
+            return null;
+
+        var intersection = intersections.Value;
+        var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / Angle;
+        var lengthRadio = segment.Line.Projection(intersection) / segment.Length;
+        if (angleRadio is < -1e-10 or > 1 + 1e-10 || lengthRadio is < -1e-10 or > 1 + 1e-10)
+            return null;
+
+        return intersection;
+    }
+
+    public Point2D? Intersection(Arc2D other, int index)
+    {
+        var intersections = Circle.Intersection(other.Circle, index);
+        if (intersections == null)
+            return null;
+
+        var intersection = intersections.Value;
+        var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / Angle;
+        var angleRadio2 = ((intersection - other.Circle.Center).Angle - other.StartAngle).Normalized / Angle;
+        if (angleRadio is < -1e-10 or > 1 + 1e-10 || angleRadio2 is < -1e-10 or > 1 + 1e-10)
+            return null;
+
+        return intersection;
+    }
 }

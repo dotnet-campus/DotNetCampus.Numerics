@@ -27,6 +27,11 @@ public readonly record struct Vector2D(double X, double Y)
     /// </summary>
     public AngularMeasure Angle => AngularMeasure.FromRadian(Math.Atan2(Y, X));
 
+    /// <summary>
+    /// 法向量。
+    /// </summary>
+    public Vector2D NormalVector => new(-Y, X);
+
     #region 向量特殊乘法
 
     /// <summary>

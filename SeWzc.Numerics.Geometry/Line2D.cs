@@ -18,6 +18,44 @@ public readonly record struct Line2D(Point2D PointBase, Vector2D UnitDirectionVe
     }
 
     /// <summary>
+    /// 获取点在直线上的投影位置。
+    /// </summary>
+    /// <param name="point"></param>
+    /// <returns></returns>
+    public double Projection(Point2D point)
+    {
+        var vector = point - PointBase;
+        return vector.Projection(UnitDirectionVector);
+    }
+
+    /// <summary>
+    /// 获取点到直线的距离。
+    /// </summary>
+    /// <param name="point"></param>
+    /// <returns></returns>
+    public double Distance(Point2D point)
+    {
+        var vector = point - PointBase;
+        return vector.Det(UnitDirectionVector);
+    }
+
+    /// <summary>
+    /// 获取两条直线的交点。
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public Point2D? Intersection(Line2D other)
+    {
+        var det = UnitDirectionVector.Det(other.UnitDirectionVector);
+        if (Math.Abs(det) < 1e-10)
+            return null;
+
+        var vector = other.PointBase - PointBase;
+        var position = vector.Det(other.UnitDirectionVector) / det;
+        return GetPoint(position);
+    }
+
+    /// <summary>
     /// 通过两个点创建直线。
     /// </summary>
     /// <param name="point1"></param>
