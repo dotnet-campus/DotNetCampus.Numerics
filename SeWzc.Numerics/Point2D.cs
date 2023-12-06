@@ -1,6 +1,6 @@
 ﻿namespace SeWzc.Numerics;
 
-public readonly record struct Point2D(double X, double Y)
+public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vector2D, double>
 {
     #region 运算符重载
 

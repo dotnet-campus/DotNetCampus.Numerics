@@ -25,7 +25,7 @@ public readonly record struct Line2D(Point2D PointBase, Vector2D UnitDirectionVe
     public double Projection(Point2D point)
     {
         var vector = point - PointBase;
-        return vector.Projection(UnitDirectionVector);
+        return vector.GetProjectionOn(UnitDirectionVector);
     }
 
     /// <summary>

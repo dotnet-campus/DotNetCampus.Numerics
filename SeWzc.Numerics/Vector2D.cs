@@ -5,21 +5,26 @@
 /// </summary>
 /// <param name="X"></param>
 /// <param name="Y"></param>
-public readonly record struct Vector2D(double X, double Y)
+public readonly record struct Vector2D(double X, double Y) : IVector<Vector2D, double>
 {
-    /// <summary>
-    /// 模长的平方。
-    /// </summary>
+    /// <inheritdoc />
+    public static int Dimension => 2;
+
+    /// <inheritdoc />
+    public double this[int index] => index switch
+    {
+        0 => X,
+        1 => Y,
+        _ => throw new ArgumentOutOfRangeException(nameof(index), "2 维向量的索引必须是小于 2 的非负数。"),
+    };
+
+    /// <inheritdoc />
     public double SquaredLength => X * X + Y * Y;
 
-    /// <summary>
-    /// 模长。
-    /// </summary>
+    /// <inheritdoc />
     public double Length => Math.Sqrt(SquaredLength);
 
-    /// <summary>
-    /// 单位向量。
-    /// </summary>
+    /// <inheritdoc />
     public Vector2D Normalized => this / Length;
 
     /// <summary>
@@ -32,8 +37,6 @@ public readonly record struct Vector2D(double X, double Y)
     /// </summary>
     public Vector2D NormalVector => new(-Y, X);
 
-    #region 向量特殊乘法
-
     /// <summary>
     /// 行列式。
     /// </summary>
@@ -44,20 +47,11 @@ public readonly record struct Vector2D(double X, double Y)
         return X * other.Y - Y * other.X;
     }
 
-    /// <summary>
-    /// 投影到另一个向量上的投影位置。
-    /// </summary>
-    /// <remarks>
-    /// 投影位置满足：投影值乘以 <paramref name="other" /> 的单位向量等于该向量在 <paramref name="other" /> 上的投影向量。
-    /// </remarks>
-    /// <param name="other"></param>
-    /// <returns>投影位置。</returns>
-    public double Projection(Vector2D other)
+    /// <inheritdoc />
+    public double Dot(Vector2D other)
     {
-        return this * other.Normalized;
+        return this * other;
     }
-
-    #endregion
 
     #region 运算符重载
 
