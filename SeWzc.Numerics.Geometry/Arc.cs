@@ -8,6 +8,8 @@
 /// <param name="Angle">圆心角。</param>
 public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, AngularMeasure Angle)
 {
+    #region 属性
+
     /// <summary>
     /// 圆心角。
     /// </summary>
@@ -22,6 +24,10 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
     /// 结束点坐标。
     /// </summary>
     public Point2D EndPoint => Circle.GetPoint(EndAngle);
+
+    #endregion
+
+    #region 成员方法
 
     public Point2D? Intersection(Line2D line, int index)
     {
@@ -91,4 +97,6 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
     {
         return ((point - Circle.Center).Angle - StartAngle).Normalized;
     }
+
+    #endregion
 }

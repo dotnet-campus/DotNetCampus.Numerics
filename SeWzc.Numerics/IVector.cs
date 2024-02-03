@@ -6,10 +6,16 @@ public interface IVector<TSelf, TNum>
     where TSelf : unmanaged, IVector<TSelf, TNum>
     where TNum : unmanaged, INumber<TNum>
 {
+    #region 静态变量
+
     /// <summary>
     /// 向量维度。
     /// </summary>
     public static abstract int Dimension { get; }
+
+    #endregion
+
+    #region 属性
 
     /// <summary>
     /// 模长的平方。
@@ -26,12 +32,18 @@ public interface IVector<TSelf, TNum>
     /// </summary>
     public TSelf Normalized { get; }
 
+    #endregion
+
+    #region 成员方法
+
     /// <summary>
     /// 向量点乘。
     /// </summary>
     /// <param name="other">另一个向量。</param>
     /// <returns></returns>
     public TNum Dot(TSelf other);
+
+    #endregion
 
     #region 运算符重载
 

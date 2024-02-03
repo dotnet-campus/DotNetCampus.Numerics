@@ -4,8 +4,19 @@ namespace SeWzc.Numerics.Geometry.GeometryDefinitions;
 
 public abstract partial class SegmentDefinitionBase
 {
+    #region 内部类
+
     public sealed class NormalSegmentDefinition : SegmentDefinitionBase
     {
+        #region 属性
+
+        public PointDefinitionBase Point1 { get; }
+        public PointDefinitionBase Point2 { get; }
+
+        #endregion
+
+        #region 构造函数
+
         public NormalSegmentDefinition(Guid id, PointDefinitionBase point1, PointDefinitionBase point2) : base(id)
         {
             Point1 = point1;
@@ -14,8 +25,9 @@ public abstract partial class SegmentDefinitionBase
             UpdateValue();
         }
 
-        public PointDefinitionBase Point1 { get; }
-        public PointDefinitionBase Point2 { get; }
+        #endregion
+
+        #region 成员方法
 
         protected override void UpdateValueCore()
         {
@@ -28,5 +40,9 @@ public abstract partial class SegmentDefinitionBase
         {
             return Point1.IsValid && Point2.IsValid;
         }
+
+        #endregion
     }
+
+    #endregion
 }

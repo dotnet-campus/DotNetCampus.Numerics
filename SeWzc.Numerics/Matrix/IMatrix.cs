@@ -29,12 +29,31 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose>
     /// </summary>
     public static int ColumnCount => TRow.Dimension;
 
+    #endregion
+
+    #region 属性
+
     /// <summary>
     /// 获取矩阵的第 <paramref name="row" /> 行、第 <paramref name="column" /> 列的元素。
     /// </summary>
     /// <param name="row">行的索引。基于 0 的索引。</param>
     /// <param name="column">列的索引。基于 0 的索引。</param>
     public TNum this[int row, int column] { get; }
+
+    /// <summary>
+    /// 获取转置矩阵。
+    /// </summary>
+    /// <returns></returns>
+    public TTranspose Transpose { get; }
+
+    /// <summary>
+    /// Frobenius范数。等于矩阵元素的平方和的平方根。
+    /// </summary>
+    public double FrobeniusNorm { get; }
+
+    #endregion
+
+    #region 成员方法
 
     /// <summary>
     /// 获取矩阵的第 <paramref name="row" /> 行。
@@ -49,17 +68,6 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose>
     /// <param name="column">列的索引。基于 0 的索引。</param>
     /// <returns></returns>
     public TColumn GetColumn(int column);
-
-    /// <summary>
-    /// 获取转置矩阵。
-    /// </summary>
-    /// <returns></returns>
-    public TTranspose Transpose { get; }
-
-    /// <summary>
-    /// Frobenius范数。等于矩阵元素的平方和的平方根。
-    /// </summary>
-    public double FrobeniusNorm { get; }
 
     #endregion
 
@@ -89,10 +97,14 @@ public interface ISquareMatrix<TSelf, TVector, TNum> : IMatrix<TSelf, TVector, T
     where TVector : unmanaged, IVector<TVector, TNum>
     where TNum : unmanaged, INumber<TNum>
 {
+    #region 属性
+
     /// <summary>
     /// 行列式。
     /// </summary>
     public double Determinant { get; }
+
+    #endregion
 
     #region 成员方法
 

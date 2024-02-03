@@ -4,9 +4,28 @@ namespace SeWzc.Numerics.Geometry.GeometryDefinitions;
 
 partial class IntersectionDefinitionBase
 {
+    #region 内部类
+
     public sealed class SegmentArcIntersectionDefinition : IntersectionDefinitionBase
     {
+        #region 私有字段
+
         private bool _isValid;
+
+        #endregion
+
+        #region 属性
+
+        public SegmentDefinitionBase Segment { get; }
+        public ArcDefinitionBase Arc { get; }
+
+        public override CurveDefinitionBase Geometry1 => Segment;
+        public override CurveDefinitionBase Geometry2 => Arc;
+        public override int Index { get; }
+
+        #endregion
+
+        #region 构造函数
 
         public SegmentArcIntersectionDefinition(Guid id, SegmentDefinitionBase segment, ArcDefinitionBase arc, int index) : base(id)
         {
@@ -19,12 +38,9 @@ partial class IntersectionDefinitionBase
             UpdateValueCore();
         }
 
-        public SegmentDefinitionBase Segment { get; }
-        public ArcDefinitionBase Arc { get; }
+        #endregion
 
-        public override CurveDefinitionBase Geometry1 => Segment;
-        public override CurveDefinitionBase Geometry2 => Arc;
-        public override int Index { get; }
+        #region 成员方法
 
         protected override void UpdateValueCore()
         {
@@ -39,5 +55,9 @@ partial class IntersectionDefinitionBase
         {
             return _isValid && Segment.IsValid && Arc.IsValid;
         }
+
+        #endregion
     }
+
+    #endregion
 }

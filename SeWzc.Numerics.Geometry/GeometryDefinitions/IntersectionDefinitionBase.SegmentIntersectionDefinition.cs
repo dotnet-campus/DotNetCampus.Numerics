@@ -2,9 +2,28 @@
 
 partial class IntersectionDefinitionBase
 {
+    #region 内部类
+
     public sealed class SegmentIntersectionDefinition : IntersectionDefinitionBase
     {
+        #region 私有字段
+
         private bool _isValid;
+
+        #endregion
+
+        #region 属性
+
+        public SegmentDefinitionBase Segment1 { get; }
+        public SegmentDefinitionBase Segment2 { get; }
+
+        public override CurveDefinitionBase Geometry1 => Segment1;
+        public override CurveDefinitionBase Geometry2 => Segment2;
+        public override int Index => 0;
+
+        #endregion
+
+        #region 构造函数
 
         public SegmentIntersectionDefinition(Guid id, SegmentDefinitionBase segment1, SegmentDefinitionBase segment2) : base(id)
         {
@@ -13,12 +32,9 @@ partial class IntersectionDefinitionBase
             UpdateValue();
         }
 
-        public SegmentDefinitionBase Segment1 { get; }
-        public SegmentDefinitionBase Segment2 { get; }
+        #endregion
 
-        public override CurveDefinitionBase Geometry1 => Segment1;
-        public override CurveDefinitionBase Geometry2 => Segment2;
-        public override int Index => 0;
+        #region 成员方法
 
         protected override void UpdateValueCore()
         {
@@ -33,5 +49,9 @@ partial class IntersectionDefinitionBase
         {
             return _isValid && Segment1.IsValid && Segment2.IsValid;
         }
+
+        #endregion
     }
+
+    #endregion
 }

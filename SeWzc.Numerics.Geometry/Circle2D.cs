@@ -7,6 +7,8 @@
 /// <param name="Radius">圆半径。</param>
 public readonly record struct Circle2D(Point2D Center, double Radius)
 {
+    #region 成员方法
+
     /// <summary>
     /// 获取圆上的点。
     /// </summary>
@@ -62,4 +64,6 @@ public readonly record struct Circle2D(Point2D Center, double Radius)
     {
         return AngularMeasure.FromRadian(Math.Atan2(point.Y - Center.Y, point.X - Center.X));
     }
+
+    #endregion
 }

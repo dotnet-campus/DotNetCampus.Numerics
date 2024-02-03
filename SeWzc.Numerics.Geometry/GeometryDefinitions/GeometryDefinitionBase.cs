@@ -7,12 +7,13 @@ namespace SeWzc.Numerics.Geometry.GeometryDefinitions;
 /// </summary>
 public abstract class GeometryDefinitionBase
 {
+    #region 私有字段
+
     private readonly ImmutableArray<GeometryDefinitionBase> _dependencies;
 
-    public GeometryDefinitionBase(Guid id)
-    {
-        Id = id;
-    }
+    #endregion
+
+    #region 属性
 
     /// <summary>
     /// 几何定义的 ID。
@@ -55,7 +56,24 @@ public abstract class GeometryDefinitionBase
     /// </remarks>
     public bool IsValid { get; private set; }
 
+    #endregion
+
+    #region 构造函数
+
+    public GeometryDefinitionBase(Guid id)
+    {
+        Id = id;
+    }
+
+    #endregion
+
+    #region 事件
+
     public event GeometryDefinitionValueChangedEventHandler? ValueChanged;
+
+    #endregion
+
+    #region 成员方法
 
     /// <summary>
     /// 更新几何定义的值。
@@ -101,6 +119,8 @@ public abstract class GeometryDefinitionBase
     /// </summary>
     /// <returns>是否有效。</returns>
     protected abstract bool GetNewIsValidCore();
+
+    #endregion
 }
 
 public delegate void GeometryDefinitionValueChangedEventHandler(GeometryDefinitionBase sender);

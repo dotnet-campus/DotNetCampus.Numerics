@@ -2,26 +2,7 @@
 
 public class GeometryDefinitionManager
 {
-    private readonly Dictionary<Guid, GeometryDefinitionBase> _geometryDefinitionDictionary = new();
-    private readonly HashSet<GeometryDefinitionBase> _geometryDefinitions = new();
-    private readonly Dictionary<IntersectionKey, IntersectionDefinitionBase> _intersectionDictionary = new();
-    private readonly HashSet<GeometryDefinitionBase> _validGeometryDefinitions = new();
-
-    public void AddSegmentDefinition(SegmentDefinitionBase segmentDefinition)
-    {
-        var intersectionList = GetIntersectionDefinitions(segmentDefinition, _geometryDefinitions, _intersectionDictionary);
-        AddGeometryDefinitionWithDependencies(segmentDefinition);
-        foreach (var intersectionDefinition in intersectionList)
-            AddGeometryDefinitionWithDependencies(intersectionDefinition);
-    }
-
-    public void AddArcDefinition(ArcDefinitionBase arcDefinition)
-    {
-        var intersectionList = GetIntersectionDefinitions(arcDefinition, _geometryDefinitions, _intersectionDictionary);
-        AddGeometryDefinitionWithDependencies(arcDefinition);
-        foreach (var intersectionDefinition in intersectionList)
-            AddGeometryDefinitionWithDependencies(intersectionDefinition);
-    }
+    #region 静态方法
 
     private static IReadOnlyCollection<IntersectionDefinitionBase> GetIntersectionDefinitions(
         GeometryDefinitionBase geometryDefinition,
@@ -86,6 +67,45 @@ public class GeometryDefinitionManager
         return result;
     }
 
+    #endregion
+
+    #region 私有字段
+
+    private readonly Dictionary<Guid, GeometryDefinitionBase> _geometryDefinitionDictionary = new();
+    private readonly HashSet<GeometryDefinitionBase> _geometryDefinitions = new();
+    private readonly Dictionary<IntersectionKey, IntersectionDefinitionBase> _intersectionDictionary = new();
+    private readonly HashSet<GeometryDefinitionBase> _validGeometryDefinitions = new();
+
+    #endregion
+
+    #region 成员方法
+
+    public void AddSegmentDefinition(SegmentDefinitionBase segmentDefinition)
+    {
+        var intersectionList = GetIntersectionDefinitions(segmentDefinition, _geometryDefinitions, _intersectionDictionary);
+        AddGeometryDefinitionWithDependencies(segmentDefinition);
+        foreach (var intersectionDefinition in intersectionList)
+            AddGeometryDefinitionWithDependencies(intersectionDefinition);
+    }
+
+    public void AddArcDefinition(ArcDefinitionBase arcDefinition)
+    {
+        var intersectionList = GetIntersectionDefinitions(arcDefinition, _geometryDefinitions, _intersectionDictionary);
+        AddGeometryDefinitionWithDependencies(arcDefinition);
+        foreach (var intersectionDefinition in intersectionList)
+            AddGeometryDefinitionWithDependencies(intersectionDefinition);
+    }
+
+    public IReadOnlyCollection<GeometryDefinitionBase> GetValidGeometryDefinitions()
+    {
+        return _validGeometryDefinitions.ToList().AsReadOnly();
+    }
+
+    public IReadOnlyCollection<GeometryDefinitionBase> GetGeometryDefinitions()
+    {
+        return _geometryDefinitions.ToList().AsReadOnly();
+    }
+
     private void AddGeometryDefinitionWithDependencies(GeometryDefinitionBase geometryDefinition)
     {
         foreach (var dependency in geometryDefinition.Dependencies)
@@ -127,15 +147,11 @@ public class GeometryDefinitionManager
             _validGeometryDefinitions.Remove(geometryDefinition);
     }
 
-    public IReadOnlyCollection<GeometryDefinitionBase> GetValidGeometryDefinitions()
-    {
-        return _validGeometryDefinitions.ToList().AsReadOnly();
-    }
+    #endregion
 
-    public IReadOnlyCollection<GeometryDefinitionBase> GetGeometryDefinitions()
-    {
-        return _geometryDefinitions.ToList().AsReadOnly();
-    }
+    #region 内部类
 
     private readonly record struct IntersectionKey(GeometryDefinitionBase Geometry1, GeometryDefinitionBase Geometry2, int Index);
+
+    #endregion
 }

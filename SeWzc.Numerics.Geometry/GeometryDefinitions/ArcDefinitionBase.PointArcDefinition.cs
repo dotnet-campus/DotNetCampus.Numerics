@@ -4,8 +4,20 @@ namespace SeWzc.Numerics.Geometry.GeometryDefinitions;
 
 partial class ArcDefinitionBase
 {
+    #region 内部类
+
     public sealed class PointArcDefinition : ArcDefinitionBase
     {
+        #region 属性
+
+        public PointDefinitionBase Center { get; }
+        public PointDefinitionBase StartPoint { get; }
+        public PointDefinitionBase EndPoint { get; }
+
+        #endregion
+
+        #region 构造函数
+
         public PointArcDefinition(Guid id, PointDefinitionBase Center, PointDefinitionBase StartPoint, PointDefinitionBase EndPoint) : base(id)
         {
             this.Center = Center;
@@ -15,9 +27,9 @@ partial class ArcDefinitionBase
             UpdateValue();
         }
 
-        public PointDefinitionBase Center { get; }
-        public PointDefinitionBase StartPoint { get; }
-        public PointDefinitionBase EndPoint { get; }
+        #endregion
+
+        #region 成员方法
 
         protected override void UpdateValueCore()
         {
@@ -37,5 +49,9 @@ partial class ArcDefinitionBase
         {
             return Center.IsValid && StartPoint.IsValid && EndPoint.IsValid;
         }
+
+        #endregion
     }
+
+    #endregion
 }

@@ -10,16 +10,16 @@ namespace SeWzc.Numerics.InternalSourceGenerators;
 [Generator]
 public class SampleIncrementalSourceGenerator : IIncrementalGenerator
 {
+    #region 静态变量
+
     private const int MaxDimension = 4;
     private static readonly ImmutableArray<string> AxisLowerNames = ImmutableArray.Create("x", "y", "z", "w");
     private static readonly ImmutableArray<string> AxisNames = ImmutableArray.Create("X", "Y", "Z", "W");
     private static readonly ImmutableArray<NumberType> NumberTypes = [new NumberType("float", "F", "MathF.Sqrt"), new NumberType("double", "D", "Math.Sqrt")];
 
-    public void Initialize(IncrementalGeneratorInitializationContext context)
-    {
-        GenerateVector(context);
-        GenerateMatrix(context);
-    }
+    #endregion
+
+    #region 静态方法
 
     /// <summary>
     /// 生成向量。
@@ -95,9 +95,9 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
             "namespace SeWzc.Numerics.Matrix;",
             new CodeBlock(
                 $"""
-                 public readonly partial struct {typeName}({string.Join(", ", RangeSelect(rowDimension, columnDimension, (i, j) => $"{numberType.Name} M{i + 1}{j + 1}"))})
-                    : IMatrix<{typeName}, {rowVectorType}, {columnVectorType}, {numberType.Name}, {transposeTypeName}>
-                 """,
+                public readonly partial struct {typeName}({string.Join(", ", RangeSelect(rowDimension, columnDimension, (i, j) => $"{numberType.Name} M{i + 1}{j + 1}"))})
+                   : IMatrix<{typeName}, {rowVectorType}, {columnVectorType}, {numberType.Name}, {transposeTypeName}>
+                """,
                 [
                     // 行向量
                     ..RangeSelect<CodeBase>(rowDimension,
@@ -197,5 +197,21 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
         return ImmutableCollectionsMarshal.AsImmutableArray(result);
     }
 
+    #endregion
+
+    #region 成员方法
+
+    public void Initialize(IncrementalGeneratorInitializationContext context)
+    {
+        GenerateVector(context);
+        GenerateMatrix(context);
+    }
+
+    #endregion
+
+    #region 内部类
+
     private record NumberType(string Name, string Suffix, string SqrtMethod);
+
+    #endregion
 }

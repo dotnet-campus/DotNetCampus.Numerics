@@ -1,6 +1,4 @@
-﻿using SeWzc.Numerics.Matrix;
-
-namespace SeWzc.Numerics;
+﻿namespace SeWzc.Numerics;
 
 /// <summary>
 /// 2 维向量。
@@ -9,6 +7,8 @@ namespace SeWzc.Numerics;
 /// <param name="Y"></param>
 public readonly partial record struct Vector2D
 {
+    #region 属性
+
     /// <summary>
     /// 向量在极坐标上的角。
     /// </summary>
@@ -19,6 +19,10 @@ public readonly partial record struct Vector2D
     /// </summary>
     public Vector2D NormalVector => new(-Y, X);
 
+    #endregion
+
+    #region 成员方法
+
     /// <summary>
     /// 行列式。
     /// </summary>
@@ -28,4 +32,6 @@ public readonly partial record struct Vector2D
     {
         return X * other.Y - Y * other.X;
     }
+
+    #endregion
 }

@@ -2,9 +2,15 @@
 
 public readonly partial record struct Vector3D
 {
+    #region 构造函数
+
     public Vector3D(Vector2D vector2D, double Z = 0) : this(vector2D.X, vector2D.Y, Z)
     {
     }
+
+    #endregion
+
+    #region 成员方法
 
     /// <summary>
     /// 向量叉乘。
@@ -19,4 +25,6 @@ public readonly partial record struct Vector3D
             X * other.Y - Y * other.X
         );
     }
+
+    #endregion
 }

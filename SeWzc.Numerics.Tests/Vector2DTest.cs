@@ -6,6 +6,8 @@ namespace SeWzc.Numerics.Tests;
 [TestSubject(typeof(Vector2D))]
 public class Vector2DTest
 {
+    #region 成员方法
+
     [Fact(DisplayName = "测试向量的加法。")]
     public void AddTest()
     {
@@ -52,4 +54,6 @@ public class Vector2DTest
         var dot = v1.Dot(v2);
         Assert.Equal(11, dot);
     }
+
+    #endregion
 }

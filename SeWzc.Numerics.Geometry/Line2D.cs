@@ -7,6 +7,23 @@
 /// <param name="UnitDirectionVector"></param>
 public readonly record struct Line2D(Point2D PointBase, Vector2D UnitDirectionVector)
 {
+    #region 静态方法
+
+    /// <summary>
+    /// 通过两个点创建直线。
+    /// </summary>
+    /// <param name="point1"></param>
+    /// <param name="point2"></param>
+    /// <returns></returns>
+    public static Line2D Create(Point2D point1, Point2D point2)
+    {
+        return new Line2D(point1, (point2 - point1).Normalized);
+    }
+
+    #endregion
+
+    #region 成员方法
+
     /// <summary>
     /// 根据位置获取点。
     /// </summary>
@@ -55,14 +72,5 @@ public readonly record struct Line2D(Point2D PointBase, Vector2D UnitDirectionVe
         return GetPoint(position);
     }
 
-    /// <summary>
-    /// 通过两个点创建直线。
-    /// </summary>
-    /// <param name="point1"></param>
-    /// <param name="point2"></param>
-    /// <returns></returns>
-    public static Line2D Create(Point2D point1, Point2D point2)
-    {
-        return new Line2D(point1, (point2 - point1).Normalized);
-    }
+    #endregion
 }
