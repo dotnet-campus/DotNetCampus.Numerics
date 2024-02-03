@@ -10,6 +10,8 @@ namespace SeWzc.Numerics;
 /// </remarks>
 public static class NumericsEqualHelper
 {
+    #region 静态变量
+
     /// <summary>
     /// 接近相等的容差。
     /// </summary>
@@ -25,6 +27,10 @@ public static class NumericsEqualHelper
     /// 适合用在单纯因为浮点数精度问题导致的不相等的情况。
     /// </remarks>
     public const double AlmostTolerance = 1e-10;
+
+    #endregion
+
+    #region 静态方法
 
     /// <summary>
     /// 判断两个浮点数是否近似相等，并且要求进行归一化处理。
@@ -103,6 +109,8 @@ public static class NumericsEqualHelper
     {
         return (a - b).SquaredLength < AlmostTolerance * AlmostTolerance;
     }
+
+    #endregion
 
     #region 是否接近 0
 

@@ -10,10 +10,25 @@
 /// <param name="End"></param>
 public readonly record struct Interval(double Start, double End)
 {
+    #region 静态方法
+
+    public static Interval Create(double a, double b)
+    {
+        return a > b ? new Interval(b, a) : new Interval(a, b);
+    }
+
+    #endregion
+
+    #region 属性
+
     /// <summary>
     /// 区间长度。
     /// </summary>
     public double Length => End - Start;
+
+    #endregion
+
+    #region 成员方法
 
     /// <summary>
     /// 判断一个值是否在区间内。
@@ -25,14 +40,13 @@ public readonly record struct Interval(double Start, double End)
         return Start <= value && value <= End;
     }
 
-    public static Interval Create(double a, double b)
-    {
-        return a > b ? new Interval(b, a) : new Interval(a, b);
-    }
+    #endregion
 }
 
 public static class IntervalExtensions
 {
+    #region 静态方法
+
     /// <summary>
     /// 是否是空集。
     /// </summary>
@@ -196,4 +210,6 @@ public static class IntervalExtensions
         var end = Math.Min(other.GetValueOrDefault().End, interval.GetValueOrDefault().End);
         return start >= end ? null : new Interval(start, end);
     }
+
+    #endregion
 }

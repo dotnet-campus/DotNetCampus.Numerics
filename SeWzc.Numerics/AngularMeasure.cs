@@ -5,10 +5,31 @@
 /// </summary>
 public readonly record struct AngularMeasure
 {
-    private AngularMeasure(double radian)
+    #region 静态方法
+
+    /// <summary>
+    /// 从角度创建角。
+    /// </summary>
+    /// <param name="degree"></param>
+    /// <returns></returns>
+    public static AngularMeasure FromDegree(double degree)
     {
-        Radian = radian;
+        return new AngularMeasure(degree * Math.PI / 180);
     }
+
+    /// <summary>
+    /// 从弧度创建角。
+    /// </summary>
+    /// <param name="radian"></param>
+    /// <returns></returns>
+    public static AngularMeasure FromRadian(double radian)
+    {
+        return new AngularMeasure(radian);
+    }
+
+    #endregion
+
+    #region 属性
 
     /// <summary>
     /// 弧度。
@@ -30,25 +51,16 @@ public readonly record struct AngularMeasure
     /// </summary>
     public AngularMeasure Normalized => FromRadian(Radian >= 0 ? Radian % Math.Tau : Radian % Math.Tau + Math.Tau);
 
-    /// <summary>
-    /// 从角度创建角。
-    /// </summary>
-    /// <param name="degree"></param>
-    /// <returns></returns>
-    public static AngularMeasure FromDegree(double degree)
+    #endregion
+
+    #region 构造函数
+
+    private AngularMeasure(double radian)
     {
-        return new AngularMeasure(degree * Math.PI / 180);
+        Radian = radian;
     }
 
-    /// <summary>
-    /// 从弧度创建角。
-    /// </summary>
-    /// <param name="radian"></param>
-    /// <returns></returns>
-    public static AngularMeasure FromRadian(double radian)
-    {
-        return new AngularMeasure(radian);
-    }
+    #endregion
 
     #region 运算符重载
 
