@@ -47,19 +47,27 @@ public static class NumericsEqualHelper
     }
 
     /// <summary>
-    /// 判断两个浮点数是否近似相等。
+    /// 判断两个浮点数是否近似相等。将两个浮点数中的绝对值较大值作为归一化因子。
     /// </summary>
     public static bool IsNearlyEqual(this double a, double b)
     {
-        return (a - b).IsNearlyZero();
+        return a.Equals(b) || ((a - b) / Math.MaxMagnitude(a, b)).IsNearlyZero();
     }
 
     /// <summary>
-    /// 判断两个浮点数是否几乎相等。
+    /// 判断两个浮点数是否近似相等。将两个浮点数中的绝对值较大值作为归一化因子。
+    /// </summary>
+    public static bool IsNearlyEqual(this float a, float b)
+    {
+        return IsNearlyEqual(a, (double)b);
+    }
+
+    /// <summary>
+    /// 判断两个浮点数是否几乎相等。将两个浮点数中的绝对值较大值作为归一化因子。
     /// </summary>
     public static bool IsAlmostEqual(this double a, double b)
     {
-        return (a - b).IsAlmostZero();
+        return a.Equals(b) || ((a - b) / Math.MaxMagnitude(a, b)).IsAlmostZero();
     }
 
     /// <summary>
