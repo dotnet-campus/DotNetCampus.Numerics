@@ -168,6 +168,7 @@ public class VectorTest
         where TVector : unmanaged, IVector<TVector, TNum>
         where TNum : unmanaged, INumber<TNum>
     {
+#pragma warning disable CS1718
         // ReSharper disable ParameterOnlyUsedForPreconditionCheck.Local
         // ReSharper disable EqualExpressionComparison - 测试相等运算符重载。
         VectorFactory<TVector, TNum>.Test((a, b) =>
@@ -183,6 +184,7 @@ public class VectorTest
         });
         // ReSharper disable EqualExpressionComparison
         // ReSharper restore ParameterOnlyUsedForPreconditionCheck.Local
+#pragma warning restore  CS1718
     }
 
     [Fact(DisplayName = "测试向量的归一化。")]
