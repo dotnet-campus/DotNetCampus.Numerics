@@ -13,7 +13,6 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
     #region 静态变量
 
     private const int MaxDimension = 4;
-    private static readonly ImmutableArray<string> AxisLowerNames = ImmutableArray.Create("x", "y", "z", "w");
     private static readonly ImmutableArray<string> AxisNames = ImmutableArray.Create("X", "Y", "Z", "W");
     private static readonly ImmutableArray<NumberType> NumberTypes = [new NumberType("float", "F", "MathF.Sqrt"), new NumberType("double", "D", "Math.Sqrt")];
 
@@ -48,13 +47,22 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
             new CodeBlock($"public readonly partial record struct {typeName}({parameterList}) : IVector<{typeName}, {numberType.Name}>",
             [
                 "public static int Dimension => " + dimension + ";",
+                $"public static {typeName} Zero => new({string.Join(", ", parameters.Select(_ => "0"))});",
                 $"public {numberType.Name} Length => {numberType.SqrtMethod}(SquaredLength);",
                 $"public {numberType.Name} SquaredLength => {string.Join("+ ", parameters.Select(p => $"{p} * {p}"))};",
                 $"public {typeName} Normalized => this / Length;",
-                $"public {numberType.Name} Dot({typeName} other) => {string.Join("+ ", parameters.Select(p => $"{p} * other.{p}"))};",
+                new CodeCombination(
+                [
+                    $"public {numberType.Name} this[int index] => index switch",
+                    "{",
+                    ..RangeSelect(dimension, i => $"    {i} => {parameters[i]},"),
+                    "    _ => throw new ArgumentOutOfRangeException(nameof(index)),",
+                    "};",
+                ]),
+                $"public {numberType.Name} Dot({typeName} other) => {string.Join(" + ", parameters.Select(p => $"{p} * other.{p}"))};",
                 $"public static {typeName} operator +({typeName} vector1, {typeName} vector2) => new ({string.Join(", ", parameters.Select(p => $"vector1.{p} + vector2.{p}"))});",
                 $"public static {typeName} operator -({typeName} vector1, {typeName} vector2) => new ({string.Join(", ", parameters.Select(p => $"vector1.{p} - vector2.{p}"))});",
-                $"public static {numberType.Name} operator *({typeName} vector1, {typeName} vector2) => {string.Join("+ ", parameters.Select(p => $"vector1.{p} * vector2.{p}"))};",
+                $"public static {numberType.Name} operator *({typeName} vector1, {typeName} vector2) => vector1.Dot(vector2);",
                 $"public static {typeName} operator *({typeName} vector, {numberType.Name} scalar) => new ({string.Join(", ", parameters.Select(p => $"vector.{p} * scalar"))});",
                 $"public static {typeName} operator *({numberType.Name} scalar, {typeName} vector) => new ({string.Join(", ", parameters.Select(p => $"vector.{p} * scalar"))});",
                 $"public static {typeName} operator /({typeName} vector, {numberType.Name} scalar) => new ({string.Join(", ", parameters.Select(p => $"vector.{p} / scalar"))});",

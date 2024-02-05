@@ -2,7 +2,7 @@
 
 namespace SeWzc.Numerics;
 
-public interface IVector<TSelf, TNum>
+public interface IVector<TSelf, TNum> : IEqualityOperators<TSelf, TSelf, bool>
     where TSelf : unmanaged, IVector<TSelf, TNum>
     where TNum : unmanaged, INumber<TNum>
 {
@@ -12,6 +12,11 @@ public interface IVector<TSelf, TNum>
     /// 向量维度。
     /// </summary>
     public static abstract int Dimension { get; }
+
+    /// <summary>
+    /// 零向量。
+    /// </summary>
+    public static abstract TSelf Zero { get; }
 
     #endregion
 
@@ -28,13 +33,19 @@ public interface IVector<TSelf, TNum>
     public TNum Length { get; }
 
     /// <summary>
-    /// 单位向量。
+    /// 单位向量。如果模长为 0，则返回每个分量都为 <see cref="double.NaN" /> 的向量。
     /// </summary>
     public TSelf Normalized { get; }
 
     #endregion
 
     #region 成员方法
+
+    /// <summary>
+    /// 获取向量的第 <paramref name="index" /> 个分量。
+    /// </summary>
+    /// <param name="index"></param>
+    public TNum this[int index] { get; }
 
     /// <summary>
     /// 向量点乘。
