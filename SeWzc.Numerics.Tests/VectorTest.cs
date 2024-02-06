@@ -10,6 +10,8 @@ namespace SeWzc.Numerics.Tests;
 [TestSubject(typeof(IVector<,>))]
 public class VectorTest
 {
+    #region 静态变量
+
     private static readonly ImmutableArray<Type[]> VectorTypes =
     [
         [typeof(Vector2D), typeof(double)],
@@ -19,6 +21,10 @@ public class VectorTest
         [typeof(Vector3F), typeof(float)],
         [typeof(Vector4F), typeof(float)],
     ];
+
+    #endregion
+
+    #region 成员方法
 
     private void Test(string methodName)
     {
@@ -30,6 +36,10 @@ public class VectorTest
                 .Invoke(null, Array.Empty<object?>());
         }
     }
+
+    #endregion
+
+    #region 测试方法
 
     [Fact(DisplayName = "测试向量的加法。")]
     public void AddTest()
@@ -202,15 +212,11 @@ public class VectorTest
             var actual = v.Normalized;
             var length = v.Length;
             if (length is 0)
-            {
                 for (var i = 0; i < TVector.Dimension; i++)
                     Assert.True(actual[i] is 0);
-            }
             else
-            {
                 for (var i = 0; i < TVector.Dimension; i++)
                     Assert.Equal(v[i] / length, actual[i]);
-            }
         });
     }
 
@@ -231,4 +237,6 @@ public class VectorTest
                 Assert.Equal(-v[i], actual[i]);
         });
     }
+
+    #endregion
 }
