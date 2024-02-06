@@ -37,15 +37,15 @@ public interface IVector<TSelf, TNum> : IEqualityOperators<TSelf, TSelf, bool>
     /// </summary>
     public TSelf Normalized { get; }
 
-    #endregion
-
-    #region 成员方法
-
     /// <summary>
     /// 获取向量的第 <paramref name="index" /> 个分量。
     /// </summary>
     /// <param name="index"></param>
     public TNum this[int index] { get; }
+
+    #endregion
+
+    #region 成员方法
 
     /// <summary>
     /// 向量点乘。

@@ -6,6 +6,8 @@ namespace SeWzc.Numerics.Tests;
 [TestSubject(typeof(Vector3D))]
 public class Vector3DTest
 {
+    #region 成员方法
+
     [Theory(DisplayName = "测试向量的行列式。")]
     [InlineData(1, 2, 3, 4, 5, 6, -3, 6, -3)]
     [InlineData(1, 2, -3, -4, 5, 6, 27, 6, 13)]
@@ -22,4 +24,6 @@ public class Vector3DTest
         Assert.Equal(expectedY, cross.Y);
         Assert.Equal(expectedZ, cross.Z);
     }
+
+    #endregion
 }
