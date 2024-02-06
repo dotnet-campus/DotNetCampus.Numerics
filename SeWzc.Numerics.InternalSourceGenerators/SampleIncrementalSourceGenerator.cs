@@ -147,7 +147,7 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
                     $"public {transposeTypeName} Transpose => {transposeTypeName}.CreateFromColumnVectors({string.Join(", ", RangeSelect(rowDimension, i => $"Row{i + 1}"))});",
 
                     // Frobenius范数
-                    $"public double FrobeniusNorm => {sqrtMethod}({string.Join("+ ", RangeSelect(rowDimension, i => $"Row{i + 1}.SquaredLength"))});",
+                    $"public {numberType.Name} FrobeniusNorm => {sqrtMethod}({string.Join("+ ", RangeSelect(rowDimension, i => $"Row{i + 1}.SquaredLength"))});",
 
                     $"public override string ToString() => $\"({string.Join(", ", RangeSelect(rowDimension, i => $"{{Row{i + 1}}}"))})\";",
 

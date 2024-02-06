@@ -45,7 +45,7 @@ public interface IMatrix<TRow, TColumn, TNum>
     /// <summary>
     /// Frobenius范数。等于矩阵元素的平方和的平方根。
     /// </summary>
-    double FrobeniusNorm { get; }
+    TNum FrobeniusNorm { get; }
 
     #endregion
 
