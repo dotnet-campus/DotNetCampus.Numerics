@@ -5,29 +5,25 @@ namespace SeWzc.Numerics.Matrix;
 /// <summary>
 /// 矩阵的接口。
 /// </summary>
-/// <typeparam name="TSelf"></typeparam>
 /// <typeparam name="TRow">每行的向量。</typeparam>
 /// <typeparam name="TColumn">每一列的向量。</typeparam>
 /// <typeparam name="TNum"></typeparam>
-/// <typeparam name="TTranspose"></typeparam>
-public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose>
-    where TSelf : IMatrix<TSelf, TRow, TColumn, TNum, TTranspose>
+public interface IMatrix<TRow, TColumn, TNum>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>
     where TNum : unmanaged, INumber<TNum>
-    where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TSelf>
 {
     #region 静态变量
 
     /// <summary>
     /// 矩阵行数。
     /// </summary>
-    public static int RowCount => TColumn.Dimension;
+    static virtual int RowCount => TColumn.Dimension;
 
     /// <summary>
     /// 矩阵列数。
     /// </summary>
-    public static int ColumnCount => TRow.Dimension;
+    static virtual int ColumnCount => TRow.Dimension;
 
     #endregion
 
@@ -38,18 +34,18 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose>
     /// </summary>
     /// <param name="row">行的索引。基于 0 的索引。</param>
     /// <param name="column">列的索引。基于 0 的索引。</param>
-    public TNum this[int row, int column] { get; }
+    TNum this[int row, int column] { get; }
 
     /// <summary>
     /// 获取转置矩阵。
     /// </summary>
     /// <returns></returns>
-    public TTranspose Transpose { get; }
+    IMatrix<TColumn, TRow, TNum> Transpose { get; }
 
     /// <summary>
     /// Frobenius范数。等于矩阵元素的平方和的平方根。
     /// </summary>
-    public double FrobeniusNorm { get; }
+    double FrobeniusNorm { get; }
 
     #endregion
 
@@ -60,14 +56,37 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose>
     /// </summary>
     /// <param name="row">行的索引。基于 0 的索引。</param>
     /// <returns></returns>
-    public TRow GetRow(int row);
+    TRow GetRow(int row);
 
     /// <summary>
     /// 获取矩阵的第 <paramref name="column" /> 列。
     /// </summary>
     /// <param name="column">列的索引。基于 0 的索引。</param>
     /// <returns></returns>
-    public TColumn GetColumn(int column);
+    TColumn GetColumn(int column);
+
+    #endregion
+}
+
+/// <summary>
+/// 矩阵的接口。
+/// </summary>
+/// <typeparam name="TSelf"></typeparam>
+/// <typeparam name="TRow">每行的向量。</typeparam>
+/// <typeparam name="TColumn">每一列的向量。</typeparam>
+/// <typeparam name="TNum"></typeparam>
+public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TNum>
+    where TSelf : IMatrix<TSelf, TRow, TColumn, TNum>
+    where TRow : unmanaged, IVector<TRow, TNum>
+    where TColumn : unmanaged, IVector<TColumn, TNum>
+    where TNum : unmanaged, INumber<TNum>
+{
+    #region 静态变量
+
+    /// <summary>
+    /// 零矩阵。
+    /// </summary>
+    public static abstract TSelf Zero { get; }
 
     #endregion
 
@@ -88,6 +107,26 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose>
     public static abstract TSelf operator /(TSelf matrix, TNum scalar);
 
     public static abstract TSelf operator -(TSelf matrix);
+
+    #endregion
+}
+
+public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose> : IMatrix<TSelf, TRow, TColumn, TNum>
+    where TSelf : IMatrix<TSelf, TRow, TColumn, TNum, TTranspose>
+    where TRow : unmanaged, IVector<TRow, TNum>
+    where TColumn : unmanaged, IVector<TColumn, TNum>
+    where TNum : unmanaged, INumber<TNum>
+    where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum>
+{
+    #region 属性
+
+    /// <summary>
+    /// 获取转置矩阵。
+    /// </summary>
+    /// <returns></returns>
+    public new TTranspose Transpose { get; }
+
+    IMatrix<TColumn, TRow, TNum> IMatrix<TRow, TColumn, TNum>.Transpose => Transpose;
 
     #endregion
 }

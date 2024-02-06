@@ -107,6 +107,9 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
                    : IMatrix<{typeName}, {rowVectorType}, {columnVectorType}, {numberType.Name}, {transposeTypeName}>
                 """,
                 [
+                    // 零矩阵
+                    $"public static {typeName} Zero => new({string.Join(", ", RangeSelect(rowDimension, columnDimension, (i, j) => "0"))});",
+
                     // 行向量
                     ..RangeSelect<CodeBase>(rowDimension,
                         i => $"public {rowVectorType} Row{i + 1} => new({string.Join(", ", RangeSelect(columnDimension, j => $"M{i + 1}{j + 1}"))});"),
