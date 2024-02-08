@@ -48,5 +48,16 @@ public class Vector2DTest
         Assert.Equal(expectedY, v2.Y);
     }
 
+    [Theory(DisplayName = "测试向量的字符串。")]
+    [InlineData(1, 2, "(1, 2)")]
+    [InlineData(3, 4, "(3, 4)")]
+    [InlineData(-3, -4, "(-3, -4)")]
+    [InlineData(-1, -2, "(-1, -2)")]
+    public void ToStringTest(double x, double y, string expected)
+    {
+        var v = new Vector2D(x, y);
+        Assert.Equal(expected, v.ToString());
+    }
+
     #endregion
 }

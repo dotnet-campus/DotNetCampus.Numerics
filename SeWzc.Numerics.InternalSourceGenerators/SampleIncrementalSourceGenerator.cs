@@ -67,7 +67,7 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
                 $"public static {typeName} operator *({numberType.Name} scalar, {typeName} vector) => new ({string.Join(", ", parameters.Select(p => $"vector.{p} * scalar"))});",
                 $"public static {typeName} operator /({typeName} vector, {numberType.Name} scalar) => new ({string.Join(", ", parameters.Select(p => $"vector.{p} / scalar"))});",
                 $"public static {typeName} operator -({typeName} vector) => new ({string.Join(", ", parameters.Select(p => $"-vector.{p}"))});",
-                $"public override string ToString() => $\"({string.Join(", ", parameters)})\";",
+                $"public override string ToString() => $\"({string.Join(", ", parameters.Select(p => $"{{{p}}}"))})\";",
             ]),
         ]);
         return code;
