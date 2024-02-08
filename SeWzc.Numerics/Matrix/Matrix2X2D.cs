@@ -3,6 +3,9 @@
 public readonly partial record struct Matrix2X2D : ISquareMatrix<Matrix2X2D, Vector2D, double>
 {
     /// <inheritdoc />
+    public static Matrix2X2D Identity { get; } = new(1, 0, 0, 1);
+
+    /// <inheritdoc />
     public double Determinant => M11 * M22 - M12 * M21;
 
     /// <inheritdoc />

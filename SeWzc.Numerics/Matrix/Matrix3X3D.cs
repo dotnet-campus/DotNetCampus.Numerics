@@ -3,6 +3,9 @@
 public readonly partial record struct Matrix3X3D : ISquareMatrix<Matrix3X3D, Vector3D, double>
 {
     /// <inheritdoc />
+    public static Matrix3X3D Identity { get; } = new(1, 0, 0, 0, 1, 0, 0, 0, 1);
+
+    /// <inheritdoc />
     public double Determinant => M11 * (M22 * M33 - M23 * M32) - M12 * (M21 * M33 - M23 * M31) + M13 * (M21 * M32 - M22 * M31);
 
     /// <inheritdoc />
