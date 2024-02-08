@@ -19,6 +19,11 @@ public static class NumericsEqualHelper
     /// 适合用在
     /// </remarks>
     public const double NearlyTolerance = 1e-6;
+    
+    /// <summary>
+    /// 接近相等的容差。
+    /// </summary>
+    public const float NearlyToleranceF = 1e-6f;
 
     /// <summary>
     /// 几乎相等的容差。
@@ -59,7 +64,7 @@ public static class NumericsEqualHelper
     /// </summary>
     public static bool IsNearlyEqual(this float a, float b)
     {
-        return IsNearlyEqual(a, (double)b);
+        return a.Equals(b) || ((a - b) / MathF.MaxMagnitude(a, b)).IsNearlyZero();
     }
 
     /// <summary>
@@ -136,6 +141,18 @@ public static class NumericsEqualHelper
     }
 
     /// <summary>
+    /// 判断浮点数是否近似为 0，并且要求进行归一化处理。
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="tolerance">容差</param>
+    /// <param name="normalizationFactor">归一化因子。</param>
+    /// <returns></returns>
+    public static bool IsCloseZero(this float a, float tolerance, float normalizationFactor)
+    {
+        return Math.Abs(a) < tolerance * normalizationFactor;
+    }
+
+    /// <summary>
     /// 判断浮点数是否近似为 0。
     /// </summary>
     /// <param name="a"></param>
@@ -146,7 +163,18 @@ public static class NumericsEqualHelper
     {
         return Math.Abs(a) < tolerance;
     }
-
+    
+    /// <summary>
+    /// 判断浮点数是否近似为 0。
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="tolerance">容差。</param>
+    /// <returns></returns>
+    public static bool IsCloseZero(this float a, float tolerance)
+    {
+        return Math.Abs(a) < tolerance;
+    }
+    
     /// <summary>
     /// 判断浮点数是否近似为 0，并且要求进行归一化处理。
     /// </summary>
@@ -159,6 +187,17 @@ public static class NumericsEqualHelper
         return a.IsCloseZero(NearlyTolerance, normalizationFactor);
     }
 
+    /// <summary>
+    /// 判断浮点数是否几乎为 0，并且要求进行归一化处理。
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="normalizationFactor">归一化因子。</param>
+    /// <returns></returns>
+    public static bool IsNearlyZero(this float a, float normalizationFactor)
+    {
+        return a.IsCloseZero(NearlyToleranceF, normalizationFactor);
+    }
+    
     /// <summary>
     /// 判断浮点数是否几乎为 0，并且要求进行归一化处理。
     /// </summary>
@@ -178,6 +217,14 @@ public static class NumericsEqualHelper
     public static bool IsNearlyZero(this double a)
     {
         return Math.Abs(a) < NearlyTolerance;
+    }
+
+    /// <summary>
+    /// 判断浮点数是否近似为 0。
+    /// </summary>
+    public static bool IsNearlyZero(this float a)
+    {
+        return Math.Abs(a) < NearlyToleranceF;
     }
 
     /// <summary>
