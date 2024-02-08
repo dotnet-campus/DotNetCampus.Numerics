@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeWzc.Numerics.Geometry", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeWzc.Numerics.InternalSourceGenerators", "SeWzc.Numerics.InternalSourceGenerators\SeWzc.Numerics.InternalSourceGenerators.csproj", "{925FEF64-F67D-4DBC-9E5A-8F28BAB7D1F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeWzc.Numerics.Tests", "SeWzc.Numerics.Tests\SeWzc.Numerics.Tests.csproj", "{6EC36852-5DB9-4DD1-A014-6E01D2DC94AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeWzc.Numerics.Tests", "SeWzc.Numerics.Tests\SeWzc.Numerics.Tests.csproj", "{6EC36852-5DB9-4DD1-A014-6E01D2DC94AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{542C5479-699F-4617-BA64-BF6B29ED9FAC}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
