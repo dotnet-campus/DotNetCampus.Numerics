@@ -1,6 +1,6 @@
 ﻿namespace SeWzc.Numerics.Matrix;
 
-public readonly partial struct Matrix2X2D : ISquareMatrix<Matrix2X2D, Vector2D, double>
+public readonly partial record struct Matrix2X2D : ISquareMatrix<Matrix2X2D, Vector2D, double>
 {
     /// <inheritdoc />
     public double Determinant => M11 * M22 - M12 * M21;

@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace SeWzc.Numerics.Tests;
 
-public static class VectorFactory<TVector, TNum>
+internal static class VectorFactory<TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
     where TNum : unmanaged, INumber<TNum>
 {

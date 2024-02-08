@@ -6,7 +6,7 @@ using SeWzc.Numerics.Matrix;
 
 namespace SeWzc.Numerics.Tests;
 
-public static class MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>
+internal static class MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>
     where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>

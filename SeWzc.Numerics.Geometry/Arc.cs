@@ -5,15 +5,15 @@
 /// </summary>
 /// <param name="Circle">圆弧对应的圆。</param>
 /// <param name="StartAngle">开始角。</param>
-/// <param name="Angle">圆心角。</param>
-public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, AngularMeasure Angle)
+/// <param name="AngleSize">圆心角。</param>
+public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, AngularMeasure AngleSize)
 {
     #region 属性
 
     /// <summary>
     /// 圆心角。
     /// </summary>
-    public AngularMeasure EndAngle => Angle + StartAngle;
+    public AngularMeasure EndAngle => StartAngle + AngleSize;
 
     /// <summary>
     /// 开始点坐标。
@@ -36,7 +36,7 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
             return null;
 
         var intersection = intersections.Value;
-        var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / Angle;
+        var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
         if (angleRadio is < -1e-10 or > 1 + 1e-10)
             return null;
 
@@ -50,7 +50,7 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
             return null;
 
         var intersection = intersections.Value;
-        var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / Angle;
+        var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
         var lengthRadio = segment.Line.Projection(intersection) / segment.Length;
         if (angleRadio is < -1e-10 or > 1 + 1e-10 || lengthRadio is < -1e-10 or > 1 + 1e-10)
             return null;
@@ -66,7 +66,7 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
             return null;
 
         var intersection = intersections.Value;
-        var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / Angle;
+        var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
         if (angleRadio is < -1e-10 or > 1 + 1e-10)
             return null;
 
@@ -80,8 +80,8 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
             return null;
 
         var intersection = intersections.Value;
-        var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / Angle;
-        var angleRadio2 = ((intersection - other.Circle.Center).Angle - other.StartAngle).Normalized / Angle;
+        var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
+        var angleRadio2 = ((intersection - other.Circle.Center).Angle - other.StartAngle).Normalized / AngleSize;
         if (angleRadio is < -1e-10 or > 1 + 1e-10 || angleRadio2 is < -1e-10 or > 1 + 1e-10)
             return null;
 

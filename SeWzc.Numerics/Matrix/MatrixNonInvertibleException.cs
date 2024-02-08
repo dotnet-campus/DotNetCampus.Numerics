@@ -26,5 +26,9 @@ public class MatrixNonInvertibleException : Exception
         Det = det;
     }
 
+    public MatrixNonInvertibleException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+
     #endregion
 }

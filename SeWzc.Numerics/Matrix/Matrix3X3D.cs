@@ -1,6 +1,6 @@
 ﻿namespace SeWzc.Numerics.Matrix;
 
-public readonly partial struct Matrix3X3D : ISquareMatrix<Matrix3X3D, Vector3D, double>
+public readonly partial record struct Matrix3X3D : ISquareMatrix<Matrix3X3D, Vector3D, double>
 {
     /// <inheritdoc />
     public double Determinant => M11 * (M22 * M33 - M23 * M32) - M12 * (M21 * M33 - M23 * M31) + M13 * (M21 * M32 - M22 * M31);

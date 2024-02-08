@@ -2,6 +2,8 @@
 
 namespace SeWzc.Numerics.Matrix;
 
+#pragma warning disable CA1000 // 不要在泛型类型中声明静态成员。这里是为了定义接口的抽象静态成员。
+
 /// <summary>
 /// 矩阵的接口。
 /// </summary>
@@ -75,7 +77,7 @@ public interface IMatrix<TRow, TColumn, TNum>
 /// <typeparam name="TRow">每行的向量。</typeparam>
 /// <typeparam name="TColumn">每一列的向量。</typeparam>
 /// <typeparam name="TNum"></typeparam>
-public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TNum>
+public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TNum>, IEqualityOperators<TSelf, TSelf, bool>
     where TSelf : IMatrix<TSelf, TRow, TColumn, TNum>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>

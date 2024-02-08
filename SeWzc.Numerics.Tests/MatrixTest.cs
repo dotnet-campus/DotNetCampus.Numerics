@@ -37,9 +37,9 @@ public class MatrixTest
 
     #endregion
 
-    #region 成员方法
+    #region 静态方法
 
-    private void Test(string methodName)
+    private static void Test(string methodName)
     {
         foreach (var genericTypeArguments in MatrixTypes)
         {
@@ -267,10 +267,7 @@ public class MatrixTest
                     sum += m[i, j] * m[i, j];
             }
 
-            if (typeof(TNum) == typeof(double))
-                Assert.Equal(Convert.ToDouble(sum), Convert.ToDouble(actual * actual), (a, b) => a.IsAlmostEqual(b));
-            else
-                Assert.Equal(Convert.ToSingle(sum), Convert.ToSingle(actual * actual), (a, b) => a.IsNearlyEqual(b));
+            NumAssert.CloseEqual(sum, actual * actual);
         });
     }
 

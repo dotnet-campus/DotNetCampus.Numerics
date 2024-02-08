@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Numerics;
 using System.Reflection;
 using JetBrains.Annotations;
@@ -26,7 +27,7 @@ public class VectorTest
 
     #region 成员方法
 
-    private void Test(string methodName)
+    private static void Test(string methodName)
     {
         foreach (var genericTypeArguments in VectorTypes)
         {
@@ -157,13 +158,13 @@ public class VectorTest
 
             if (typeof(TNum) == typeof(double))
             {
-                Assert.Equal(Convert.ToDouble(sum), Convert.ToDouble(squaredLength));
-                Assert.Equal(Convert.ToDouble(sum), Convert.ToDouble(length * length), (a, b) => a.IsAlmostEqual(b));
+                Assert.Equal(Convert.ToDouble(sum, CultureInfo.InvariantCulture), Convert.ToDouble(squaredLength, CultureInfo.InvariantCulture));
+                Assert.Equal(Convert.ToDouble(sum, CultureInfo.InvariantCulture), Convert.ToDouble(length * length, CultureInfo.InvariantCulture), (a, b) => a.IsAlmostEqual(b));
             }
             else
             {
-                Assert.Equal(Convert.ToSingle(sum), Convert.ToSingle(squaredLength));
-                Assert.Equal(Convert.ToSingle(sum), Convert.ToSingle(length * length), (a, b) => a.IsNearlyEqual(b));
+                Assert.Equal(Convert.ToSingle(sum, CultureInfo.InvariantCulture), Convert.ToSingle(squaredLength, CultureInfo.InvariantCulture));
+                Assert.Equal(Convert.ToSingle(sum, CultureInfo.InvariantCulture), Convert.ToSingle(length * length, CultureInfo.InvariantCulture), (a, b) => a.IsNearlyEqual(b));
             }
         });
     }

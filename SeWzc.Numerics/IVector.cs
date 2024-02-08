@@ -2,6 +2,8 @@
 
 namespace SeWzc.Numerics;
 
+#pragma warning disable CA1000 // 不要在泛型类型中声明静态成员。这里是为了定义接口的抽象静态成员。
+
 public interface IVector<TSelf, TNum> : IEqualityOperators<TSelf, TSelf, bool>
     where TSelf : unmanaged, IVector<TSelf, TNum>
     where TNum : unmanaged, INumber<TNum>
