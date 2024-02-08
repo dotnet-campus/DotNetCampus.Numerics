@@ -138,10 +138,14 @@ public interface ISquareMatrix<TSelf, TVector, TNum> : IMatrix<TSelf, TVector, T
     where TVector : unmanaged, IVector<TVector, TNum>
     where TNum : unmanaged, INumber<TNum>
 {
+    #region 静态变量
+
     /// <summary>
     /// 单位矩阵。
     /// </summary>
     public static abstract TSelf Identity { get; }
+
+    #endregion
 
     #region 属性
 

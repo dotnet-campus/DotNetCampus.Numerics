@@ -19,7 +19,7 @@ public static class NumericsEqualHelper
     /// 适合用在
     /// </remarks>
     public const double NearlyTolerance = 1e-6;
-    
+
     /// <summary>
     /// 接近相等的容差。
     /// </summary>
@@ -163,7 +163,7 @@ public static class NumericsEqualHelper
     {
         return Math.Abs(a) < tolerance;
     }
-    
+
     /// <summary>
     /// 判断浮点数是否近似为 0。
     /// </summary>
@@ -174,7 +174,7 @@ public static class NumericsEqualHelper
     {
         return Math.Abs(a) < tolerance;
     }
-    
+
     /// <summary>
     /// 判断浮点数是否近似为 0，并且要求进行归一化处理。
     /// </summary>
@@ -197,7 +197,7 @@ public static class NumericsEqualHelper
     {
         return a.IsCloseZero(NearlyToleranceF, normalizationFactor);
     }
-    
+
     /// <summary>
     /// 判断浮点数是否几乎为 0，并且要求进行归一化处理。
     /// </summary>

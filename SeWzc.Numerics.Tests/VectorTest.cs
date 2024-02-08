@@ -25,7 +25,7 @@ public class VectorTest
 
     #endregion
 
-    #region 成员方法
+    #region 静态方法
 
     private static void Test(string methodName)
     {
@@ -159,12 +159,14 @@ public class VectorTest
             if (typeof(TNum) == typeof(double))
             {
                 Assert.Equal(Convert.ToDouble(sum, CultureInfo.InvariantCulture), Convert.ToDouble(squaredLength, CultureInfo.InvariantCulture));
-                Assert.Equal(Convert.ToDouble(sum, CultureInfo.InvariantCulture), Convert.ToDouble(length * length, CultureInfo.InvariantCulture), (a, b) => a.IsAlmostEqual(b));
+                Assert.Equal(Convert.ToDouble(sum, CultureInfo.InvariantCulture), Convert.ToDouble(length * length, CultureInfo.InvariantCulture),
+                    (a, b) => a.IsAlmostEqual(b));
             }
             else
             {
                 Assert.Equal(Convert.ToSingle(sum, CultureInfo.InvariantCulture), Convert.ToSingle(squaredLength, CultureInfo.InvariantCulture));
-                Assert.Equal(Convert.ToSingle(sum, CultureInfo.InvariantCulture), Convert.ToSingle(length * length, CultureInfo.InvariantCulture), (a, b) => a.IsNearlyEqual(b));
+                Assert.Equal(Convert.ToSingle(sum, CultureInfo.InvariantCulture), Convert.ToSingle(length * length, CultureInfo.InvariantCulture),
+                    (a, b) => a.IsNearlyEqual(b));
             }
         });
     }
@@ -213,11 +215,15 @@ public class VectorTest
             var actual = v.Normalized;
             var length = v.Length;
             if (length is 0)
+            {
                 for (var i = 0; i < TVector.Dimension; i++)
                     Assert.True(actual[i] is 0);
+            }
             else
+            {
                 for (var i = 0; i < TVector.Dimension; i++)
                     Assert.Equal(v[i] / length, actual[i]);
+            }
         });
     }
 
