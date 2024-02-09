@@ -7,6 +7,31 @@ namespace SeWzc.Numerics.Tests;
 [TestSubject(typeof(AngularMeasure))]
 public class AngularMeasureTest
 {
+    #region 静态变量
+
+    public static readonly TheoryData<AngularMeasure> AngleData = new([
+        AngularMeasure.Zero,
+        AngularMeasure.HalfPi,
+        AngularMeasure.Pi,
+        AngularMeasure.HalfPi + AngularMeasure.Pi,
+        AngularMeasure.Tau,
+        AngularMeasure.FromRadian(1),
+        AngularMeasure.FromDegree(45),
+        AngularMeasure.FromDegree(1),
+        AngularMeasure.FromDegree(100),
+    ]);
+
+    public static readonly TheoryData<AngularMeasure, AngularMeasure, AngularMeasure> AngleAddTestData = new()
+    {
+        { AngularMeasure.Degree90, AngularMeasure.Degree90, AngularMeasure.Degree180 },
+        { AngularMeasure.Degree90, AngularMeasure.Degree180, AngularMeasure.Degree270 },
+        { AngularMeasure.Degree180, AngularMeasure.Degree180, AngularMeasure.Degree360 },
+        { AngularMeasure.Degree270, AngularMeasure.Degree90, AngularMeasure.Degree360 },
+        { AngularMeasure.HalfPi, AngularMeasure.Pi, AngularMeasure.OneAndHalfPi },
+    };
+
+    #endregion
+
     #region 成员方法
 
     [Theory(DisplayName = "测试从角度创建角。")]
@@ -123,7 +148,7 @@ public class AngularMeasureTest
     [InlineData(0, 0)]
     [InlineData(Math.Tau, 0)]
     [InlineData(Math.Tau / 2, Math.Tau / 2)]
-    [InlineData(- Math.Tau / 4, Math.Tau * 3 / 4)]
+    [InlineData(-Math.Tau / 4, Math.Tau * 3 / 4)]
     [InlineData(Math.Tau * 3 / 2, Math.Tau / 2)]
     public void NormalizedTest(double radian, double expected)
     {
@@ -132,25 +157,4 @@ public class AngularMeasureTest
     }
 
     #endregion
-
-    public static readonly TheoryData<AngularMeasure> AngleData = new([
-        AngularMeasure.Zero,
-        AngularMeasure.HalfPi,
-        AngularMeasure.Pi,
-        AngularMeasure.HalfPi + AngularMeasure.Pi,
-        AngularMeasure.Tau,
-        AngularMeasure.FromRadian(1),
-        AngularMeasure.FromDegree(45),
-        AngularMeasure.FromDegree(1),
-        AngularMeasure.FromDegree(100),
-    ]);
-
-    public static readonly TheoryData<AngularMeasure, AngularMeasure, AngularMeasure> AngleAddTestData = new()
-    {
-        { AngularMeasure.Degree90, AngularMeasure.Degree90, AngularMeasure.Degree180 },
-        { AngularMeasure.Degree90, AngularMeasure.Degree180, AngularMeasure.Degree270 },
-        { AngularMeasure.Degree180, AngularMeasure.Degree180, AngularMeasure.Degree360 },
-        { AngularMeasure.Degree270, AngularMeasure.Degree90, AngularMeasure.Degree360 },
-        { AngularMeasure.HalfPi, AngularMeasure.Pi, AngularMeasure.OneAndHalfPi },
-    };
 }

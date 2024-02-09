@@ -7,6 +7,23 @@ namespace SeWzc.Numerics.Tests;
 [TestSubject(typeof(Matrix3X3D))]
 public class Matrix3X3DTest
 {
+    #region 静态变量
+
+    public static readonly TheoryData<Matrix3X3D> InvertibleMatrix = new([
+        new Matrix3X3D(1, 0, 0, 0, 1, 0, 0, 0, 1),
+        new Matrix3X3D(0, 0, 1, 0, 1, 0, 1, 0, 0),
+        new Matrix3X3D(2, -1, 1, 3, 2, -1, 1, 6, -1),
+    ]);
+
+    public static readonly TheoryData<Matrix3X3D> NonInvertibleMatrix = new([
+        new Matrix3X3D(),
+        new Matrix3X3D(1, 1, 1, 1, 1, 1, 1, 1, 1),
+        new Matrix3X3D(1, 2, 3, 4, 5, 6, 7, 8, 9),
+        new Matrix3X3D(2, 4, 6, 1, 2, 3, 3, 6, 9),
+    ]);
+
+    #endregion
+
     #region 成员方法
 
     [Theory(DisplayName = "可逆矩阵求逆测试。")]
@@ -36,17 +53,4 @@ public class Matrix3X3DTest
     }
 
     #endregion
-
-    public static readonly TheoryData<Matrix3X3D> InvertibleMatrix = new([
-        new Matrix3X3D(1, 0, 0, 0, 1, 0, 0, 0, 1),
-        new Matrix3X3D(0, 0, 1, 0, 1, 0, 1, 0, 0),
-        new Matrix3X3D(2, -1, 1, 3, 2, -1, 1, 6, -1),
-    ]);
-
-    public static readonly TheoryData<Matrix3X3D> NonInvertibleMatrix = new([
-        new Matrix3X3D(),
-        new Matrix3X3D(1, 1, 1, 1, 1, 1, 1, 1, 1),
-        new Matrix3X3D(1, 2, 3, 4, 5, 6, 7, 8, 9),
-        new Matrix3X3D(2, 4, 6, 1, 2, 3, 3, 6, 9),
-    ]);
 }

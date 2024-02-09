@@ -7,6 +7,22 @@ namespace SeWzc.Numerics.Tests;
 [TestSubject(typeof(Matrix2X2D))]
 public class Matrix2X2DTest
 {
+    #region 静态变量
+
+    public static readonly TheoryData<Matrix2X2D> InvertibleMatrix = new([
+        new Matrix2X2D(1, 2, 3, 4),
+        new Matrix2X2D(1, 0, 0, 1),
+        new Matrix2X2D(0, 1, 1, 0),
+    ]);
+
+    public static readonly TheoryData<Matrix2X2D> NonInvertibleMatrix = new([
+        new Matrix2X2D(),
+        new Matrix2X2D(1, 1, 1, 1),
+        new Matrix2X2D(2, 4, 1, 2),
+    ]);
+
+    #endregion
+
     #region 成员方法
 
     [Theory(DisplayName = "可逆矩阵求逆测试。")]
@@ -32,16 +48,4 @@ public class Matrix2X2DTest
     }
 
     #endregion
-
-    public static readonly TheoryData<Matrix2X2D> InvertibleMatrix = new([
-        new Matrix2X2D(1, 2, 3, 4),
-        new Matrix2X2D(1, 0, 0, 1),
-        new Matrix2X2D(0, 1, 1, 0),
-    ]);
-
-    public static readonly TheoryData<Matrix2X2D> NonInvertibleMatrix = new([
-        new Matrix2X2D(),
-        new Matrix2X2D(1, 1, 1, 1),
-        new Matrix2X2D(2, 4, 1, 2),
-    ]);
 }
