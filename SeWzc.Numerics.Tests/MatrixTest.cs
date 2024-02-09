@@ -295,5 +295,33 @@ public class MatrixTest
         });
     }
 
+    [Fact(DisplayName = "测试矩阵的行列索引器。")]
+    public void IndexOutOfRangeTest()
+    {
+        Test(nameof(IndexOutOfRangeTestGeneric));
+    }
+
+    private static void IndexOutOfRangeTestGeneric<TMatrix, TRow, TColumn, TNum, TTranspose>()
+        where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
+        where TRow : unmanaged, IVector<TRow, TNum>
+        where TColumn : unmanaged, IVector<TColumn, TNum>
+        where TNum : unmanaged, INumber<TNum>
+        where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
+    {
+        MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test(m =>
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => m.GetRow(-1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => m.GetRow(TMatrix.RowCount));
+            Assert.Throws<ArgumentOutOfRangeException>(() => m.GetColumn(-1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => m.GetColumn(TMatrix.ColumnCount));
+            Assert.Throws<ArgumentOutOfRangeException>(() => m[0, -1]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => m[0, TMatrix.ColumnCount]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => m[-1, 0]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => m[TMatrix.RowCount, 0]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => m[-1, -1]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => m[TMatrix.RowCount, TMatrix.ColumnCount]);
+        });
+    }
+
     #endregion
 }

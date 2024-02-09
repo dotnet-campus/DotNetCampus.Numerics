@@ -245,5 +245,20 @@ public class VectorTest
         });
     }
 
+    [Fact(DisplayName = "测试向量索引超出范围。")]
+    public void IndexOutRangeTest()
+    {
+        Test(nameof(IndexOutRangeTestGeneric));
+    }
+
+    private static void IndexOutRangeTestGeneric<TVector, TNum>()
+        where TVector : unmanaged, IVector<TVector, TNum>
+        where TNum : unmanaged, INumber<TNum>
+    {
+        var v = new TVector();
+        Assert.Throws<ArgumentOutOfRangeException>(() => v[-1]);
+        Assert.Throws<ArgumentOutOfRangeException>(() => v[TVector.Dimension]);
+    }
+
     #endregion
 }
