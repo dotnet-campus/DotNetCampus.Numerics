@@ -3,7 +3,7 @@
 /// <summary>
 /// 角（大小）。
 /// </summary>
-public readonly record struct AngularMeasure
+public readonly record struct AngularMeasure : IComparable<AngularMeasure>
 {
     #region 静态变量
 
@@ -144,6 +144,12 @@ public readonly record struct AngularMeasure
     public override string ToString()
     {
         return $"{Radian} rad";
+    }
+
+    /// <inheritdoc />
+    public int CompareTo(AngularMeasure other)
+    {
+        return Radian.CompareTo(other.Radian);
     }
 
     #endregion

@@ -30,6 +30,31 @@ public class AngularMeasureTest
         { AngularMeasure.HalfPi, AngularMeasure.Pi, AngularMeasure.OneAndHalfPi },
     };
 
+    public static readonly TheoryData<AngularMeasure, double, AngularMeasure> AngleMultiplyTestData = new()
+    {
+        { AngularMeasure.HalfPi, 2, AngularMeasure.Pi },
+        { AngularMeasure.Pi, 2, AngularMeasure.Tau },
+        { AngularMeasure.HalfPi, 4, AngularMeasure.Tau },
+    };
+
+    // (角1, 角度2, 角度1.CompareTo(角度2))
+    public static readonly TheoryData<AngularMeasure, AngularMeasure, int> AngleCompareTestData = new()
+    {
+        { AngularMeasure.Zero, AngularMeasure.HalfPi, -1 },
+        { AngularMeasure.HalfPi, AngularMeasure.Pi, -1 },
+        { AngularMeasure.Pi, AngularMeasure.HalfPi + AngularMeasure.Pi, -1 },
+        { AngularMeasure.HalfPi + AngularMeasure.Pi, AngularMeasure.Tau, -1 },
+        { AngularMeasure.Zero, AngularMeasure.Zero, 0 },
+        { AngularMeasure.HalfPi, AngularMeasure.HalfPi, 0 },
+        { AngularMeasure.Pi, AngularMeasure.Pi, 0 },
+        { AngularMeasure.HalfPi + AngularMeasure.Pi, AngularMeasure.HalfPi + AngularMeasure.Pi, 0 },
+        { AngularMeasure.Tau, AngularMeasure.Tau, 0 },
+        { AngularMeasure.HalfPi, AngularMeasure.Zero, 1 },
+        { AngularMeasure.Pi, AngularMeasure.HalfPi, 1 },
+        { AngularMeasure.HalfPi + AngularMeasure.Pi, AngularMeasure.Pi, 1 },
+        { AngularMeasure.Tau, AngularMeasure.HalfPi + AngularMeasure.Pi, 1 },
+    };
+
     #endregion
 
     #region 成员方法
@@ -62,56 +87,39 @@ public class AngularMeasureTest
         Assert.Equal(expected, angle2 - angle1, NumericsEqualHelper.IsAlmostEqual);
     }
 
-    [Fact(DisplayName = "测试角的乘法。")]
-    public void MultiplyTest()
+    [Theory(DisplayName = "测试角的乘法。")]
+    [MemberData(nameof(AngleMultiplyTestData))]
+    public void MultiplyTest(AngularMeasure angle, double num, AngularMeasure expected)
     {
-        Assert.Equal(AngularMeasure.Pi, AngularMeasure.HalfPi * 2, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(AngularMeasure.Tau, AngularMeasure.Pi * 2, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(AngularMeasure.Tau, AngularMeasure.HalfPi * 4, NumericsEqualHelper.IsAlmostEqual);
-
-        Assert.Equal(AngularMeasure.Pi, 2 * AngularMeasure.HalfPi, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(AngularMeasure.Tau, 2 * AngularMeasure.Pi, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(AngularMeasure.Tau, 4 * AngularMeasure.HalfPi, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected, angle * num, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected, num * angle, NumericsEqualHelper.IsAlmostEqual);
     }
 
-    [Fact(DisplayName = "测试角的数除。")]
-    public void DivideNumTest()
+    [Theory(DisplayName = "测试角的数除。")]
+    [MemberData(nameof(AngleMultiplyTestData))]
+    public void DivideNumTest(AngularMeasure expected, double num, AngularMeasure angle)
     {
-        Assert.Equal(AngularMeasure.HalfPi, AngularMeasure.Pi / 2, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(AngularMeasure.HalfPi, AngularMeasure.Tau / 4, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(AngularMeasure.Pi, AngularMeasure.Tau / 2, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected, angle / num, NumericsEqualHelper.IsAlmostEqual);
     }
 
-    [Fact(DisplayName = "测试角的除法。")]
-    public void DivideTest()
+    [Theory(DisplayName = "测试角的除法。")]
+    [MemberData(nameof(AngleMultiplyTestData))]
+    public void DivideTest(AngularMeasure angle1, double expected, AngularMeasure angle2)
     {
-        Assert.Equal(2, AngularMeasure.Pi / AngularMeasure.HalfPi, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(4, AngularMeasure.Tau / AngularMeasure.HalfPi, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(2, AngularMeasure.Tau / AngularMeasure.Pi, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected, angle2 / angle1, NumericsEqualHelper.IsAlmostEqual);
     }
 
-    [Fact(DisplayName = "测试角的比较。")]
-    public void CompareTest()
+    [Theory(DisplayName = "测试角的比较。")]
+    [MemberData(nameof(AngleCompareTestData))]
+    public void CompareTest(AngularMeasure angle1, AngularMeasure angle2, int expected)
     {
-        Assert.True(AngularMeasure.Zero < AngularMeasure.HalfPi);
-        Assert.True(AngularMeasure.HalfPi < AngularMeasure.Pi);
-        Assert.True(AngularMeasure.Pi < AngularMeasure.HalfPi + AngularMeasure.Pi);
-        Assert.True(AngularMeasure.HalfPi + AngularMeasure.Pi < AngularMeasure.Tau);
-
-        Assert.True(AngularMeasure.Zero <= AngularMeasure.HalfPi);
-        Assert.True(AngularMeasure.HalfPi <= AngularMeasure.Pi);
-        Assert.True(AngularMeasure.Pi <= AngularMeasure.HalfPi + AngularMeasure.Pi);
-        Assert.True(AngularMeasure.HalfPi + AngularMeasure.Pi <= AngularMeasure.Tau);
-
-        Assert.True(AngularMeasure.HalfPi > AngularMeasure.Zero);
-        Assert.True(AngularMeasure.Pi > AngularMeasure.HalfPi);
-        Assert.True(AngularMeasure.HalfPi + AngularMeasure.Pi > AngularMeasure.Pi);
-        Assert.True(AngularMeasure.Tau > AngularMeasure.HalfPi + AngularMeasure.Pi);
-
-        Assert.True(AngularMeasure.HalfPi >= AngularMeasure.Zero);
-        Assert.True(AngularMeasure.Pi >= AngularMeasure.HalfPi);
-        Assert.True(AngularMeasure.HalfPi + AngularMeasure.Pi >= AngularMeasure.Pi);
-        Assert.True(AngularMeasure.Tau >= AngularMeasure.HalfPi + AngularMeasure.Pi);
+        Assert.Equal(expected, angle1.CompareTo(angle2));
+        Assert.Equal(expected < 0, angle1 < angle2);
+        Assert.Equal(expected <= 0, angle1 <= angle2);
+        Assert.Equal(expected > 0, angle1 > angle2);
+        Assert.Equal(expected >= 0, angle1 >= angle2);
+        Assert.Equal(expected == 0, angle1 == angle2);
+        Assert.Equal(expected != 0, angle1 != angle2);
     }
 
     [Theory(DisplayName = "测试角的转换。")]
