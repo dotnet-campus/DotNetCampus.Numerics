@@ -4,14 +4,18 @@
 /// 区间。
 /// </summary>
 /// <remarks>
-/// 表示一个 [Start, End] 的区间。
+/// 表示一个 [Start, End] 的闭区间。
 /// </remarks>
-/// <param name="Start"></param>
-/// <param name="End"></param>
-public readonly record struct Interval(double Start, double End)
+public readonly record struct Interval
 {
     #region 静态方法
 
+    /// <summary>
+    /// 通过区间端点创建一个区间。
+    /// </summary>
+    /// <param name="a">区间的一个端点。</param>
+    /// <param name="b">区间的另一个端点。</param>
+    /// <returns></returns>
     public static Interval Create(double a, double b)
     {
         return a > b ? new Interval(b, a) : new Interval(a, b);
@@ -19,12 +23,52 @@ public readonly record struct Interval(double Start, double End)
 
     #endregion
 
+    #region 私有字段
+
+    /// <summary>
+    /// 是否是非空集。
+    /// </summary>
+    /// <remarks>
+    /// 未使用构造函数创建的区间是空集。
+    /// 区间起点大于等于终点的区间是空集。
+    /// </remarks>
+    private readonly bool _isNotEmpty = true;
+
+    #endregion
+
     #region 属性
+
+    /// <summary>
+    /// 是否是空集。
+    /// </summary>
+    public bool IsEmpty => !_isNotEmpty;
 
     /// <summary>
     /// 区间长度。
     /// </summary>
-    public double Length => End - Start;
+    public double Length => Start >= End ? 0 : End - Start;
+
+    /// <summary>
+    /// 区间的左端点。
+    /// </summary>
+    public double Start { get; }
+
+    /// <summary>
+    /// 区间的右端点。
+    /// </summary>
+    public double End { get; }
+
+    #endregion
+
+    #region 构造函数
+
+    public Interval(double Start, double End)
+    {
+        this.Start = Start;
+        this.End = End;
+        if (Start > End)
+            _isNotEmpty = false;
+    }
 
     #endregion
 
@@ -40,32 +84,17 @@ public readonly record struct Interval(double Start, double End)
         return Start <= value && value <= End;
     }
 
+    public override string ToString()
+    {
+        return _isNotEmpty ? $"[{Start}, {End}]" : "Empty";
+    }
+
     #endregion
 }
 
 public static class IntervalExtensions
 {
     #region 静态方法
-
-    /// <summary>
-    /// 是否是空集。
-    /// </summary>
-    /// <param name="interval"></param>
-    /// <returns></returns>
-    public static bool IsEmpty(this Interval interval)
-    {
-        return interval.End <= interval.Start;
-    }
-
-    /// <summary>
-    /// 是否是空集。
-    /// </summary>
-    /// <param name="interval"></param>
-    /// <returns></returns>
-    public static bool IsEmpty(this Interval? interval)
-    {
-        return interval is not { } intervalNotNull || intervalNotNull.IsEmpty();
-    }
 
     /// <summary>
     /// 是否是一个区间的真子集。
@@ -75,30 +104,15 @@ public static class IntervalExtensions
     /// <returns></returns>
     public static bool IsProperSubsetOf(this Interval interval, Interval other)
     {
-        if (other.IsEmpty())
+        if (other.IsEmpty)
             return false;
 
-        if (interval.IsEmpty())
+        if (interval.IsEmpty)
             return true;
 
-        return interval.Start > other.Start && interval.End < other.End;
-    }
-
-    /// <summary>
-    /// 是否是一个区间的真子集。
-    /// </summary>
-    /// <param name="interval"></param>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    public static bool IsProperSubsetOf(this Interval? interval, Interval? other)
-    {
-        if (other.IsEmpty())
-            return false;
-
-        if (interval.IsEmpty())
-            return true;
-
-        return interval.GetValueOrDefault().Start > other.GetValueOrDefault().Start && interval.GetValueOrDefault().End < other.GetValueOrDefault().End;
+        return interval.Start >= other.Start
+               && interval.End <= other.End
+               && (!interval.Start.Equals(other.Start) || !interval.End.Equals(other.End));
     }
 
     /// <summary>
@@ -109,30 +123,13 @@ public static class IntervalExtensions
     /// <returns></returns>
     public static bool IsSubsetOf(this Interval interval, Interval other)
     {
-        if (interval.IsEmpty())
+        if (interval.IsEmpty)
             return true;
 
-        if (other.IsEmpty())
+        if (other.IsEmpty)
             return false;
 
         return interval.Start >= other.Start && interval.End <= other.End;
-    }
-
-    /// <summary>
-    /// 是否是一个区间的子集。
-    /// </summary>
-    /// <param name="interval"></param>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    public static bool IsSubsetOf(this Interval? interval, Interval? other)
-    {
-        if (interval.IsEmpty())
-            return true;
-
-        if (other.IsEmpty())
-            return false;
-
-        return interval.GetValueOrDefault().Start >= other.GetValueOrDefault().Start && interval.GetValueOrDefault().End <= other.GetValueOrDefault().End;
     }
 
     /// <summary>
@@ -147,17 +144,6 @@ public static class IntervalExtensions
     }
 
     /// <summary>
-    /// 是否是一个区间的真超集。
-    /// </summary>
-    /// <param name="interval"></param>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    public static bool IsProperSupersetOf(this Interval? interval, Interval? other)
-    {
-        return other.IsProperSubsetOf(interval);
-    }
-
-    /// <summary>
     /// 是否是一个区间的超集。
     /// </summary>
     /// <param name="interval"></param>
@@ -166,49 +152,6 @@ public static class IntervalExtensions
     public static bool IsSupersetOf(this Interval interval, Interval other)
     {
         return other.IsSubsetOf(interval);
-    }
-
-    /// <summary>
-    /// 是否是一个区间的超集。
-    /// </summary>
-    /// <param name="interval"></param>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    public static bool IsSupersetOf(this Interval? interval, Interval? other)
-    {
-        return other.IsSubsetOf(interval);
-    }
-
-    /// <summary>
-    /// 获取与一个区间的交集。
-    /// </summary>
-    /// <param name="interval"></param>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    public static Interval? Intersect(this Interval interval, Interval other)
-    {
-        var start = Math.Max(other.Start, interval.Start);
-        var end = Math.Min(other.End, interval.End);
-        return start >= end ? null : new Interval(start, end);
-    }
-
-    /// <summary>
-    /// 获取与一个区间的交集。
-    /// </summary>
-    /// <param name="interval"></param>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    public static Interval? Intersect(this Interval? interval, Interval? other)
-    {
-        if (interval.IsEmpty())
-            return null;
-
-        if (other.IsEmpty())
-            return null;
-
-        var start = Math.Max(other.GetValueOrDefault().Start, interval.GetValueOrDefault().Start);
-        var end = Math.Min(other.GetValueOrDefault().End, interval.GetValueOrDefault().End);
-        return start >= end ? null : new Interval(start, end);
     }
 
     #endregion
