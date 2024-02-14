@@ -15,9 +15,6 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 接近相等的容差。
     /// </summary>
-    /// <remarks>
-    /// 适合用在
-    /// </remarks>
     public const double NearlyTolerance = 1e-6;
 
     /// <summary>
@@ -35,16 +32,16 @@ public static class NumericsEqualHelper
 
     #endregion
 
-    #region 静态方法
+    #region 相等判断
 
     /// <summary>
     /// 判断两个浮点数是否近似相等，并且要求进行归一化处理。
     /// </summary>
-    /// <param name="a"></param>
-    /// <param name="b"></param>
+    /// <param name="a">要比较的第一个浮点数。</param>
+    /// <param name="b">要比较的第二个浮点数。</param>
     /// <param name="normalizationFactor">归一化因子。</param>
     /// <param name="tolerance">容差。</param>
-    /// <returns></returns>
+    /// <returns>如果两个浮点数近似相等，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsCloseEqual(double a, double b, double normalizationFactor, double tolerance)
     {
@@ -54,6 +51,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个浮点数是否近似相等。将两个浮点数中的绝对值较大值作为归一化因子。
     /// </summary>
+    /// <param name="a">要比较的第一个浮点数。</param>
+    /// <param name="b">要比较的第二个浮点数。</param>
+    /// <returns>如果两个浮点数近似相等，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this double a, double b)
     {
@@ -63,6 +63,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个浮点数是否近似相等。将两个浮点数中的绝对值较大值作为归一化因子。
     /// </summary>
+    /// <param name="a">要比较的第一个浮点数。</param>
+    /// <param name="b">要比较的第二个浮点数。</param>
+    /// <returns>如果两个浮点数近似相等，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this float a, float b)
     {
@@ -72,6 +75,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个浮点数是否几乎相等。将两个浮点数中的绝对值较大值作为归一化因子。
     /// </summary>
+    /// <param name="a">要比较的第一个浮点数。</param>
+    /// <param name="b">要比较的第二个浮点数。</param>
+    /// <returns>如果两个浮点数几乎相等，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual(this double a, double b)
     {
@@ -81,6 +87,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个角是否近似相等。
     /// </summary>
+    /// <param name="a">要比较的第一个角。</param>
+    /// <param name="b">要比较的第二个角。</param>
+    /// <returns>如果两个角近似相等，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this AngularMeasure a, AngularMeasure b)
     {
@@ -90,6 +99,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个角是否几乎相等。
     /// </summary>
+    /// <param name="a">要比较的第一个角。</param>
+    /// <param name="b">要比较的第二个角。</param>
+    /// <returns>如果两个角几乎相等，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual(this AngularMeasure a, AngularMeasure b)
     {
@@ -99,6 +111,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个向量是否近似相等。
     /// </summary>
+    /// <param name="a">要比较的第一个向量。</param>
+    /// <param name="b">要比较的第二个向量。</param>
+    /// <returns>如果两个向量近似相等，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this Vector2D a, Vector2D b)
     {
@@ -108,6 +123,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个向量是否几乎相等。
     /// </summary>
+    /// <param name="a">要比较的第一个向量。</param>
+    /// <param name="b">要比较的第二个向量。</param>
+    /// <returns>如果两个向量几乎相等，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual(this Vector2D a, Vector2D b)
     {
@@ -117,6 +135,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个向量是否近似相等。
     /// </summary>
+    /// <param name="a">要比较的第一个向量。</param>
+    /// <param name="b">要比较的第二个向量。</param>
+    /// <returns>如果两个向量近似相等，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this Vector3D a, Vector3D b)
     {
@@ -126,6 +147,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个向量是否几乎相等。
     /// </summary>
+    /// <param name="a">要比较的第一个向量。</param>
+    /// <param name="b">要比较的第二个向量。</param>
+    /// <returns>如果两个向量几乎相等，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual(this Vector3D a, Vector3D b)
     {
@@ -139,10 +163,10 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断浮点数是否近似为 0，并且要求进行归一化处理。
     /// </summary>
-    /// <param name="a"></param>
-    /// <param name="tolerance">容差</param>
+    /// <param name="a">要判断的浮点数。</param>
+    /// <param name="tolerance">容差。</param>
     /// <param name="normalizationFactor">归一化因子。</param>
-    /// <returns></returns>
+    /// <returns>如果浮点数近似为 0，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsCloseZero(this double a, double tolerance, double normalizationFactor)
     {
@@ -152,10 +176,10 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断浮点数是否近似为 0，并且要求进行归一化处理。
     /// </summary>
-    /// <param name="a"></param>
-    /// <param name="tolerance">容差</param>
+    /// <param name="a">要判断的浮点数。</param>
+    /// <param name="tolerance">容差。</param>
     /// <param name="normalizationFactor">归一化因子。</param>
-    /// <returns></returns>
+    /// <returns>如果浮点数近似为 0，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsCloseZero(this float a, float tolerance, float normalizationFactor)
     {
@@ -165,9 +189,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断浮点数是否近似为 0。
     /// </summary>
-    /// <param name="a"></param>
+    /// <param name="a">要判断的浮点数。</param>
     /// <param name="tolerance">容差。</param>
-    /// <returns></returns>
+    /// <returns>如果浮点数近似为 0，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsCloseZero(this double a, double tolerance)
     {
@@ -177,9 +201,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断浮点数是否近似为 0。
     /// </summary>
-    /// <param name="a"></param>
+    /// <param name="a">要判断的浮点数。</param>
     /// <param name="tolerance">容差。</param>
-    /// <returns></returns>
+    /// <returns>如果浮点数近似为 0，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsCloseZero(this float a, float tolerance)
     {
@@ -189,9 +213,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断浮点数是否近似为 0，并且要求进行归一化处理。
     /// </summary>
-    /// <param name="a"></param>
+    /// <param name="a">要判断的浮点数。</param>
     /// <param name="normalizationFactor">归一化因子。</param>
-    /// <returns></returns>
+    /// <returns>如果浮点数近似为 0，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyZero(this double a, double normalizationFactor)
     {
@@ -201,9 +225,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断浮点数是否几乎为 0，并且要求进行归一化处理。
     /// </summary>
-    /// <param name="a"></param>
+    /// <param name="a">要判断的浮点数。</param>
     /// <param name="normalizationFactor">归一化因子。</param>
-    /// <returns></returns>
+    /// <returns>如果浮点数几乎为 0，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyZero(this float a, float normalizationFactor)
     {
@@ -213,9 +237,9 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断浮点数是否几乎为 0，并且要求进行归一化处理。
     /// </summary>
-    /// <param name="a"></param>
+    /// <param name="a">要判断的浮点数。</param>
     /// <param name="normalizationFactor">归一化因子。</param>
-    /// <returns></returns>
+    /// <returns>如果浮点数几乎为 0，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostZero(this double a, double normalizationFactor)
     {
@@ -225,6 +249,8 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断浮点数是否近似为 0。
     /// </summary>
+    /// <param name="a">要判断的浮点数。</param>
+    /// <returns>如果浮点数近似为 0，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyZero(this double a)
     {
@@ -234,6 +260,8 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断浮点数是否近似为 0。
     /// </summary>
+    /// <param name="a">要判断的浮点数。</param>
+    /// <returns>如果浮点数近似为 0，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     public static bool IsNearlyZero(this float a)
     {
         return Math.Abs(a) < NearlyToleranceF;
@@ -242,6 +270,8 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断浮点数是否几乎为 0。
     /// </summary>
+    /// <param name="a">要判断的浮点数。</param>
+    /// <returns>如果浮点数几乎为 0，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostZero(this double a)
     {
