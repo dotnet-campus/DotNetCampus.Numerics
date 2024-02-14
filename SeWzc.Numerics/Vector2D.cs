@@ -3,8 +3,6 @@
 /// <summary>
 /// 2 维向量。
 /// </summary>
-/// <param name="X"></param>
-/// <param name="Y"></param>
 public readonly partial record struct Vector2D
 {
     #region 属性
