@@ -32,6 +32,42 @@ public static class NumericsEqualHelper
 
     #endregion
 
+    #region 静态方法
+
+    /// <summary>
+    /// 判断浮点数是否在指定范围内。
+    /// </summary>
+    /// <param name="value">要判断的浮点数。</param>
+    /// <param name="min">范围的最小值。</param>
+    /// <param name="max">范围的最大值。</param>
+    /// <param name="tolerance">容差。</param>
+    /// <returns>
+    /// 如果 <paramref name="value" /> 在 <paramref name="min" /> 和 <paramref name="max" /> 之间（包括边界），则返回
+    /// <see langword="true" />；否则返回 <see langword="false" />。
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsInRange(this double value, double min, double max, double tolerance = AlmostTolerance)
+    {
+        return value >= min - tolerance && value <= max + tolerance;
+    }
+
+    /// <summary>
+    /// 判断浮点数是否在 0 到 1 之间。
+    /// </summary>
+    /// <param name="value">要判断的浮点数。</param>
+    /// <param name="tolerance">容差。</param>
+    /// <returns>
+    /// 如果 <paramref name="value" /> 在 0 到 1 之间（包括边界），则返回
+    /// <see langword="true" />；否则返回 <see langword="false" />。
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsInZeroToOne(this double value, double tolerance = AlmostTolerance)
+    {
+        return value.IsInRange(0, 1, tolerance);
+    }
+
+    #endregion
+
     #region 相等判断
 
     /// <summary>
