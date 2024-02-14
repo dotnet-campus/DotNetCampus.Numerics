@@ -54,6 +54,7 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个浮点数是否近似相等。将两个浮点数中的绝对值较大值作为归一化因子。
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this double a, double b)
     {
         return a.Equals(b) || ((a - b) / Math.MaxMagnitude(a, b)).IsNearlyZero();
@@ -62,6 +63,7 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个浮点数是否近似相等。将两个浮点数中的绝对值较大值作为归一化因子。
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this float a, float b)
     {
         return a.Equals(b) || ((a - b) / MathF.MaxMagnitude(a, b)).IsNearlyZero();
@@ -70,6 +72,7 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个浮点数是否几乎相等。将两个浮点数中的绝对值较大值作为归一化因子。
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual(this double a, double b)
     {
         return a.Equals(b) || ((a - b) / Math.MaxMagnitude(a, b)).IsAlmostZero();
@@ -78,6 +81,7 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个角是否近似相等。
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this AngularMeasure a, AngularMeasure b)
     {
         return (a - b).Radian.IsNearlyZero(Math.Tau);
@@ -86,6 +90,7 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个角是否几乎相等。
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual(this AngularMeasure a, AngularMeasure b)
     {
         return (a - b).Radian.IsAlmostZero(Math.Tau);
@@ -94,6 +99,7 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个向量是否近似相等。
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this Vector2D a, Vector2D b)
     {
         return (a - b).SquaredLength < NearlyTolerance * NearlyTolerance;
@@ -102,6 +108,7 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个向量是否几乎相等。
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual(this Vector2D a, Vector2D b)
     {
         return (a - b).SquaredLength < AlmostTolerance * AlmostTolerance;
@@ -110,6 +117,7 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个向量是否近似相等。
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this Vector3D a, Vector3D b)
     {
         return (a - b).SquaredLength < NearlyTolerance * NearlyTolerance;
@@ -118,6 +126,7 @@ public static class NumericsEqualHelper
     /// <summary>
     /// 判断两个向量是否几乎相等。
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual(this Vector3D a, Vector3D b)
     {
         return (a - b).SquaredLength < AlmostTolerance * AlmostTolerance;
@@ -147,6 +156,7 @@ public static class NumericsEqualHelper
     /// <param name="tolerance">容差</param>
     /// <param name="normalizationFactor">归一化因子。</param>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsCloseZero(this float a, float tolerance, float normalizationFactor)
     {
         return Math.Abs(a) < tolerance * normalizationFactor;
@@ -170,6 +180,7 @@ public static class NumericsEqualHelper
     /// <param name="a"></param>
     /// <param name="tolerance">容差。</param>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsCloseZero(this float a, float tolerance)
     {
         return Math.Abs(a) < tolerance;
@@ -193,6 +204,7 @@ public static class NumericsEqualHelper
     /// <param name="a"></param>
     /// <param name="normalizationFactor">归一化因子。</param>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyZero(this float a, float normalizationFactor)
     {
         return a.IsCloseZero(NearlyToleranceF, normalizationFactor);
