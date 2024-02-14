@@ -29,6 +29,12 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
 
     #region 成员方法
 
+    /// <summary>
+    /// 计算圆弧与直线的交点。
+    /// </summary>
+    /// <param name="line">直线。</param>
+    /// <param name="index">交点索引。值只能是 0 或 1。</param>
+    /// <returns>交点坐标。如果没有获取到对应的交点，则返回 <see langword="null" />。</returns>
     public Point2D? Intersection(Line2D line, int index)
     {
         var intersections = Circle.Intersection(line, index);
@@ -37,12 +43,18 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
 
         var intersection = intersections.Value;
         var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
-        if (angleRadio is < -1e-10 or > 1 + 1e-10)
+        if (angleRadio.IsInZeroToOne())
             return null;
 
         return intersection;
     }
 
+    /// <summary>
+    /// 计算圆弧与线段的交点。
+    /// </summary>
+    /// <param name="segment">线段。</param>
+    /// <param name="index">交点索引。值只能是 0 或 1。</param>
+    /// <returns>交点坐标。如果没有获取到对应的交点，则返回 <see langword="null" />。</returns>
     public Point2D? Intersection(Segment2D segment, int index)
     {
         var intersections = Circle.Intersection(segment.Line, index);
@@ -52,13 +64,19 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
         var intersection = intersections.Value;
         var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
         var lengthRadio = segment.Line.Projection(intersection) / segment.Length;
-        if (angleRadio is < -1e-10 or > 1 + 1e-10 || lengthRadio is < -1e-10 or > 1 + 1e-10)
+        if (angleRadio.IsInZeroToOne() || lengthRadio.IsInZeroToOne())
             return null;
 
         return intersection;
     }
 
 
+    /// <summary>
+    /// 计算圆弧与圆的交点。
+    /// </summary>
+    /// <param name="circle">要计算交点的圆。</param>
+    /// <param name="index">交点索引。值只能是 0 或 1。</param>
+    /// <returns>交点坐标。如果没有获取到对应的交点，则返回 <see langword="null" />。</returns>
     public Point2D? Intersection(Circle2D circle, int index)
     {
         var intersections = Circle.Intersection(circle, index);
@@ -67,12 +85,18 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
 
         var intersection = intersections.Value;
         var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
-        if (angleRadio is < -1e-10 or > 1 + 1e-10)
+        if (angleRadio.IsInZeroToOne())
             return null;
 
         return intersection;
     }
 
+    /// <summary>
+    /// 计算圆弧与圆弧的交点。
+    /// </summary>
+    /// <param name="other">要计算交点的另一个圆弧。</param>
+    /// <param name="index">交点索引。值只能是 0 或 1。</param>
+    /// <returns>交点坐标。如果没有获取到对应的交点，则返回 <see langword="null" />。</returns>
     public Point2D? Intersection(Arc2D other, int index)
     {
         var intersections = Circle.Intersection(other.Circle, index);
@@ -82,7 +106,7 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
         var intersection = intersections.Value;
         var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
         var angleRadio2 = ((intersection - other.Circle.Center).Angle - other.StartAngle).Normalized / AngleSize;
-        if (angleRadio is < -1e-10 or > 1 + 1e-10 || angleRadio2 is < -1e-10 or > 1 + 1e-10)
+        if (angleRadio.IsInZeroToOne() || angleRadio2.IsInZeroToOne())
             return null;
 
         return intersection;
