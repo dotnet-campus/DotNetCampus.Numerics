@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SeWzc.Numerics\SeWzc.Numerics.csproj"/>
+    <ProjectReference Include="..\SeWzc.Numerics\SeWzc.Numerics.csproj" />
   </ItemGroup>
 
 </Project>
