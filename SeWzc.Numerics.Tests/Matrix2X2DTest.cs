@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using SeWzc.Numerics.Matrix;
 using Xunit;
 
@@ -16,7 +17,7 @@ public class Matrix2X2DTest
     ]);
 
     public static readonly TheoryData<Matrix2X2D> NonInvertibleMatrix = new([
-        new Matrix2X2D(),
+        new Matrix2X2D(0, 0, 0, 0),
         new Matrix2X2D(1, 1, 1, 1),
         new Matrix2X2D(2, 4, 1, 2),
     ]);
@@ -29,6 +30,8 @@ public class Matrix2X2DTest
     [MemberData(nameof(InvertibleMatrix))]
     public void TestInverse(Matrix2X2D matrix)
     {
+        ArgumentNullException.ThrowIfNull(matrix);
+
         var inverse = matrix.Inverse();
         var actual = inverse * matrix;
 

@@ -103,7 +103,7 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
             "namespace SeWzc.Numerics.Matrix;",
             new CodeBlock(
                 $"""
-                public readonly partial record struct {typeName}({string.Join(", ", RangeSelect(rowDimension, columnDimension, (i, j) => $"{numberType.Name} M{i + 1}{j + 1}"))})
+                public partial record {typeName}({string.Join(", ", RangeSelect(rowDimension, columnDimension, (i, j) => $"{numberType.Name} M{i + 1}{j + 1}"))})
                    : IMatrix<{typeName}, {rowVectorType}, {columnVectorType}, {numberType.Name}, {transposeTypeName}>
                 """,
                 [

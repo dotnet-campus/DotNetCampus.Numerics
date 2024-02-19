@@ -1,6 +1,6 @@
 ﻿namespace SeWzc.Numerics.Matrix;
 
-public readonly partial record struct Matrix2X2D : ISquareMatrix<Matrix2X2D, Vector2D, double>
+public partial record Matrix2X2D : ISquareMatrix<Matrix2X2D, Vector2D, double>
 {
     #region 静态变量
 

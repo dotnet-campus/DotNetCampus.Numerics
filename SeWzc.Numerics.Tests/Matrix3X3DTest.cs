@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using SeWzc.Numerics.Matrix;
 using Xunit;
 
@@ -16,7 +17,7 @@ public class Matrix3X3DTest
     ]);
 
     public static readonly TheoryData<Matrix3X3D> NonInvertibleMatrix = new([
-        new Matrix3X3D(),
+        new Matrix3X3D(0, 0, 0, 0, 0, 0, 0, 0, 0),
         new Matrix3X3D(1, 1, 1, 1, 1, 1, 1, 1, 1),
         new Matrix3X3D(1, 2, 3, 4, 5, 6, 7, 8, 9),
         new Matrix3X3D(2, 4, 6, 1, 2, 3, 3, 6, 9),
@@ -30,6 +31,8 @@ public class Matrix3X3DTest
     [MemberData(nameof(InvertibleMatrix))]
     public void TestInverse(Matrix3X3D matrix)
     {
+        ArgumentNullException.ThrowIfNull(matrix);
+
         var inverse = matrix.Inverse();
         var actual = inverse * matrix;
 
