@@ -23,8 +23,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeWzc.Numerics.Geometry.Tests", "SeWzc.Numerics.Geometry.Tests\SeWzc.Numerics.Geometry.Tests.csproj", "{844571FC-13A5-485A-8D83-D90395ADB552}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{6EC36852-5DB9-4DD1-A014-6E01D2DC94AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EC36852-5DB9-4DD1-A014-6E01D2DC94AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EC36852-5DB9-4DD1-A014-6E01D2DC94AC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{844571FC-13A5-485A-8D83-D90395ADB552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{844571FC-13A5-485A-8D83-D90395ADB552}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{844571FC-13A5-485A-8D83-D90395ADB552}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{844571FC-13A5-485A-8D83-D90395ADB552}.Release|Any CPU.Build.0 = Release|Any CPU
 		{844571FC-13A5-485A-8D83-D90395ADB552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{844571FC-13A5-485A-8D83-D90395ADB552}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{844571FC-13A5-485A-8D83-D90395ADB552}.Release|Any CPU.ActiveCfg = Release|Any CPU
