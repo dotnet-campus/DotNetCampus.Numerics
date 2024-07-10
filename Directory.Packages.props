@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="JetBrains.Annotations" Version="2024.2.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageVersion Include="xunit" Version="2.9.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" />
+    <!-- Microsoft.CodeAnalysis.* 别升太高，以免 IDE 或 SDK 不支持。 -->
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.8.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" />
+    <PackageVersion Include="PolySharp" Version="1.14.1" />
+    <PackageVersion Include="SeWzc.SourceGenerator.CodeText" Version="0.1.0-alpha02" />
+    <PackageVersion Include="System.Collections.Immutable" Version="8.0.0" />
+  </ItemGroup>
+</Project>

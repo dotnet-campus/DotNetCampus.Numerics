@@ -13,14 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeWzc.Numerics.Tests", "SeW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeWzc.Numerics.Geometry.Tests", "SeWzc.Numerics.Geometry.Tests\SeWzc.Numerics.Geometry.Tests.csproj", "{844571FC-13A5-485A-8D83-D90395ADB552}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{542C5479-699F-4617-BA64-BF6B29ED9FAC}"
-	ProjectSection(SolutionItems) = preProject
-		Directory.Build.props = Directory.Build.props
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FF8212D2-7B39-46C8-9694-C7AFDF6B470C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{FF8212D2-7B39-46C8-9694-C7AFDF6B470C}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
 Global
