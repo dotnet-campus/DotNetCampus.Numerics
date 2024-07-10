@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="PointBase"></param>
 /// <param name="UnitDirectionVector"></param>
-public readonly record struct Line2D(Point2D PointBase, Vector2D UnitDirectionVector)
+public readonly record struct Line2D(Point2D PointBase, Vector2D UnitDirectionVector) : IAffineTransformable2D<Line2D>
 {
     #region 静态方法
 
@@ -70,6 +70,14 @@ public readonly record struct Line2D(Point2D PointBase, Vector2D UnitDirectionVe
         var vector = other.PointBase - PointBase;
         var position = vector.Det(other.UnitDirectionVector) / det;
         return GetPoint(position);
+    }
+
+    /// <inheritdoc />
+    public Line2D Transform(AffineTransformation2D transformation)
+    {
+        var point1 = PointBase.Transform(transformation);
+        var point2 = (PointBase + UnitDirectionVector).Transform(transformation);
+        return Create(point1, point2);
     }
 
     #endregion

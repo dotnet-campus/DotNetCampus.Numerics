@@ -5,8 +5,19 @@
 /// </summary>
 /// <param name="X">点的 X 坐标。</param>
 /// <param name="Y">点的 Y 坐标。</param>
-public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vector2D, double>
+public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vector2D, double>, IAffineTransformable2D<Point2D>
 {
+    #region 成员方法
+
+    /// <inheritdoc />
+    public Point2D Transform(AffineTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+        return transformation.Transform(this);
+    }
+
+    #endregion
+
     #region 运算符重载
 
     /// <inheritdoc />

@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="Line"></param>
 /// <param name="Length"></param>
-public readonly record struct Segment2D(Line2D Line, double Length)
+public readonly record struct Segment2D(Line2D Line, double Length) : IAffineTransformable2D<Segment2D>
 {
     #region 静态方法
 
@@ -67,4 +67,11 @@ public readonly record struct Segment2D(Line2D Line, double Length)
     }
 
     #endregion
+
+    /// <inheritdoc />
+    public Segment2D Transform(AffineTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+        return new Segment2D(Line.Transform(transformation), Length);
+    }
 }
