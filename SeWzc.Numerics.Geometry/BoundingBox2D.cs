@@ -35,6 +35,17 @@ public readonly record struct BoundingBox2D
     }
 
     /// <summary>
+    /// 通过左上角位置和大小创建 2 维边界框。
+    /// </summary>
+    /// <param name="location">左上角位置。</param>
+    /// <param name="size">大小。</param>
+    /// <returns>创建的 2 维边界框。</returns>
+    public static BoundingBox2D CreateByLocationSize(Point2D location, Size2D size)
+    {
+        return Create(location.X, location.Y, location.X + size.Width, location.Y + size.Height);
+    }
+
+    /// <summary>
     /// 通过一个点创建 2 维边界框。
     /// </summary>
     /// <param name="point">点。</param>
@@ -119,6 +130,31 @@ public readonly record struct BoundingBox2D
     /// 高度。
     /// </summary>
     public double Height => MaxY - MinY;
+
+    /// <summary>
+    /// 左上角。
+    /// </summary>
+    public Point2D TopLeft => new(MinX, MaxY);
+
+    /// <summary>
+    /// 右上角。
+    /// </summary>
+    public Point2D TopRight => new(MaxX, MaxY);
+
+    /// <summary>
+    /// 左下角。
+    /// </summary>
+    public Point2D BottomLeft => new(MinX, MinY);
+
+    /// <summary>
+    /// 右下角。
+    /// </summary>
+    public Point2D BottomRight => new(MaxX, MinY);
+
+    /// <summary>
+    /// 中心点。
+    /// </summary>
+    public Point2D Center => new((MinX + MaxX) / 2, (MinY + MaxY) / 2);
 
     #endregion
 
