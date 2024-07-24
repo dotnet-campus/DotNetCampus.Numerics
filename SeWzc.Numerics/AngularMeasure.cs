@@ -166,6 +166,11 @@ public readonly record struct AngularMeasure : IComparable<AngularMeasure>
         return new AngularMeasure(measure1.Radian - measure2.Radian);
     }
 
+    public static AngularMeasure operator -(AngularMeasure measure)
+    {
+        return new AngularMeasure(-measure.Radian);
+    }
+
     public static AngularMeasure operator *(AngularMeasure measure, double scalar)
     {
         return new AngularMeasure(measure.Radian * scalar);
