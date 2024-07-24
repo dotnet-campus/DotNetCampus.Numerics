@@ -7,6 +7,44 @@
 /// <param name="Y">点的 Y 坐标。</param>
 public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vector2D, double>, IAffineTransformable2D<Point2D>
 {
+    #region 静态方法
+
+    /// <summary>
+    /// 获取两个点的中点。
+    /// </summary>
+    /// <param name="point1">第一个点。</param>
+    /// <param name="point2">第二个点。</param>
+    /// <returns>两个点的中点。</returns>
+    public static Point2D Middle(Point2D point1, Point2D point2)
+    {
+        return new Point2D((point1.X + point2.X) / 2, (point1.Y + point2.Y) / 2);
+    }
+
+    /// <summary>
+    /// 获取点列表的中心点。
+    /// </summary>
+    /// <param name="points">点列表。</param>
+    /// <returns>点列表的中心点。</returns>
+    /// <exception cref="ArgumentException">点列表不能为空。</exception>
+    public static Point2D Middle(IReadOnlyList<Point2D> points)
+    {
+        ArgumentNullException.ThrowIfNull(points);
+        if (points.Count == 0)
+            throw new ArgumentException("The point list cannot be empty.");
+
+        var x = 0.0;
+        var y = 0.0;
+        foreach (var point in points)
+        {
+            x += point.X;
+            y += point.Y;
+        }
+
+        return new Point2D(x / points.Count, y / points.Count);
+    }
+
+    #endregion
+
     #region 成员方法
 
     /// <inheritdoc />
