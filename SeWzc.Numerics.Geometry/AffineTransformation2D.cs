@@ -151,6 +151,19 @@ public record AffineTransformation2D(double M11, double M12, double M21, double 
     }
 
     /// <summary>
+    /// 在指定的中心点进行缩放。
+    /// </summary>
+    /// <param name="scaling">缩放变换的参数。</param>
+    /// <param name="center">缩放的中心点。</param>
+    /// <returns>缩放后的仿射变换。</returns>
+    public AffineTransformation2D ScaleAt(Scaling2D scaling, Point2D center)
+    {
+        return Translate(-center.ToVector())
+            .Scale(scaling)
+            .Translate(center.ToVector());
+    }
+
+    /// <summary>
     /// 对仿射变换进行剪切。
     /// </summary>
     /// <param name="shear">剪切变换的系数。</param>
@@ -176,6 +189,19 @@ public record AffineTransformation2D(double M11, double M12, double M21, double 
             M22 * cos + M12 * sin,
             OffsetX * cos - OffsetY * sin,
             OffsetX * sin + OffsetY * cos);
+    }
+
+    /// <summary>
+    /// 在指定的中心点进行旋转。
+    /// </summary>
+    /// <param name="angle">旋转变换的角度。</param>
+    /// <param name="center">旋转的中心点。</param>
+    /// <returns>旋转后的仿射变换。</returns>
+    public AffineTransformation2D RotateAt(AngularMeasure angle, Point2D center)
+    {
+        return Translate(-center.ToVector())
+            .Rotate(angle)
+            .Translate(center.ToVector());
     }
 
     /// <summary>
