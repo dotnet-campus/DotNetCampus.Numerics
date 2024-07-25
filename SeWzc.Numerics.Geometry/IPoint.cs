@@ -2,6 +2,8 @@
 
 namespace SeWzc.Numerics.Geometry;
 
+#pragma warning disable CA1000 // 不要在泛型类型中声明静态成员。这里是为了定义接口的抽象静态成员。
+
 public interface IPoint<TSelf, TVector, TNum>
     where TSelf : unmanaged, IPoint<TSelf, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
