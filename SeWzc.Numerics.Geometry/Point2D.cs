@@ -54,6 +54,15 @@ public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vect
         return transformation.Transform(this);
     }
 
+    /// <summary>
+    /// 转换成向量。相当于减去原点。
+    /// </summary>
+    /// <returns>该点相对于原点的向量。</returns>
+    public Vector2D ToVector()
+    {
+        return new Vector2D(X, Y);
+    }
+
     #endregion
 
     #region 运算符重载
