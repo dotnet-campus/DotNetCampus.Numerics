@@ -7,6 +7,28 @@ public interface IPoint<TSelf, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
     where TNum : unmanaged, INumber<TNum>
 {
+    /// <summary>
+    /// 获取两个点的中点。
+    /// </summary>
+    /// <param name="point1">第一个点。</param>
+    /// <param name="point2">第二个点。</param>
+    /// <returns>两个点的中点。</returns>
+    static abstract TSelf Middle(TSelf point1, TSelf point2);
+
+    /// <summary>
+    /// 获取点列表的中心点。
+    /// </summary>
+    /// <param name="points">点列表。</param>
+    /// <returns>点列表的中心点。</returns>
+    /// <exception cref="ArgumentException">点列表不能为空。</exception>
+    static abstract TSelf Middle(IReadOnlyList<TSelf> points);
+
+    /// <summary>
+    /// 转换成向量。相当于从原点到该点的向量。
+    /// </summary>
+    /// <returns>从原点到该点的向量。</returns>
+    TVector ToVector();
+
     #region 运算符重载
 
     /// <summary>

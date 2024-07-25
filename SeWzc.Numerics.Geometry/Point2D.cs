@@ -9,23 +9,13 @@ public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vect
 {
     #region 静态方法
 
-    /// <summary>
-    /// 获取两个点的中点。
-    /// </summary>
-    /// <param name="point1">第一个点。</param>
-    /// <param name="point2">第二个点。</param>
-    /// <returns>两个点的中点。</returns>
+    /// <inheritdoc />
     public static Point2D Middle(Point2D point1, Point2D point2)
     {
         return new Point2D((point1.X + point2.X) / 2, (point1.Y + point2.Y) / 2);
     }
 
-    /// <summary>
-    /// 获取点列表的中心点。
-    /// </summary>
-    /// <param name="points">点列表。</param>
-    /// <returns>点列表的中心点。</returns>
-    /// <exception cref="ArgumentException">点列表不能为空。</exception>
+    /// <inheritdoc />
     public static Point2D Middle(IReadOnlyList<Point2D> points)
     {
         ArgumentNullException.ThrowIfNull(points);
@@ -54,10 +44,7 @@ public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vect
         return transformation.Transform(this);
     }
 
-    /// <summary>
-    /// 转换成向量。相当于减去原点。
-    /// </summary>
-    /// <returns>该点相对于原点的向量。</returns>
+    /// <inheritdoc />
     public Vector2D ToVector()
     {
         return new Vector2D(X, Y);
