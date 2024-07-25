@@ -262,6 +262,19 @@ public record AffineTransformation2D(double M11, double M12, double M21, double 
     }
 
     /// <summary>
+    /// 对指定的向量进行仿射变换。
+    /// </summary>
+    /// <remarks>
+    /// 与 <see cref="Transform(Point2D)"/> 方法的区别在于，这个方法不会对偏移量进行变换。
+    /// </remarks>
+    /// <param name="vector">要进行变换的向量。</param>
+    /// <returns>变换后的向量。</returns>
+    public Vector2D Transform(Vector2D vector)
+    {
+        return new Vector2D(M11 * vector.X + M12 * vector.Y, M21 * vector.X + M22 * vector.Y);
+    }
+
+    /// <summary>
     /// 对指定的值进行仿射变换。
     /// </summary>
     /// <typeparam name="TIn">输入值的类型。</typeparam>
