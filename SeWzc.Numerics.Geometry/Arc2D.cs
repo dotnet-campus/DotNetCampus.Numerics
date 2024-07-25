@@ -43,10 +43,7 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
 
         var intersection = intersections.Value;
         var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
-        if (angleRadio.IsInZeroToOne())
-            return null;
-
-        return intersection;
+        return angleRadio.IsInZeroToOne() ? intersection : null;
     }
 
     /// <summary>
@@ -64,10 +61,7 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
         var intersection = intersections.Value;
         var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
         var lengthRadio = segment.Line.Projection(intersection) / segment.Length;
-        if (angleRadio.IsInZeroToOne() || lengthRadio.IsInZeroToOne())
-            return null;
-
-        return intersection;
+        return angleRadio.IsInZeroToOne() && lengthRadio.IsInZeroToOne() ? intersection : null;
     }
 
 
@@ -85,10 +79,7 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
 
         var intersection = intersections.Value;
         var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
-        if (angleRadio.IsInZeroToOne())
-            return null;
-
-        return intersection;
+        return angleRadio.IsInZeroToOne() ? intersection : null;
     }
 
     /// <summary>
@@ -106,10 +97,7 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
         var intersection = intersections.Value;
         var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
         var angleRadio2 = ((intersection - other.Circle.Center).Angle - other.StartAngle).Normalized / AngleSize;
-        if (angleRadio.IsInZeroToOne() || angleRadio2.IsInZeroToOne())
-            return null;
-
-        return intersection;
+        return angleRadio.IsInZeroToOne() && angleRadio2.IsInZeroToOne() ? intersection : null;
     }
 
     /// <summary>

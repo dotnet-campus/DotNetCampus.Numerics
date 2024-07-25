@@ -416,5 +416,6 @@
   &lt;/TypePattern&gt;
 &lt;/Patterns&gt;
 </s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=XY/@EntryIndexedValue">XY</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Frobenius/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Matrixes/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

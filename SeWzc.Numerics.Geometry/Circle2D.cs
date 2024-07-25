@@ -33,8 +33,8 @@ public readonly record struct Circle2D(Point2D Center, double Radius)
             return null;
 
         var offset = Math.Sqrt(Radius * Radius - distance * distance);
-        var position1 = projection - offset;
-        var position2 = projection + offset;
+        var position1 = projection + offset;
+        var position2 = projection - offset;
         return line.GetPoint(index == 0 ? position1 : position2);
     }
 
@@ -74,8 +74,8 @@ public readonly record struct Circle2D(Point2D Center, double Radius)
         var position = (Radius * Radius - other.Radius * other.Radius + centerDistance * centerDistance) / (2 * centerDistance);
         var h = Math.Sqrt(Radius * Radius - position * position);
         return index == 0
-            ? Center + position * centerUnitVector + h * centerUnitVector.NormalVector
-            : Center + position * centerUnitVector - h * centerUnitVector.NormalVector;
+            ? Center + position * centerUnitVector + h * centerUnitVector.Normalized
+            : Center + position * centerUnitVector - h * centerUnitVector.Normalized;
     }
 
     /// <summary>

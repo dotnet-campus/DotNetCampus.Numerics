@@ -22,6 +22,25 @@ public readonly record struct Line2D(Point2D PointBase, Vector2D UnitDirectionVe
 
     #endregion
 
+    #region 私有字段
+
+    private readonly Vector2D _unitDirectionVector = UnitDirectionVector.Normalized;
+
+    #endregion
+
+    #region 属性
+
+    /// <summary>
+    /// 单位方向向量。
+    /// </summary>
+    public Vector2D UnitDirectionVector
+    {
+        get => _unitDirectionVector;
+        init => _unitDirectionVector = value.Normalized;
+    }
+
+    #endregion
+
     #region 成员方法
 
     /// <summary>

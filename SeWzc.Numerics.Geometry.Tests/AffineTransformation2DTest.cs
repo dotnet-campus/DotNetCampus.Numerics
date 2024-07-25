@@ -89,7 +89,8 @@ public class AffineTransformation2DTest
     [Fact(DisplayName = "测试缩放剪切旋转平移变换。")]
     public void ScaleShearRotateTranslateTest()
     {
-        var transformation = AffineTransformation2D.Identity.Scale(new Scaling2D(2, 3)).Shear(2).Rotate(AngularMeasure.FromDegree(90)).Translate(new Vector2D(1, 2));
+        var transformation = AffineTransformation2D.Identity.Scale(new Scaling2D(2, 3)).Shear(2).Rotate(AngularMeasure.FromDegree(90))
+            .Translate(new Vector2D(1, 2));
 
         var point = new Point2D(3, 4);
         var result = transformation.Transform(point);
@@ -104,10 +105,44 @@ public class AffineTransformation2DTest
         Assert.Equal(new Vector2D(1, 2), decompose.Translation, (a, b) => a.X.IsAlmostEqual(b.X) && a.Y.IsAlmostEqual(b.Y));
     }
 
+    [Fact(DisplayName = "测试按指定点缩放变换。")]
+    public void ScaleAtTest()
+    {
+        var transformation = AffineTransformation2D.Identity.ScaleAt(new Scaling2D(2, 3), new Point2D(1, 2));
+
+        var point = new Point2D(3, 4);
+        var result = transformation.Transform(point);
+
+        Assert.Equal(new Point2D(5, 8), result, (a, b) => a.X.IsAlmostEqual(b.X) && a.Y.IsAlmostEqual(b.Y));
+    }
+
+    [Fact(DisplayName = "测试绕指定点旋转变换。")]
+    public void RotateAtTest()
+    {
+        var transformation = AffineTransformation2D.Identity.RotateAt(AngularMeasure.FromDegree(90), new Point2D(1, 2));
+
+        var point = new Point2D(3, 4);
+        var result = transformation.Transform(point);
+
+        Assert.Equal(new Point2D(-1, 4), result, (a, b) => a.X.IsAlmostEqual(b.X) && a.Y.IsAlmostEqual(b.Y));
+    }
+
+    [Fact(DisplayName = "测试对向量进行变换。")]
+    public void TransformVectorTest()
+    {
+        var transformation = AffineTransformation2D.Identity.Scale(new Scaling2D(2, 3)).Shear(2).Rotate(AngularMeasure.FromDegree(90))
+            .Translate(new Vector2D(1, 2));
+        var vector = new Vector2D(3, 4);
+        var result = transformation.Transform(vector);
+
+        Assert.Equal(new Vector2D(-12, 30), result, (a, b) => a.X.IsAlmostEqual(b.X) && a.Y.IsAlmostEqual(b.Y));
+    }
+
     [Fact(DisplayName = "测试逆变换。")]
     public void InverseTest()
     {
-        var transformation = AffineTransformation2D.Identity.Scale(new Scaling2D(2, 3)).Shear(2).Rotate(AngularMeasure.FromDegree(90)).Translate(new Vector2D(1, 2));
+        var transformation = AffineTransformation2D.Identity.Scale(new Scaling2D(2, 3)).Shear(2).Rotate(AngularMeasure.FromDegree(90))
+            .Translate(new Vector2D(1, 2));
         var inverse = transformation.Inverse();
 
         var point = new Point2D(3, 4);
