@@ -56,6 +56,21 @@ public readonly record struct BoundingBox2D
     }
 
     /// <summary>
+    /// 通过两个点创建 2 维边界框。
+    /// </summary>
+    /// <param name="point1">点1。</param>
+    /// <param name="point2">点2。</param>
+    /// <returns>包含两个点的最小 2 维边界框。</returns>
+    public static BoundingBox2D Create(Point2D point1, Point2D point2)
+    {
+        return new BoundingBox2D(
+            Math.Min(point1.X, point2.X),
+            Math.Min(point1.Y, point2.Y),
+            Math.Max(point1.X, point2.X),
+            Math.Max(point1.Y, point2.Y));
+    }
+
+    /// <summary>
     /// 通过点列表创建 2 维边界框。
     /// </summary>
     /// <param name="points">点列表。</param>
@@ -209,6 +224,38 @@ public readonly record struct BoundingBox2D
             Math.Min(MinY, other.MinY),
             Math.Max(MaxX, other.MaxX),
             Math.Max(MaxY, other.MaxY));
+    }
+
+    /// <summary>
+    /// 合并当前边界框与指定点，返回合并后的边界框。
+    /// </summary>
+    /// <param name="point">要合并的点。</param>
+    /// <returns>包含当前边界框和点的最小边界框。</returns>
+    public BoundingBox2D Union(Point2D point)
+    {
+        if (IsEmpty)
+        {
+            return Create(point);
+        }
+
+        return Create(
+            Math.Min(MinX, point.X),
+            Math.Min(MinY, point.Y),
+            Math.Max(MaxX, point.X),
+            Math.Max(MaxY, point.Y));
+    }
+
+    /// <summary>
+    /// 判断当前边界框是否包含指定点。
+    /// </summary>
+    /// <remarks>
+    /// 如果点正好在边界上，也算包含。
+    /// </remarks>
+    /// <param name="point">指定点。</param>
+    /// <returns>如果包含则为 <see langword="true"/>，否则为 <see langword="false"/>。</returns>
+    public bool Contains(Point2D point)
+    {
+        return point.X >= MinX && point.X <= MaxX && point.Y >= MinY && point.Y <= MaxY;
     }
 
     #endregion
