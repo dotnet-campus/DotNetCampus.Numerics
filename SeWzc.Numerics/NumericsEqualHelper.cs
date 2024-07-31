@@ -153,7 +153,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this Vector2D a, Vector2D b)
     {
-        return (a - b).SquaredLength < NearlyTolerance * NearlyTolerance;
+        return (a - b).SquaredLength < NearlyTolerance * NearlyTolerance * (a.SquaredLength + b.SquaredLength);
     }
 
     /// <summary>
@@ -165,7 +165,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual(this Vector2D a, Vector2D b)
     {
-        return (a - b).SquaredLength < AlmostTolerance * AlmostTolerance;
+        return (a - b).SquaredLength < AlmostTolerance * AlmostTolerance * (a.SquaredLength + b.SquaredLength);
     }
 
     /// <summary>
@@ -177,7 +177,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this Vector3D a, Vector3D b)
     {
-        return (a - b).SquaredLength < NearlyTolerance * NearlyTolerance;
+        return (a - b).SquaredLength < NearlyTolerance * NearlyTolerance * (a.SquaredLength + b.SquaredLength);
     }
 
     /// <summary>
@@ -189,7 +189,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual(this Vector3D a, Vector3D b)
     {
-        return (a - b).SquaredLength < AlmostTolerance * AlmostTolerance;
+        return (a - b).SquaredLength < AlmostTolerance * AlmostTolerance * (a.SquaredLength + b.SquaredLength);
     }
 
     #endregion
