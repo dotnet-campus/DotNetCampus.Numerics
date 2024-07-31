@@ -258,5 +258,36 @@ public readonly record struct BoundingBox2D
         return point.X >= MinX && point.X <= MaxX && point.Y >= MinY && point.Y <= MaxY;
     }
 
+    /// <summary>
+    /// 向外扩张边界框。如果参数为负数，则会向内收缩。
+    /// </summary>
+    /// <param name="horizontalAmount">左右方向的扩张量。</param>
+    /// <param name="verticalAmount">上下方向的扩张量。</param>
+    /// <returns>扩张后的边界框。如果边界框垂直或竖值方向收缩后为空，则返回空的边界框。</returns>
+    public BoundingBox2D Inflate(double horizontalAmount, double verticalAmount)
+    {
+        var minX = MinX - horizontalAmount;
+        var minY = MinY - verticalAmount;
+        var maxX = MaxX + horizontalAmount;
+        var maxY = MaxY + verticalAmount;
+
+        if (minX > maxX || minY > maxY)
+        {
+            return Empty;
+        }
+
+        return Create(minX, minY, maxX, maxY);
+    }
+
+    /// <summary>
+    /// 向外扩张边界框。如果参数为负数，则会向内收缩。
+    /// </summary>
+    /// <param name="amount">四个方向上的扩张量。</param>
+    /// <returns>扩张后的边界框。如果边界框垂直或竖值方向收缩后为空，则返回空的边界框。</returns>
+    public BoundingBox2D Inflate(double amount)
+    {
+        return Inflate(amount, amount);
+    }
+
     #endregion
 }
