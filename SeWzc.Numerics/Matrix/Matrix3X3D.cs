@@ -26,7 +26,7 @@ public partial record Matrix3X3D : ISquareMatrix<Matrix3X3D, Vector3D, double>
         if (det == 0)
             throw new MatrixNonInvertibleException(det);
 
-        if (det.IsAlmostZero(Row1.SquaredLength + Row2.SquaredLength + Row3.SquaredLength))
+        if (det.IsAlmostZero(Row1.LengthSquared + Row2.LengthSquared + Row3.LengthSquared))
             throw new MatrixNonInvertibleException(det);
 
         var invDet = 1 / det;

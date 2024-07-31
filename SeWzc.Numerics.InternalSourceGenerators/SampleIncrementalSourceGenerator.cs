@@ -48,8 +48,8 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
             [
                 "public static int Dimension => " + dimension + ";",
                 $"public static {typeName} Zero => new({string.Join(", ", parameters.Select(_ => "0"))});",
-                $"public {numberType.Name} Length => {numberType.SqrtMethod}(SquaredLength);",
-                $"public {numberType.Name} SquaredLength => {string.Join("+ ", parameters.Select(p => $"{p} * {p}"))};",
+                $"public {numberType.Name} Length => {numberType.SqrtMethod}(LengthSquared);",
+                $"public {numberType.Name} LengthSquared => {string.Join("+ ", parameters.Select(p => $"{p} * {p}"))};",
                 $"public {typeName} Normalized => this / Length;",
                 new CodeCombination(
                 [
@@ -147,7 +147,7 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
                     $"public {transposeTypeName} Transpose => {transposeTypeName}.CreateFromColumnVectors({string.Join(", ", RangeSelect(rowDimension, i => $"Row{i + 1}"))});",
 
                     // Frobenius范数
-                    $"public {numberType.Name} FrobeniusNorm => {sqrtMethod}({string.Join("+ ", RangeSelect(rowDimension, i => $"Row{i + 1}.SquaredLength"))});",
+                    $"public {numberType.Name} FrobeniusNorm => {sqrtMethod}({string.Join("+ ", RangeSelect(rowDimension, i => $"Row{i + 1}.LengthSquared"))});",
 
                     $"public override string ToString() => $\"({string.Join(", ", RangeSelect(rowDimension, i => $"{{Row{i + 1}}}"))})\";",
 

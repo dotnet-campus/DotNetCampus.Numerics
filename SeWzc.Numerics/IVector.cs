@@ -27,7 +27,7 @@ public interface IVector<TSelf, TNum> : IEqualityOperators<TSelf, TSelf, bool>
     /// <summary>
     /// 模长的平方。
     /// </summary>
-    public TNum SquaredLength { get; }
+    public TNum LengthSquared { get; }
 
     /// <summary>
     /// 模长。

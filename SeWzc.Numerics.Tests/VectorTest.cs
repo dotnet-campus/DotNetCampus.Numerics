@@ -149,7 +149,7 @@ public class VectorTest
     {
         VectorFactory<TVector, TNum>.Test(v =>
         {
-            var squaredLength = v.SquaredLength;
+            var lengthSquared = v.LengthSquared;
             var length = v.Length;
 
             var sum = TNum.Zero;
@@ -158,13 +158,13 @@ public class VectorTest
 
             if (typeof(TNum) == typeof(double))
             {
-                Assert.Equal(Convert.ToDouble(sum, CultureInfo.InvariantCulture), Convert.ToDouble(squaredLength, CultureInfo.InvariantCulture));
+                Assert.Equal(Convert.ToDouble(sum, CultureInfo.InvariantCulture), Convert.ToDouble(lengthSquared, CultureInfo.InvariantCulture));
                 Assert.Equal(Convert.ToDouble(sum, CultureInfo.InvariantCulture), Convert.ToDouble(length * length, CultureInfo.InvariantCulture),
                     (a, b) => a.IsAlmostEqual(b));
             }
             else
             {
-                Assert.Equal(Convert.ToSingle(sum, CultureInfo.InvariantCulture), Convert.ToSingle(squaredLength, CultureInfo.InvariantCulture));
+                Assert.Equal(Convert.ToSingle(sum, CultureInfo.InvariantCulture), Convert.ToSingle(lengthSquared, CultureInfo.InvariantCulture));
                 Assert.Equal(Convert.ToSingle(sum, CultureInfo.InvariantCulture), Convert.ToSingle(length * length, CultureInfo.InvariantCulture),
                     (a, b) => a.IsNearlyEqual(b));
             }
