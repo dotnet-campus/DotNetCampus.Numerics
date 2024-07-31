@@ -6,7 +6,9 @@
 /// <remarks>
 /// 表示一个 [Start, End] 的闭区间。
 /// </remarks>
-public readonly record struct Interval
+/// <param name="Start">区间的左端点。</param>
+/// <param name="End">区间的右端点。</param>
+public readonly record struct Interval(double Start, double End)
 {
     #region 静态方法
 
@@ -32,7 +34,7 @@ public readonly record struct Interval
     /// 未使用构造函数创建的区间是空集。
     /// 区间起点大于等于终点的区间是空集。
     /// </remarks>
-    private readonly bool _isNotEmpty = true;
+    private readonly bool _isNotEmpty = Start <= End;
 
     #endregion
 
@@ -48,28 +50,6 @@ public readonly record struct Interval
     /// </summary>
     public double Length => Start >= End ? 0 : End - Start;
 
-    /// <summary>
-    /// 区间的左端点。
-    /// </summary>
-    public double Start { get; }
-
-    /// <summary>
-    /// 区间的右端点。
-    /// </summary>
-    public double End { get; }
-
-    #endregion
-
-    #region 构造函数
-
-    public Interval(double Start, double End)
-    {
-        this.Start = Start;
-        this.End = End;
-        if (Start > End)
-            _isNotEmpty = false;
-    }
-
     #endregion
 
     #region 成员方法
@@ -84,14 +64,17 @@ public readonly record struct Interval
         return Start <= value && value <= End;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return _isNotEmpty ? $"[{Start}, {End}]" : "Empty";
     }
-
     #endregion
 }
 
+/// <summary>
+/// 区间的扩展方法。
+/// </summary>
 public static class IntervalExtensions
 {
     #region 静态方法

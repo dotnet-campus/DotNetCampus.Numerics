@@ -1,5 +1,8 @@
 ﻿namespace SeWzc.Numerics;
 
+/// <summary>
+/// 向量的扩展方法。
+/// </summary>
 public static class VectorExtensions
 {
     #region 静态方法

@@ -156,6 +156,8 @@ public readonly record struct AngularMeasure : IComparable<AngularMeasure>
 
     #region 运算符重载
 
+    #pragma warning disable CS1591
+
     public static AngularMeasure operator +(AngularMeasure measure1, AngularMeasure measure2)
     {
         return new AngularMeasure(measure1.Radian + measure2.Radian);
@@ -210,6 +212,8 @@ public readonly record struct AngularMeasure : IComparable<AngularMeasure>
     {
         return measure1.Radian >= measure2.Radian;
     }
+
+    #pragma warning restore CS1591
 
     #endregion
 }

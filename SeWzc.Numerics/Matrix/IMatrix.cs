@@ -9,7 +9,7 @@ namespace SeWzc.Numerics.Matrix;
 /// </summary>
 /// <typeparam name="TRow">每行的向量。</typeparam>
 /// <typeparam name="TColumn">每一列的向量。</typeparam>
-/// <typeparam name="TNum"></typeparam>
+/// <typeparam name="TNum">矩阵元素的类型。</typeparam>
 public interface IMatrix<TRow, TColumn, TNum>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>
@@ -73,10 +73,10 @@ public interface IMatrix<TRow, TColumn, TNum>
 /// <summary>
 /// 矩阵的接口。
 /// </summary>
-/// <typeparam name="TSelf"></typeparam>
+/// <typeparam name="TSelf">实现此接口的类型。</typeparam>
 /// <typeparam name="TRow">每行的向量。</typeparam>
 /// <typeparam name="TColumn">每一列的向量。</typeparam>
-/// <typeparam name="TNum"></typeparam>
+/// <typeparam name="TNum">矩阵元素的类型。</typeparam>
 public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TNum>, IEqualityOperators<TSelf, TSelf, bool>
     where TSelf : IMatrix<TSelf, TRow, TColumn, TNum>
     where TRow : unmanaged, IVector<TRow, TNum>
@@ -94,6 +94,8 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TN
 
     #region 运算符重载
 
+#pragma warning disable CS1591
+
     public static abstract TSelf operator +(TSelf matrix1, TSelf matrix2);
 
     public static abstract TSelf operator -(TSelf matrix1, TSelf matrix2);
@@ -110,9 +112,19 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TN
 
     public static abstract TSelf operator -(TSelf matrix);
 
+#pragma warning restore CS1591
+
     #endregion
 }
 
+/// <summary>
+/// 可转置的矩阵接口。
+/// </summary>
+/// <typeparam name="TSelf">实现此接口的类型。</typeparam>
+/// <typeparam name="TRow">每行的向量。</typeparam>
+/// <typeparam name="TColumn">每一列的向量。</typeparam>
+/// <typeparam name="TNum">矩阵元素的类型。</typeparam>
+/// <typeparam name="TTranspose">转置矩阵的类型。</typeparam>
 public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose> : IMatrix<TSelf, TRow, TColumn, TNum>
     where TSelf : IMatrix<TSelf, TRow, TColumn, TNum, TTranspose>
     where TRow : unmanaged, IVector<TRow, TNum>
@@ -133,6 +145,12 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose> : IMatrix<TSelf
     #endregion
 }
 
+/// <summary>
+/// 方阵的接口。
+/// </summary>
+/// <typeparam name="TSelf">实现此接口的类型。</typeparam>
+/// <typeparam name="TVector">向量的类型。</typeparam>
+/// <typeparam name="TNum">矩阵元素的类型。</typeparam>
 public interface ISquareMatrix<TSelf, TVector, TNum> : IMatrix<TSelf, TVector, TVector, TNum, TSelf>
     where TSelf : ISquareMatrix<TSelf, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>

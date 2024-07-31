@@ -4,6 +4,11 @@ public readonly partial record struct Vector3D
 {
     #region 构造函数
 
+    /// <summary>
+    /// 通过 2 维向量和 Z 坐标构造 3 维向量。
+    /// </summary>
+    /// <param name="vector2D">2 维向量。</param>
+    /// <param name="Z">Z 坐标。</param>
     public Vector3D(Vector2D vector2D, double Z = 0) : this(vector2D.X, vector2D.Y, Z)
     {
     }
