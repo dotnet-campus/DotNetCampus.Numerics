@@ -98,6 +98,24 @@ public readonly record struct BoundingBox2D
         return new BoundingBox2D(minX, minY, maxX, maxY);
     }
 
+    /// <summary>
+    /// 尝试创建一个 2 维边界框。并且如果最小值大于最大值，则返回空的边界框。
+    /// </summary>
+    /// <param name="minX">最小 X 值。</param>
+    /// <param name="minY">最小 Y 值。</param>
+    /// <param name="maxX">最大 X 值。</param>
+    /// <param name="maxY">最大 Y 值。</param>
+    /// <returns>创建的 2 维边界框。如果最小值大于最大值，则返回空的边界框。</returns>
+    public static BoundingBox2D TryCreate(double minX, double minY, double maxX, double maxY)
+    {
+        if (minX > maxX || minY > maxY)
+        {
+            return Empty;
+        }
+
+        return new BoundingBox2D(minX, minY, maxX, maxY);
+    }
+
     #endregion
 
     #region 私有字段
@@ -259,6 +277,16 @@ public readonly record struct BoundingBox2D
     }
 
     /// <summary>
+    /// 判断当前边界框是否包含另一个边界框。
+    /// </summary>
+    /// <param name="other">判断是否被包含的边界框。</param>
+    /// <returns>如果包含则为 <see langword="true"/>，否则为 <see langword="false"/>。</returns>
+    public bool Contains(BoundingBox2D other)
+    {
+        return MinX <= other.MinX && MinY <= other.MinY && MaxX >= other.MaxX && MaxY >= other.MaxY;
+    }
+
+    /// <summary>
     /// 向外扩张边界框。如果参数为负数，则会向内收缩。
     /// </summary>
     /// <param name="horizontalAmount">左右方向的扩张量。</param>
@@ -271,12 +299,7 @@ public readonly record struct BoundingBox2D
         var maxX = MaxX + horizontalAmount;
         var maxY = MaxY + verticalAmount;
 
-        if (minX > maxX || minY > maxY)
-        {
-            return Empty;
-        }
-
-        return Create(minX, minY, maxX, maxY);
+        return TryCreate(minX, minY, maxX, maxY);
     }
 
     /// <summary>
@@ -287,6 +310,26 @@ public readonly record struct BoundingBox2D
     public BoundingBox2D Inflate(double amount)
     {
         return Inflate(amount, amount);
+    }
+
+    /// <summary>
+    /// 获取当前边界框与另一个边界框的交集。
+    /// </summary>
+    /// <param name="other">另一个边界框。</param>
+    /// <returns>两个边界框的交集。如果两个边界框没有交集，则返回空的边界框。</returns>
+    public BoundingBox2D Intersect(BoundingBox2D other)
+    {
+        if (IsEmpty || other.IsEmpty)
+        {
+            return Empty;
+        }
+
+        var minX = Math.Max(MinX, other.MinX);
+        var minY = Math.Max(MinY, other.MinY);
+        var maxX = Math.Min(MaxX, other.MaxX);
+        var maxY = Math.Min(MaxY, other.MaxY);
+
+        return TryCreate(minX, minY, maxX, maxY);
     }
 
     #endregion
