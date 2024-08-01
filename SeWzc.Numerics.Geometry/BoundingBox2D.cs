@@ -165,24 +165,14 @@ public readonly record struct BoundingBox2D
     public double Height => MaxY - MinY;
 
     /// <summary>
-    /// 左上角。
+    /// 边界框坐标值最小的点（MinX, MinY）。
     /// </summary>
-    public Point2D TopLeft => new(MinX, MaxY);
+    public Point2D MinPoint => new(MinX, MinY);
 
     /// <summary>
-    /// 右上角。
+    /// 边界框坐标值最大的点（MaxX, MaxY）。
     /// </summary>
-    public Point2D TopRight => new(MaxX, MaxY);
-
-    /// <summary>
-    /// 左下角。
-    /// </summary>
-    public Point2D BottomLeft => new(MinX, MinY);
-
-    /// <summary>
-    /// 右下角。
-    /// </summary>
-    public Point2D BottomRight => new(MaxX, MinY);
+    public Point2D MaxPoint => new(MaxX, MaxY);
 
     /// <summary>
     /// 中心点。
