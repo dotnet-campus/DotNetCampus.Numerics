@@ -48,6 +48,20 @@ public class Vector2DTest
         Assert.Equal(expectedY, v2.Y);
     }
 
+    [Theory(DisplayName = "测试向量到另一个向量的旋转。")]
+    [InlineData(1, 0, 0, 1, Math.PI / 2)]
+    [InlineData(1, 0, 1, 0, 0)]
+    [InlineData(1, 0, 1, 1, Math.PI / 4)]
+    [InlineData(1, 0, -1, 0, Math.PI)]
+    [InlineData(-1, 0, 1, 0, -Math.PI)]
+    public void AngleToTest(double x1, double y1, double x2, double y2, double expected)
+    {
+        var v1 = new Vector2D(x1, y1);
+        var v2 = new Vector2D(x2, y2);
+        var angle = v1.AngleTo(v2);
+        Assert.Equal(expected, angle.Radian);
+    }
+
     [Theory(DisplayName = "测试向量的字符串。")]
     [InlineData(1, 2, "(1, 2)")]
     [InlineData(3, 4, "(3, 4)")]

@@ -31,5 +31,15 @@ public readonly partial record struct Vector2D
         return X * other.Y - Y * other.X;
     }
 
+    /// <summary>
+    /// 获取从当前向量到另一个向量的旋转。
+    /// </summary>
+    /// <param name="other">目标向量。</param>
+    /// <returns>从当前向量旋转到目标向量的角。结果的范围为 -π~π。</returns>
+    public AngularMeasure AngleTo(Vector2D other)
+    {
+        return AngularMeasure.FromRadian(Math.Atan2(Det(other), Dot(other)));
+    }
+
     #endregion
 }
