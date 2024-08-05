@@ -32,7 +32,7 @@ public class Matrix2X2DTest
     {
         ArgumentNullException.ThrowIfNull(matrix);
 
-        var inverse = matrix.Inverse();
+        var inverse = matrix.Invert();
         var actual = inverse * matrix;
 
         NumAssert.NotCloseZero(matrix.Determinant);
@@ -47,7 +47,9 @@ public class Matrix2X2DTest
     [MemberData(nameof(NonInvertibleMatrix))]
     public void TestNonInvertible(Matrix2X2D matrix)
     {
-        Assert.Throws<MatrixNonInvertibleException>(() => matrix.Inverse());
+        ArgumentNullException.ThrowIfNull(matrix);
+
+        Assert.Throws<MatrixNonInvertibleException>(matrix.Invert);
     }
 
     #endregion

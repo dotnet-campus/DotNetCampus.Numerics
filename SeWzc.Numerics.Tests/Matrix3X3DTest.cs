@@ -33,7 +33,7 @@ public class Matrix3X3DTest
     {
         ArgumentNullException.ThrowIfNull(matrix);
 
-        var inverse = matrix.Inverse();
+        var inverse = matrix.Invert();
         var actual = inverse * matrix;
 
         NumAssert.NotCloseZero(matrix.Determinant);
@@ -52,7 +52,9 @@ public class Matrix3X3DTest
     [MemberData(nameof(NonInvertibleMatrix))]
     public void TestNonInvertible(Matrix3X3D matrix)
     {
-        Assert.Throws<MatrixNonInvertibleException>(() => matrix.Inverse());
+        ArgumentNullException.ThrowIfNull(matrix);
+
+        Assert.Throws<MatrixNonInvertibleException>(matrix.Invert);
     }
 
     #endregion

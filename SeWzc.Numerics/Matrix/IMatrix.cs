@@ -92,8 +92,6 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TN
 
     #endregion
 
-    #region 运算符重载
-
 #pragma warning disable CS1591
 
     public static abstract TSelf operator +(TSelf matrix1, TSelf matrix2);
@@ -113,8 +111,6 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TN
     public static abstract TSelf operator -(TSelf matrix);
 
 #pragma warning restore CS1591
-
-    #endregion
 }
 
 /// <summary>
@@ -170,18 +166,28 @@ public interface ISquareMatrix<TSelf, TVector, TNum> : IMatrix<TSelf, TVector, T
     /// <summary>
     /// 行列式。
     /// </summary>
-    public double Determinant { get; }
+    public TNum Determinant { get; }
+
+    /// <summary>
+    /// 矩阵是否可逆。
+    /// </summary>
+    public bool Invertible { get; }
+
+    /// <summary>
+    /// 矩阵的逆。如果矩阵不可逆，则返回 null。
+    /// </summary>
+    public TSelf? Inverse { get; }
 
     #endregion
 
     #region 成员方法
 
     /// <summary>
-    /// 矩阵的逆。
+    /// 获取矩阵的逆。
     /// </summary>
     /// <returns></returns>
-    /// <exception cref="MatrixNonInvertibleException"></exception>
-    public TSelf Inverse();
+    /// <exception cref="MatrixNonInvertibleException">该矩阵不可逆。</exception>
+    public TSelf Invert();
 
     #endregion
 }

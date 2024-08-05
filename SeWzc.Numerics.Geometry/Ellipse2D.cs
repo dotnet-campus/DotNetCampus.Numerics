@@ -108,7 +108,7 @@ public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>
         var matrix = new Matrix2X2D(newTransform.M11, newTransform.M12, newTransform.M21, newTransform.M22);
 
         // 获取椭圆的方程 X^T * M * X = 1 中的 M 矩阵
-        var inverse = matrix.Inverse();
+        var inverse = matrix.Invert();
         var inverseTranspose = inverse.Transpose;
         var m = inverseTranspose * inverse;
 
