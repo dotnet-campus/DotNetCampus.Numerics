@@ -12,8 +12,7 @@ public class Point2DTest
     public void CreateTest()
     {
         var point = new Point2D(3, 4);
-        Assert.Equal(3, point.X);
-        Assert.Equal(4, point.Y);
+        Assert.Equal(new Point2D(3, 4), point, GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
     [Fact(DisplayName = "测试点的加法。")]
@@ -23,12 +22,10 @@ public class Point2DTest
         var vector = new Vector2D(5, 6);
 
         var result = point + vector;
-        Assert.Equal(8, result.X);
-        Assert.Equal(10, result.Y);
+        Assert.Equal(new Point2D(8, 10), result, GeometryNumericsEqualHelper.IsAlmostEqual);
 
         result = vector + point;
-        Assert.Equal(8, result.X);
-        Assert.Equal(10, result.Y);
+        Assert.Equal(new Point2D(8, 10), result, GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
     [Fact(DisplayName = "测试点的减法。")]
@@ -37,8 +34,7 @@ public class Point2DTest
         var point1 = new Point2D(3, 4);
         var point2 = new Point2D(5, 6);
         var result = point1 - point2;
-        Assert.Equal(-2, result.X);
-        Assert.Equal(-2, result.Y);
+        Assert.Equal(new Vector2D(-2, -2), result, NumericsEqualHelper.IsAlmostEqual);
     }
 
     [Fact(DisplayName = "测试点的缩放。")]
@@ -46,20 +42,13 @@ public class Point2DTest
     {
         var point = new Point2D(3, 4);
         var result = point * 2;
-        Assert.Equal(6, result.X);
-        Assert.Equal(8, result.Y);
+        Assert.Equal(new Point2D(6, 8), result, GeometryNumericsEqualHelper.IsAlmostEqual);
 
         result = 2 * point;
-        Assert.Equal(6, result.X);
-        Assert.Equal(8, result.Y);
+        Assert.Equal(new Point2D(6, 8), result, GeometryNumericsEqualHelper.IsAlmostEqual);
 
         result = point / 2;
-        Assert.Equal(1.5, result.X);
-        Assert.Equal(2, result.Y);
-
-        result = point / 2;
-        Assert.Equal(1.5, result.X);
-        Assert.Equal(2, result.Y);
+        Assert.Equal(new Point2D(1.5, 2), result, GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
     [Fact(DisplayName = "测试两个点中心点的计算。")]
@@ -68,8 +57,7 @@ public class Point2DTest
         var point1 = new Point2D(3, 4);
         var point2 = new Point2D(5, 6);
         var result = Point2D.Middle(point1, point2);
-        Assert.Equal(4, result.X);
-        Assert.Equal(5, result.Y);
+        Assert.Equal(new Point2D(4, 5), result, GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
     [Fact(DisplayName = "测试多个点中心点的计算。")]
@@ -84,8 +72,7 @@ public class Point2DTest
             new(9, 10),
         };
         var result = Point2D.Middle(points);
-        Assert.Equal(5, result.X);
-        Assert.Equal(6, result.Y);
+        Assert.Equal(new Point2D(5, 6), result, GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
     #endregion

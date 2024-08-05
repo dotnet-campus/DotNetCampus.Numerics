@@ -12,16 +12,14 @@ public class Scaling2DTest
     public void CreateFromXYTest()
     {
         var scaling = Scaling2D.Create(2, 3);
-        Assert.Equal(2, scaling.ScaleX);
-        Assert.Equal(3, scaling.ScaleY);
+        Assert.Equal(new Scaling2D(2, 3), scaling, GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
     [Fact(DisplayName = "测试通过缩放比例创建缩放。")]
     public void CreateFromScaleTest()
     {
         var scaling = Scaling2D.Create(2);
-        Assert.Equal(2, scaling.ScaleX);
-        Assert.Equal(2, scaling.ScaleY);
+        Assert.Equal(new Scaling2D(2, 2), scaling, GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
     #endregion
