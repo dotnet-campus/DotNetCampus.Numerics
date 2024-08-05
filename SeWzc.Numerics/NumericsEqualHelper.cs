@@ -153,7 +153,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this Vector2D a, Vector2D b)
     {
-        return (a - b).LengthSquared < NearlyTolerance * NearlyTolerance * (a.LengthSquared + b.LengthSquared);
+        return (a - b).LengthSquared <= NearlyTolerance * NearlyTolerance * (a.LengthSquared + b.LengthSquared);
     }
 
     /// <summary>
@@ -165,7 +165,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual(this Vector2D a, Vector2D b)
     {
-        return (a - b).LengthSquared < AlmostTolerance * AlmostTolerance * (a.LengthSquared + b.LengthSquared);
+        return (a - b).LengthSquared <= AlmostTolerance * AlmostTolerance * (a.LengthSquared + b.LengthSquared);
     }
 
     /// <summary>
@@ -177,7 +177,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyEqual(this Vector3D a, Vector3D b)
     {
-        return (a - b).LengthSquared < NearlyTolerance * NearlyTolerance * (a.LengthSquared + b.LengthSquared);
+        return (a - b).LengthSquared <= NearlyTolerance * NearlyTolerance * (a.LengthSquared + b.LengthSquared);
     }
 
     /// <summary>
@@ -189,7 +189,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual(this Vector3D a, Vector3D b)
     {
-        return (a - b).LengthSquared < AlmostTolerance * AlmostTolerance * (a.LengthSquared + b.LengthSquared);
+        return (a - b).LengthSquared <= AlmostTolerance * AlmostTolerance * (a.LengthSquared + b.LengthSquared);
     }
 
     #endregion
@@ -206,7 +206,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsCloseZero(this double a, double tolerance, double normalizationFactor)
     {
-        return Math.Abs(a) < tolerance * normalizationFactor;
+        return Math.Abs(a) <= tolerance * normalizationFactor;
     }
 
     /// <summary>
@@ -219,7 +219,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsCloseZero(this float a, float tolerance, float normalizationFactor)
     {
-        return Math.Abs(a) < tolerance * normalizationFactor;
+        return Math.Abs(a) <= tolerance * normalizationFactor;
     }
 
     /// <summary>
@@ -231,7 +231,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsCloseZero(this double a, double tolerance)
     {
-        return Math.Abs(a) < tolerance;
+        return Math.Abs(a) <= tolerance;
     }
 
     /// <summary>
@@ -243,7 +243,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsCloseZero(this float a, float tolerance)
     {
-        return Math.Abs(a) < tolerance;
+        return Math.Abs(a) <= tolerance;
     }
 
     /// <summary>
@@ -290,7 +290,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNearlyZero(this double a)
     {
-        return Math.Abs(a) < NearlyTolerance;
+        return Math.Abs(a) <= NearlyTolerance;
     }
 
     /// <summary>
@@ -300,7 +300,7 @@ public static class NumericsEqualHelper
     /// <returns>如果浮点数近似为 0，则返回 <see langword="true" />；否则返回 <see langword="false" />。</returns>
     public static bool IsNearlyZero(this float a)
     {
-        return Math.Abs(a) < NearlyToleranceF;
+        return Math.Abs(a) <= NearlyToleranceF;
     }
 
     /// <summary>
@@ -311,7 +311,7 @@ public static class NumericsEqualHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostZero(this double a)
     {
-        return Math.Abs(a) < AlmostTolerance;
+        return Math.Abs(a) <= AlmostTolerance;
     }
 
     #endregion
