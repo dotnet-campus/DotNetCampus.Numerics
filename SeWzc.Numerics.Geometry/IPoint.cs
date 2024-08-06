@@ -32,6 +32,42 @@ public interface IPoint<TSelf, TVector, TNum>
     static abstract TSelf Middle(IReadOnlyList<TSelf> points);
 
     /// <summary>
+    /// 获取两个点的加权和。
+    /// </summary>
+    /// <param name="weight1">第一个点的权重。</param>
+    /// <param name="point1">第一个点。</param>
+    /// <param name="weight2">第二个点的权重。</param>
+    /// <param name="point2">第二个点。</param>
+    /// <returns>两个点的加权中点。</returns>
+    static abstract TSelf WeightedSum(TNum weight1, TSelf point1, TNum weight2, TSelf point2);
+
+    /// <summary>
+    /// 获取三个点的加权和。
+    /// </summary>
+    /// <param name="weight1">第一个点的权重。</param>
+    /// <param name="point1">第一个点。</param>
+    /// <param name="weight2">第二个点的权重。</param>
+    /// <param name="point2">第二个点。</param>
+    /// <param name="weight3">第三个点的权重。</param>
+    /// <param name="point3">第三个点。</param>
+    /// <returns>三个点的加权中点。</returns>
+    static abstract TSelf WeightedSum(TNum weight1, TSelf point1, TNum weight2, TSelf point2, TNum weight3, TSelf point3);
+
+    /// <summary>
+    /// 获取四个点的加权和。
+    /// </summary>
+    /// <param name="weight1">第一个点的权重。</param>
+    /// <param name="point1">第一个点。</param>
+    /// <param name="weight2">第二个点的权重。</param>
+    /// <param name="point2">第二个点。</param>
+    /// <param name="weight3">第三个点的权重。</param>
+    /// <param name="point3">第三个点。</param>
+    /// <param name="weight4">第四个点的权重。</param>
+    /// <param name="point4">第四个点。</param>
+    /// <returns>四个点的加权中点。</returns>
+    static abstract TSelf WeightedSum(TNum weight1, TSelf point1, TNum weight2, TSelf point2, TNum weight3, TSelf point3, TNum weight4, TSelf point4);
+
+    /// <summary>
     /// 转换成向量。相当于从原点到该点的向量。
     /// </summary>
     /// <returns>从原点到该点的向量。</returns>

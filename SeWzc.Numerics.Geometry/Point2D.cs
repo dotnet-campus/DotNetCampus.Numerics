@@ -33,6 +33,28 @@ public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vect
         return new Point2D(x / points.Count, y / points.Count);
     }
 
+    /// <inheritdoc />
+    public static Point2D WeightedSum(double weight1, Point2D point1, double weight2, Point2D point2)
+    {
+        return new Point2D(weight1 * point1.X + weight2 * point2.X, weight1 * point1.Y + weight2 * point2.Y);
+    }
+
+    /// <inheritdoc />
+    public static Point2D WeightedSum(double weight1, Point2D point1, double weight2, Point2D point2, double weight3, Point2D point3)
+    {
+        return new Point2D(
+            weight1 * point1.X + weight2 * point2.X + weight3 * point3.X,
+            weight1 * point1.Y + weight2 * point2.Y + weight3 * point3.Y);
+    }
+
+    /// <inheritdoc />
+    public static Point2D WeightedSum(double weight1, Point2D point1, double weight2, Point2D point2, double weight3, Point2D point3, double weight4, Point2D point4)
+    {
+        return new Point2D(
+            weight1 * point1.X + weight2 * point2.X + weight3 * point3.X + weight4 * point4.X,
+            weight1 * point1.Y + weight2 * point2.Y + weight3 * point3.Y + weight4 * point4.Y);
+    }
+
     #endregion
 
     #region 成员方法
