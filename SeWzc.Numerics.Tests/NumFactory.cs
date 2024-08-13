@@ -37,7 +37,7 @@ internal static class NumFactory
 }
 
 internal static class NumFactory<TNum>
-    where TNum : unmanaged, INumber<TNum>
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     #region 静态变量
 

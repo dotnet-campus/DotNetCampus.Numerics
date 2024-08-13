@@ -13,7 +13,7 @@ namespace SeWzc.Numerics.Geometry;
 public interface IPoint<TSelf, TVector, TNum>
     where TSelf : unmanaged, IPoint<TSelf, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
-    where TNum : unmanaged, INumber<TNum>
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     /// <summary>
     /// 获取两个点的中点。

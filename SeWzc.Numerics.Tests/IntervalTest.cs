@@ -3,7 +3,7 @@ using Xunit;
 
 namespace SeWzc.Numerics.Tests;
 
-[TestSubject(typeof(Interval))]
+[TestSubject(typeof(Interval<>))]
 public class IntervalTest
 {
     #region 成员方法
@@ -15,7 +15,7 @@ public class IntervalTest
     [InlineData(1, 1, 0)]
     public void LengthTest(double start, double end, double expected)
     {
-        var interval = new Interval(start, end);
+        var interval = new Interval<double>(start, end);
         Assert.Equal(expected, interval.Length);
     }
 
@@ -27,7 +27,7 @@ public class IntervalTest
     [InlineData(0, 1, 2, false)]
     public void ContainsTest(double start, double end, double value, bool expected)
     {
-        var interval = new Interval(start, end);
+        var interval = new Interval<double>(start, end);
         Assert.Equal(expected, interval.Contains(value));
     }
 
@@ -39,7 +39,7 @@ public class IntervalTest
     [InlineData(1, 0.99, true)]
     public void IsEmptyTest(double start, double end, bool expected)
     {
-        var interval = new Interval(start, end);
+        var interval = new Interval<double>(start, end);
         Assert.Equal(expected, interval.IsEmpty);
     }
 
@@ -50,7 +50,7 @@ public class IntervalTest
     [InlineData(1, 1, 1, 1)]
     public void CreateTest(double a, double b, double start, double end)
     {
-        var interval = Interval.Create(a, b);
+        var interval = Interval<double>.Create(a, b);
         Assert.Equal(start, interval.Start);
         Assert.Equal(end, interval.End);
     }
@@ -71,8 +71,8 @@ public class IntervalTest
     [InlineData(0, 0, 1, 0, true)]
     public void SubsetTest(double start, double end, double start2, double end2, bool expected)
     {
-        var interval = new Interval(start, end);
-        var interval2 = new Interval(start2, end2);
+        var interval = new Interval<double>(start, end);
+        var interval2 = new Interval<double>(start2, end2);
         Assert.Equal(expected, interval2.IsSubsetOf(interval));
         Assert.Equal(expected, interval.IsSupersetOf(interval2));
     }
@@ -88,8 +88,8 @@ public class IntervalTest
     [InlineData(0, 1, 0, 1.1, false)]
     public void ProperSubsetTest(double start, double end, double start2, double end2, bool expected)
     {
-        var interval = new Interval(start, end);
-        var interval2 = new Interval(start2, end2);
+        var interval = new Interval<double>(start, end);
+        var interval2 = new Interval<double>(start2, end2);
         Assert.Equal(expected, interval2.IsProperSubsetOf(interval));
         Assert.Equal(expected, interval.IsProperSupersetOf(interval2));
     }

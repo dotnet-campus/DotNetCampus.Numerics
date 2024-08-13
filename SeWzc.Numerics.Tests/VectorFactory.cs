@@ -7,7 +7,7 @@ namespace SeWzc.Numerics.Tests;
 
 internal static class VectorFactory<TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
-    where TNum : unmanaged, INumber<TNum>
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     #region 静态变量
 

@@ -1,4 +1,6 @@
-﻿namespace SeWzc.Numerics;
+﻿using System.Numerics;
+
+namespace SeWzc.Numerics;
 
 /// <summary>
 /// 区间。
@@ -8,7 +10,8 @@
 /// </remarks>
 /// <param name="Start">区间的左端点。</param>
 /// <param name="End">区间的右端点。</param>
-public readonly record struct Interval(double Start, double End)
+public readonly record struct Interval<TNum>(TNum Start, TNum End)
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     #region 静态方法
 
@@ -18,9 +21,9 @@ public readonly record struct Interval(double Start, double End)
     /// <param name="a">区间的一个端点。</param>
     /// <param name="b">区间的另一个端点。</param>
     /// <returns></returns>
-    public static Interval Create(double a, double b)
+    public static Interval<TNum> Create(TNum a, TNum b)
     {
-        return a > b ? new Interval(b, a) : new Interval(a, b);
+        return a > b ? new Interval<TNum>(b, a) : new Interval<TNum>(a, b);
     }
 
     #endregion
@@ -48,7 +51,7 @@ public readonly record struct Interval(double Start, double End)
     /// <summary>
     /// 区间长度。
     /// </summary>
-    public double Length => Start >= End ? 0 : End - Start;
+    public TNum Length => Start >= End ? TNum.Zero : End - Start;
 
     #endregion
 
@@ -59,7 +62,7 @@ public readonly record struct Interval(double Start, double End)
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool Contains(double value)
+    public bool Contains(TNum value)
     {
         return Start <= value && value <= End;
     }
@@ -69,6 +72,7 @@ public readonly record struct Interval(double Start, double End)
     {
         return _isNotEmpty ? $"[{Start}, {End}]" : "Empty";
     }
+
     #endregion
 }
 
@@ -85,7 +89,8 @@ public static class IntervalExtensions
     /// <param name="interval"></param>
     /// <param name="other"></param>
     /// <returns></returns>
-    public static bool IsProperSubsetOf(this Interval interval, Interval other)
+    public static bool IsProperSubsetOf<TNum>(this Interval<TNum> interval, Interval<TNum> other)
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         if (other.IsEmpty)
             return false;
@@ -104,7 +109,8 @@ public static class IntervalExtensions
     /// <param name="interval"></param>
     /// <param name="other"></param>
     /// <returns></returns>
-    public static bool IsSubsetOf(this Interval interval, Interval other)
+    public static bool IsSubsetOf<TNum>(this Interval<TNum> interval, Interval<TNum> other)
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         if (interval.IsEmpty)
             return true;
@@ -121,7 +127,8 @@ public static class IntervalExtensions
     /// <param name="interval"></param>
     /// <param name="other"></param>
     /// <returns></returns>
-    public static bool IsProperSupersetOf(this Interval interval, Interval other)
+    public static bool IsProperSupersetOf<TNum>(this Interval<TNum> interval, Interval<TNum> other)
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         return other.IsProperSubsetOf(interval);
     }
@@ -132,7 +139,8 @@ public static class IntervalExtensions
     /// <param name="interval"></param>
     /// <param name="other"></param>
     /// <returns></returns>
-    public static bool IsSupersetOf(this Interval interval, Interval other)
+    public static bool IsSupersetOf<TNum>(this Interval<TNum> interval, Interval<TNum> other)
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         return other.IsSubsetOf(interval);
     }

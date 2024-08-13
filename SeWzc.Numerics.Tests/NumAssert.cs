@@ -10,7 +10,7 @@ internal static class NumAssert
     #region 静态方法
 
     public static void CloseEqual<TNum>(TNum expected, TNum actual)
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         if (typeof(TNum) == typeof(double))
         {
@@ -59,7 +59,7 @@ internal static class NumAssert
     }
 
     public static void Equal<TNum>(TNum expected, TNum actual)
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         Assert.Equal(expected, actual);
     }

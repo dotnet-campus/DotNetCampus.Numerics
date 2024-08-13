@@ -11,7 +11,7 @@ namespace SeWzc.Numerics;
 /// <typeparam name="TNum">向量元素的类型。</typeparam>
 public interface IVector<TSelf, TNum> : IEqualityOperators<TSelf, TSelf, bool>
     where TSelf : unmanaged, IVector<TSelf, TNum>
-    where TNum : unmanaged, INumber<TNum>
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     #region 静态变量
 

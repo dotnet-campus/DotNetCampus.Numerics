@@ -13,7 +13,7 @@ namespace SeWzc.Numerics.Matrix;
 public interface IMatrix<TRow, TColumn, TNum>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>
-    where TNum : unmanaged, INumber<TNum>
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     #region 静态变量
 
@@ -81,7 +81,7 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TN
     where TSelf : IMatrix<TSelf, TRow, TColumn, TNum>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>
-    where TNum : unmanaged, INumber<TNum>
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     #region 静态变量
 
@@ -125,7 +125,7 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose> : IMatrix<TSelf
     where TSelf : IMatrix<TSelf, TRow, TColumn, TNum, TTranspose>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>
-    where TNum : unmanaged, INumber<TNum>
+    where TNum : unmanaged, IFloatingPoint<TNum>
     where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum>
 {
     #region 属性
@@ -150,7 +150,7 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose> : IMatrix<TSelf
 public interface ISquareMatrix<TSelf, TVector, TNum> : IMatrix<TSelf, TVector, TVector, TNum, TSelf>
     where TSelf : ISquareMatrix<TSelf, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
-    where TNum : unmanaged, INumber<TNum>
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     #region 静态变量
 

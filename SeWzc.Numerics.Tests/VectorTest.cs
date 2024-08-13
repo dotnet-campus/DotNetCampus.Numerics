@@ -50,7 +50,7 @@ public class VectorTest
 
     private static void AddTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         VectorFactory<TVector, TNum>.Test((a, b) =>
         {
@@ -68,7 +68,7 @@ public class VectorTest
 
     private static void SubtractTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         VectorFactory<TVector, TNum>.Test((a, b) =>
         {
@@ -86,7 +86,7 @@ public class VectorTest
 
     private static void DotTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         VectorFactory<TVector, TNum>.Test((a, b) =>
         {
@@ -106,7 +106,7 @@ public class VectorTest
 
     private static void MultiplyTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         VectorFactory<TVector, TNum>.Test((v, n) =>
         {
@@ -127,7 +127,7 @@ public class VectorTest
 
     private static void DivideTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         VectorFactory<TVector, TNum>.Test((v, n) =>
         {
@@ -145,7 +145,7 @@ public class VectorTest
 
     private static void LengthTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         VectorFactory<TVector, TNum>.Test(v =>
         {
@@ -179,7 +179,7 @@ public class VectorTest
 
     private static void EqualsTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
 #pragma warning disable CS1718
         // ReSharper disable ParameterOnlyUsedForPreconditionCheck.Local
@@ -208,7 +208,7 @@ public class VectorTest
 
     private static void NormalizeTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         VectorFactory<TVector, TNum>.Test(v =>
         {
@@ -235,7 +235,7 @@ public class VectorTest
 
     private static void UnaryNegationTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         VectorFactory<TVector, TNum>.Test(v =>
         {
@@ -253,7 +253,7 @@ public class VectorTest
 
     private static void IndexOutRangeTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
     {
         var v = new TVector();
         Assert.Throws<ArgumentOutOfRangeException>(() => v[-1]);

@@ -65,7 +65,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test((a, b) =>
@@ -89,7 +89,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test((a, b) =>
@@ -113,7 +113,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test((a, b) =>
@@ -144,7 +144,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test((a, b) =>
@@ -175,7 +175,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test((a, b) =>
@@ -206,7 +206,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test((a, b) =>
@@ -230,7 +230,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test(a =>
@@ -254,7 +254,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test(m =>
@@ -281,7 +281,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test(m =>
@@ -305,7 +305,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, INumber<TNum>
+        where TNum : unmanaged, IFloatingPoint<TNum>
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test(m =>
