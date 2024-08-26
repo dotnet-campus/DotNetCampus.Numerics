@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <Version>0.1.0-alpha08</Version>
+    <Company>dotnet campus</Company>
     <Authors>SeWzc</Authors>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
