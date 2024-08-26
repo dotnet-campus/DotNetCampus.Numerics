@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- 此版本号将被推 Tag 打包时覆盖，仅本地构建有用 -->
+    <Version>99.99.99</Version>
+  </PropertyGroup>
+</Project>
