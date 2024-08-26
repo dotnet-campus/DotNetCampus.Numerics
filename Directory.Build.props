@@ -1,11 +1,22 @@
 <Project>
   <PropertyGroup>
-    <Version>0.1.0-alpha08</Version>
+    <Company>dotnet campus</Company>
     <Authors>SeWzc</Authors>
+    <Copyright>Copyright (c) dotnet-campus 2023-$([System.DateTime]::Now.ToString(`yyyy`))</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <!-- 嵌入源代码到符号文件，方便调试 -->
+    <EmbedAllSources>true</EmbedAllSources>
+    <!-- 输出符号包 -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- 输出 pdb 文件到 NuGet 包 -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <!-- 生成注释xml文件 -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <AnalysisLevel>latest-all</AnalysisLevel>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

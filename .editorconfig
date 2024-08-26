@@ -1,4 +1,4 @@
-﻿[*.cs]
+[*.cs]
 
 # CA2225: 运算符重载具有命名的备用项
 dotnet_diagnostic.CA2225.severity = silent
