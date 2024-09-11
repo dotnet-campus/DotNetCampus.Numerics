@@ -58,11 +58,5 @@ internal static class NumAssert
             throw new NotSupportedException($"暂时不支持类型 {typeof(TNum).FullName}。");
     }
 
-    public static void Equal<TNum>(TNum expected, TNum actual)
-        where TNum : unmanaged, IFloatingPoint<TNum>
-    {
-        Assert.Equal(expected, actual);
-    }
-
     #endregion
 }

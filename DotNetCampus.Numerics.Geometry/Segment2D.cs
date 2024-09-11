@@ -60,7 +60,7 @@ public readonly record struct Segment2D(Line2D Line, double Length) : IAffineTra
         var position = vector.Det(other.UnitDirectionVector) / det;
         var radio = position / Length;
         var radio2 = vector.Det(UnitDirectionVector) / det / other.Length;
-        if (radio.IsInZeroToOne() || radio2.IsInZeroToOne())
+        if (!radio.IsInZeroToOne() || !radio2.IsInZeroToOne())
             return null;
 
         return Line.GetPoint(position);
