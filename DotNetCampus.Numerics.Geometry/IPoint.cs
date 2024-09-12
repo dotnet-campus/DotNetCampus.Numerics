@@ -13,7 +13,10 @@ namespace DotNetCampus.Numerics.Geometry;
 public interface IPoint<TSelf, TVector, TNum>
     where TSelf : unmanaged, IPoint<TSelf, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
+#if NET8_0_OR_GREATER
+    , IFloatingPoint<TNum>
+#endif
 {
     /// <summary>
     /// 获取两个点的中点。
