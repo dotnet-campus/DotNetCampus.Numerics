@@ -35,14 +35,36 @@ public readonly record struct BoundingBox2D
     }
 
     /// <summary>
-    /// 通过左上角位置和大小创建 2 维边界框。
+    /// 通过最小坐标位置和大小创建 2 维边界框。
     /// </summary>
-    /// <param name="location">左上角位置。</param>
+    /// <param name="minPoint">最小坐标位置。</param>
     /// <param name="size">大小。</param>
     /// <returns>创建的 2 维边界框。</returns>
-    public static BoundingBox2D CreateByLocationSize(Point2D location, Size2D size)
+    public static BoundingBox2D CreateByMinPointSize(Point2D minPoint, Size2D size)
     {
-        return Create(location.X, location.Y, location.X + size.Width, location.Y + size.Height);
+        if (size.Width < 0 || size.Height < 0)
+        {
+            throw new ArgumentException("The size of the bounding box cannot be negative.");
+        }
+
+        return Create(minPoint.X, minPoint.Y, minPoint.X + size.Width, minPoint.Y + size.Height);
+    }
+
+    /// <summary>
+    /// 通过中心点和大小创建 2 维边界框。
+    /// </summary>
+    /// <param name="center"></param>
+    /// <param name="size"></param>
+    /// <returns></returns>
+    public static BoundingBox2D CreateByCenterSize(Point2D center, Size2D size)
+    {
+        if (size.Width < 0 || size.Height < 0)
+        {
+            throw new ArgumentException("The size of the bounding box cannot be negative.");
+        }
+
+        var halfSize = size / 2;
+        return new BoundingBox2D(center.X - halfSize.Width, center.Y - halfSize.Height, center.X + halfSize.Width, center.Y + halfSize.Height);
     }
 
     /// <summary>
@@ -165,6 +187,11 @@ public readonly record struct BoundingBox2D
     public double Height => MaxY - MinY;
 
     /// <summary>
+    /// 边界框的大小。
+    /// </summary>
+    public Size2D Size => new(Width, Height);
+
+    /// <summary>
     /// 边界框坐标值最小的点（MinX, MinY）。
     /// </summary>
     public Point2D MinPoint => new(MinX, MinY);
@@ -188,11 +215,6 @@ public readonly record struct BoundingBox2D
     /// </summary>
     public BoundingBox2D()
     {
-        MinX = 0;
-        MinY = 0;
-        MaxX = 0;
-        MaxY = 0;
-
         _isNotEmpty = false;
     }
 
