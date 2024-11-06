@@ -37,6 +37,11 @@ public readonly record struct Segment2D(Line2D Line, double Length) : IAffineTra
     public Point2D EndPoint => StartPoint + UnitDirectionVector * Length;
 
     /// <summary>
+    /// 获取线段的向量。
+    /// </summary>
+    public Vector2D DirectionVector => UnitDirectionVector * Length;
+
+    /// <summary>
     /// 获取线段的单位方向向量。
     /// </summary>
     public Vector2D UnitDirectionVector => Line.UnitDirectionVector;
