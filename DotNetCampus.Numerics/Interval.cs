@@ -11,10 +11,7 @@ namespace DotNetCampus.Numerics;
 /// <param name="Start">区间的左端点。</param>
 /// <param name="End">区间的右端点。</param>
 public readonly record struct Interval<TNum>(TNum Start, TNum End)
-    where TNum : unmanaged
-#if NET8_0_OR_GREATER
-    , IFloatingPoint<TNum>
-#endif
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     #region 静态方法
 
@@ -26,11 +23,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// <returns></returns>
     public static Interval<TNum> Create(TNum a, TNum b)
     {
-#if NET8_0_OR_GREATER
         return a > b ? new Interval<TNum>(b, a) : new Interval<TNum>(a, b);
-#else
-        throw new NotSupportedException();
-#endif
     }
 
     #endregion
@@ -44,12 +37,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// 未使用构造函数创建的区间是空集。
     /// 区间起点大于等于终点的区间是空集。
     /// </remarks>
-    private readonly bool _isNotEmpty
-#if NET8_0_OR_GREATER
-        = Start <= End;
-#else
-     ;
-#endif
+    private readonly bool _isNotEmpty = Start <= End;
 
     #endregion
 
@@ -63,12 +51,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// <summary>
     /// 区间长度。
     /// </summary>
-    public TNum Length
-#if NET8_0_OR_GREATER
-        => Start >= End ? TNum.Zero : End - Start;
-#else
-        => throw new NotSupportedException();
-#endif
+    public TNum Length => Start >= End ? TNum.Zero : End - Start;
 
     #endregion
 
@@ -81,11 +64,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// <returns></returns>
     public bool Contains(TNum value)
     {
-#if NET8_0_OR_GREATER
         return Start <= value && value <= End;
-#else
-        throw new NotSupportedException();
-#endif
     }
 
     /// <inheritdoc />
@@ -111,7 +90,6 @@ public static class IntervalExtensions
     /// <param name="other"></param>
     /// <returns></returns>
     public static bool IsProperSubsetOf<TNum>(this Interval<TNum> interval, Interval<TNum> other)
-#if NET8_0_OR_GREATER
         where TNum : unmanaged, IFloatingPoint<TNum>
     {
         if (other.IsEmpty)
@@ -124,10 +102,6 @@ public static class IntervalExtensions
                && interval.End <= other.End
                && (!interval.Start.Equals(other.Start) || !interval.End.Equals(other.End));
     }
-#else
-        where TNum : unmanaged
-        => throw new NotSupportedException();
-#endif
 
     /// <summary>
     /// 是否是一个区间的子集。
@@ -136,7 +110,6 @@ public static class IntervalExtensions
     /// <param name="other"></param>
     /// <returns></returns>
     public static bool IsSubsetOf<TNum>(this Interval<TNum> interval, Interval<TNum> other)
-#if NET8_0_OR_GREATER
         where TNum : unmanaged, IFloatingPoint<TNum>
     {
         if (interval.IsEmpty)
@@ -147,12 +120,7 @@ public static class IntervalExtensions
 
         return interval.Start >= other.Start && interval.End <= other.End;
     }
-#else
-        where TNum : unmanaged
-        => throw new NotSupportedException();
-#endif
 
-#if NET8_0_OR_GREATER
     /// <summary>
     /// 是否是一个区间的真超集。
     /// </summary>
@@ -176,7 +144,6 @@ public static class IntervalExtensions
     {
         return other.IsSubsetOf(interval);
     }
-#endif
 
     #endregion
 }

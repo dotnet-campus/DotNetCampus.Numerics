@@ -9,15 +9,9 @@ namespace DotNetCampus.Numerics;
 /// </summary>
 /// <typeparam name="TSelf">实现此接口的类型。</typeparam>
 /// <typeparam name="TNum">向量元素的类型。</typeparam>
-public interface IVector<TSelf, TNum>
-#if NET8_0_OR_GREATER
-    : IEqualityOperators<TSelf, TSelf, bool>
-#endif
+public interface IVector<TSelf, TNum> : IEqualityOperators<TSelf, TSelf, bool>
     where TSelf : unmanaged, IVector<TSelf, TNum>
-    where TNum : unmanaged
-#if NET8_0_OR_GREATER
-    , IFloatingPoint<TNum>
-#endif
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     #region 静态变量
 

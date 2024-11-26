@@ -13,10 +13,7 @@ namespace DotNetCampus.Numerics.Matrix;
 public interface IMatrix<TRow, TColumn, TNum>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>
-    where TNum : unmanaged
-#if NET8_0_OR_GREATER
-    , IFloatingPoint<TNum>
-#endif
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     #region 静态变量
 
@@ -80,17 +77,11 @@ public interface IMatrix<TRow, TColumn, TNum>
 /// <typeparam name="TRow">每行的向量。</typeparam>
 /// <typeparam name="TColumn">每一列的向量。</typeparam>
 /// <typeparam name="TNum">矩阵元素的类型。</typeparam>
-public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TNum>
-#if NET8_0_OR_GREATER
-    , IEqualityOperators<TSelf, TSelf, bool>
-#endif
+public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TNum>, IEqualityOperators<TSelf, TSelf, bool>
     where TSelf : IMatrix<TSelf, TRow, TColumn, TNum>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>
-    where TNum : unmanaged
-#if NET8_0_OR_GREATER
-    , IFloatingPoint<TNum>
-#endif
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     #region 静态变量
 
@@ -134,10 +125,7 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose> : IMatrix<TSelf
     where TSelf : IMatrix<TSelf, TRow, TColumn, TNum, TTranspose>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>
-    where TNum : unmanaged
-#if NET8_0_OR_GREATER
-    , IFloatingPoint<TNum>
-#endif
+    where TNum : unmanaged, IFloatingPoint<TNum>
     where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum>
 {
     #region 属性
@@ -162,10 +150,7 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose> : IMatrix<TSelf
 public interface ISquareMatrix<TSelf, TVector, TNum> : IMatrix<TSelf, TVector, TVector, TNum, TSelf>
     where TSelf : ISquareMatrix<TSelf, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
-    where TNum : unmanaged
-#if NET8_0_OR_GREATER
-    , IFloatingPoint<TNum>
-#endif
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     #region 静态变量
 
