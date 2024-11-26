@@ -19,7 +19,7 @@
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <AnalysisLevel>latest-all</AnalysisLevel>
-    <NoWarn>NU1507</NoWarn>
+    <NoWarn>$(NoWarn);NU1507</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
