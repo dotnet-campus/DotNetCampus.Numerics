@@ -8,10 +8,7 @@ namespace DotNetCampus.Numerics.Geometry;
 public interface IBezierCurve<TPoint, TVector, TNum> : ICurve
     where TPoint :unmanaged, IPoint<TPoint, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
-    where TNum : unmanaged
-#if NET8_0_OR_GREATER
-    , IFloatingPoint<TNum>
-#endif
+    where TNum : unmanaged, IFloatingPoint<TNum>
 {
     /// <summary>
     /// 获取曲线上的点。
