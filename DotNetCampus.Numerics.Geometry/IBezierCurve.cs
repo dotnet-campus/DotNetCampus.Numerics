@@ -6,10 +6,12 @@ namespace DotNetCampus.Numerics.Geometry;
 /// 贝塞尔曲线接口。
 /// </summary>
 public interface IBezierCurve<TPoint, TVector, TNum> : ICurve
-    where TPoint :unmanaged, IPoint<TPoint, TVector, TNum>
+    where TPoint : unmanaged, IPoint<TPoint, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
     where TNum : unmanaged, IFloatingPoint<TNum>
 {
+    #region 成员方法
+
     /// <summary>
     /// 获取曲线上的点。
     /// </summary>
@@ -36,4 +38,6 @@ public interface IBezierCurve<TPoint, TVector, TNum> : ICurve
     /// <param name="t">比例参数，范围为 [0, 1]。</param>
     /// <returns>曲线的曲率。如果曲线是直线，则曲率为 0。</returns>
     double GetCurvature(TNum t);
+
+    #endregion
 }
