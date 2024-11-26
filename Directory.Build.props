@@ -16,9 +16,10 @@
     <!-- 生成注释xml文件 -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-    <LangVersion>latest</LangVersion>
+    <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <AnalysisLevel>latest-all</AnalysisLevel>
+    <NoWarn>NU1507</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
