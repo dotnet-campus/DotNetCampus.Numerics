@@ -217,6 +217,9 @@ public record AffineTransformation2D(double M11, double M12, double M21, double 
     /// <summary>
     /// 应用另一个仿射变换到当前仿射变换。
     /// </summary>
+    /// <remarks>
+    /// 使用应用后的结果对目标进行变换时，相当于使用当前变换对目标进行变换，然后再使用 <paramref name="transformation"/> 对变换后的目标进行变换。
+    /// </remarks>
     /// <param name="transformation">要应用的仿射变换。</param>
     /// <returns>应用后的仿射变换。</returns>
     public AffineTransformation2D Apply(AffineTransformation2D transformation)
