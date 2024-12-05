@@ -90,6 +90,7 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
         return this with
         {
             Scaling = Scaling * scale.CheckPositive(),
+            Translation = Translation * scale,
         };
     }
 
@@ -110,7 +111,14 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
         {
             Scaling = Scaling * scale.CheckPositive(),
             IsYScaleNegative = IsYScaleNegative ^ isXScaleNegative ^ isYScaleNegative,
-            Rotation = Rotation + (isXScaleNegative ? AngularMeasure.Pi : AngularMeasure.Zero),
+            Rotation = (isXScaleNegative, isYScaleNegative) switch
+            {
+                (true, true) => (AngularMeasure.Pi + Rotation).Normalized,
+                (true, false) => (AngularMeasure.Pi - Rotation).Normalized,
+                (false, true) => (AngularMeasure.Tau - Rotation).Normalized,
+                _ => Rotation,
+            },
+            Translation = scale * new Vector2D(isXScaleNegative ? -Translation.X : Translation.X, isYScaleNegative ? -Translation.Y : Translation.Y),
         };
     }
 
@@ -121,7 +129,15 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     /// <returns>旋转后的相似变换。</returns>
     public SimilarityTransformation2D Rotate(AngularMeasure rotation)
     {
-        return this with { Rotation = Rotation + rotation };
+        var cos = rotation.Cos();
+        var sin = rotation.Sin();
+        return this with
+        {
+            Rotation = (Rotation + rotation).Normalized,
+            Translation = new Vector2D(
+                cos * Translation.X - sin * Translation.Y,
+                sin * Translation.X + cos * Translation.Y),
+        };
     }
 
     /// <summary>
@@ -145,7 +161,7 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     }
 
     /// <summary>
-    /// 将向量进行相似变换。与点的变换不同的是，向量的变换不会计算 <see cref="Translation"/>。
+    /// 将向量进行相似变换。与点的变换不同的是，向量的变换不会计算 <see cref="Translation" />。
     /// </summary>
     /// <param name="vector">要变换的向量。</param>
     /// <returns>变换后的向量。</returns>
@@ -201,7 +217,7 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     /// 应用另一个相似变换到当前相似变换上。
     /// </summary>
     /// <remarks>
-    /// 使用应用后的结果对目标进行变换时，相当于使用当前变换对目标进行变换，然后再使用 <paramref name="transformation"/> 对变换后的目标进行变换。
+    /// 使用应用后的结果对目标进行变换时，相当于使用当前变换对目标进行变换，然后再使用 <paramref name="transformation" /> 对变换后的目标进行变换。
     /// </remarks>
     /// <param name="transformation">要应用的相似变换。</param>
     /// <returns>应用后的相似变换。</returns>
