@@ -110,7 +110,7 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
         {
             Scaling = Scaling * scale.CheckPositive(),
             IsYScaleNegative = IsYScaleNegative ^ isXScaleNegative ^ isYScaleNegative,
-            Rotation = Rotation + AngularMeasure.Pi * (isXScaleNegative ? 1 : 0),
+            Rotation = Rotation + (isXScaleNegative ? AngularMeasure.Pi : AngularMeasure.Zero),
         };
     }
 
@@ -137,16 +137,32 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     /// <summary>
     /// 将点进行相似变换。
     /// </summary>
-    /// <param name="point"></param>
-    /// <returns></returns>
+    /// <param name="point">要变换的点。</param>
+    /// <returns>变换后的点。</returns>
     public Point2D Transform(Point2D point)
+    {
+        return (Point2D)(Transform(point.ToVector()) + Translation);
+    }
+
+    /// <summary>
+    /// 将向量进行相似变换。与点的变换不同的是，向量的变换不会计算 <see cref="Translation"/>。
+    /// </summary>
+    /// <param name="vector">要变换的向量。</param>
+    /// <returns>变换后的向量。</returns>
+    public Vector2D Transform(Vector2D vector)
     {
         var sin = Rotation.Sin();
         var cos = Rotation.Cos();
-        return new Point2D(
-            Scaling * (cos * point.X - sin * point.Y) + Translation.X,
-            (IsYScaleNegative ? -1 : 1) * Scaling * (sin * point.X + cos * point.Y) + Translation.Y
-        );
+
+        return IsYScaleNegative
+            ? new Vector2D(
+                Scaling * (cos * vector.X + sin * vector.Y),
+                Scaling * (sin * vector.X - cos * vector.Y)
+            )
+            : new Vector2D(
+                Scaling * (cos * vector.X - sin * vector.Y),
+                Scaling * (sin * vector.X + cos * vector.Y)
+            );
     }
 
     /// <summary>
@@ -169,14 +185,36 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     {
         var sin = Rotation.Sin();
         var cos = Rotation.Cos();
+        var yScaleFactor = IsYScaleNegative ? -1 : 1;
         return this with
         {
             Scaling = 1 / Scaling,
-            Rotation = (-Rotation).Normalized,
+            Rotation = (yScaleFactor * -Rotation).Normalized,
+            IsYScaleNegative = IsYScaleNegative,
             Translation = new Vector2D(
                 -(cos * Translation.X + sin * Translation.Y) / Scaling,
-                (IsYScaleNegative ? -1 : 1) * (sin * Translation.X - cos * Translation.Y) / Scaling),
+                yScaleFactor * (sin * Translation.X - cos * Translation.Y) / Scaling),
         };
+    }
+
+    /// <summary>
+    /// 应用另一个相似变换到当前相似变换上。
+    /// </summary>
+    /// <remarks>
+    /// 使用应用后的结果对目标进行变换时，相当于使用当前变换对目标进行变换，然后再使用 <paramref name="transformation"/> 对变换后的目标进行变换。
+    /// </remarks>
+    /// <param name="transformation">要应用的相似变换。</param>
+    /// <returns>应用后的相似变换。</returns>
+    public SimilarityTransformation2D Apply(SimilarityTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+
+        var yScaleFactor = transformation.IsYScaleNegative ? -1 : 1;
+        return new SimilarityTransformation2D(
+            Scaling * transformation.Scaling,
+            IsYScaleNegative ^ transformation.IsYScaleNegative,
+            yScaleFactor * Rotation + transformation.Rotation,
+            transformation.Transform(Translation) + transformation.Translation);
     }
 
     #endregion

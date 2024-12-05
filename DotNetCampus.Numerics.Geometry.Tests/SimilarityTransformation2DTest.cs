@@ -30,6 +30,8 @@ public class SimilarityTransformation2DTest
         // 组合变换
         { new SimilarityTransformation2D(2, false, AngularMeasure.FromDegree(90), new Vector2D(1, 2)), new Point2D(1, 2), new Point2D(-3, 4) },
         { new SimilarityTransformation2D(2, false, AngularMeasure.FromDegree(90), new Vector2D(1, 2)), new Point2D(3, 4), new Point2D(-7, 8) },
+        { new SimilarityTransformation2D(2, true, AngularMeasure.FromDegree(90), new Vector2D(1, 2)), new Point2D(1, 2), new Point2D(5, 4) },
+        { new SimilarityTransformation2D(2, true, AngularMeasure.FromDegree(90), new Vector2D(1, 2)), new Point2D(3, 4), new Point2D(9, 8) },
     };
 
     #endregion
@@ -196,6 +198,32 @@ public class SimilarityTransformation2DTest
 
         var inverse = similarityTransformation2D.Inverse();
         Assert.Equal(original, inverse.Transform(transformed), GeometryNumericsEqualHelper.IsAlmostEqual);
+    }
+
+    [Theory(DisplayName = "测试应用另一个变换。")]
+    [MemberData(nameof(TestData))]
+    public void ApplyTest(SimilarityTransformation2D similarityTransformation2D, Point2D point, Point2D expected)
+    {
+        Debug.Assert(similarityTransformation2D != null, nameof(similarityTransformation2D) + " != null");
+
+        var newTransformation = SimilarityTransformation2D.Identity
+            .Apply(new SimilarityTransformation2D(similarityTransformation2D.Scaling, false, AngularMeasure.Zero, Vector2D.Zero))
+            .Apply(new SimilarityTransformation2D(1, similarityTransformation2D.IsYScaleNegative, AngularMeasure.Zero, Vector2D.Zero))
+            .Apply(new SimilarityTransformation2D(1, false, similarityTransformation2D.Rotation, Vector2D.Zero))
+            .Apply(new SimilarityTransformation2D(1, false, AngularMeasure.Zero, similarityTransformation2D.Translation));
+
+        Assert.Equal(expected, newTransformation.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
+    }
+
+    [Theory(DisplayName = "测试应用变换后再应用其逆变换。")]
+    [MemberData(nameof(TestData))]
+    public void ApplyInverseTest(SimilarityTransformation2D similarityTransformation2D, Point2D point, Point2D expected)
+    {
+        Debug.Assert(similarityTransformation2D != null, nameof(similarityTransformation2D) + " != null");
+
+        var newTransformation = similarityTransformation2D.Apply(similarityTransformation2D).Apply(similarityTransformation2D.Inverse());
+
+        Assert.Equal(expected, newTransformation.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
     #endregion
