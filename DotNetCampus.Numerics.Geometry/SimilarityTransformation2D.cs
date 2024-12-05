@@ -143,9 +143,10 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     {
         var sin = Rotation.Sin();
         var cos = Rotation.Cos();
+        var yScaleFactor = IsYScaleNegative ? -1 : 1;
         return new Point2D(
-            Scaling * (cos * point.X - sin * point.Y) + Translation.X,
-            (IsYScaleNegative ? -1 : 1) * Scaling * (sin * point.X + cos * point.Y) + Translation.Y
+            Scaling * (cos * point.X - yScaleFactor * sin * point.Y) + Translation.X,
+            Scaling * (sin * point.X + yScaleFactor * cos * point.Y) + Translation.Y
         );
     }
 
@@ -169,13 +170,15 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     {
         var sin = Rotation.Sin();
         var cos = Rotation.Cos();
+        var yScaleFactor = IsYScaleNegative ? -1 : 1;
         return this with
         {
             Scaling = 1 / Scaling,
-            Rotation = (-Rotation).Normalized,
+            Rotation = (yScaleFactor * -Rotation).Normalized,
+            IsYScaleNegative = IsYScaleNegative,
             Translation = new Vector2D(
                 -(cos * Translation.X + sin * Translation.Y) / Scaling,
-                (IsYScaleNegative ? -1 : 1) * (sin * Translation.X - cos * Translation.Y) / Scaling),
+                yScaleFactor * (sin * Translation.X - cos * Translation.Y) / Scaling),
         };
     }
 

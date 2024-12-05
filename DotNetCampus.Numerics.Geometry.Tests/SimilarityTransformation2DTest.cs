@@ -30,6 +30,8 @@ public class SimilarityTransformation2DTest
         // 组合变换
         { new SimilarityTransformation2D(2, false, AngularMeasure.FromDegree(90), new Vector2D(1, 2)), new Point2D(1, 2), new Point2D(-3, 4) },
         { new SimilarityTransformation2D(2, false, AngularMeasure.FromDegree(90), new Vector2D(1, 2)), new Point2D(3, 4), new Point2D(-7, 8) },
+        { new SimilarityTransformation2D(2, true, AngularMeasure.FromDegree(90), new Vector2D(1, 2)), new Point2D(1, 2), new Point2D(5, 4) },
+        { new SimilarityTransformation2D(2, true, AngularMeasure.FromDegree(90), new Vector2D(1, 2)), new Point2D(3, 4), new Point2D(9, 8) },
     };
 
     #endregion
