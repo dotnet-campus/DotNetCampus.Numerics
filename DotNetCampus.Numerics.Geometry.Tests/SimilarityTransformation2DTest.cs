@@ -69,83 +69,70 @@ public class SimilarityTransformation2DTest
         Assert.Equal(point, identity.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
-    [Fact(DisplayName = "测试缩放变换。")]
-    public void ScaleTest()
+    [Theory(DisplayName = "测试缩放变换。")]
+    [MemberData(nameof(TestData))]
+    public void ScaleTest(SimilarityTransformation2D similarityTransformation2D, Point2D point, Point2D transformed)
     {
-        var scaling = SimilarityTransformation2D.Identity.Scale(2);
-        var point = new Point2D(1, 2);
+        Debug.Assert(similarityTransformation2D != null, nameof(similarityTransformation2D) + " != null");
 
-        Assert.Equal(2, scaling.Scaling, NumericsEqualHelper.IsAlmostEqual);
-        Assert.False(scaling.IsYScaleNegative);
-        Assert.Equal(AngularMeasure.Zero, scaling.Rotation, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(Vector2D.Zero, scaling.Translation, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(new Point2D(2, 4), scaling.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
+        var transformation = similarityTransformation2D.Scale(2);
+
+        Assert.Equal(transformed * 2, transformation.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
-    [Fact(DisplayName = "测试 Y 轴方向翻转的缩放变换。")]
-    public void ScaleWithYScaleNegativeTest()
+    [Theory(DisplayName = "测试 Y 轴方向翻转的缩放变换。")]
+    [MemberData(nameof(TestData))]
+    public void ScaleWithYScaleNegativeTest(SimilarityTransformation2D similarityTransformation2D, Point2D point, Point2D transformed)
     {
-        var scaling = SimilarityTransformation2D.Identity.Scale(2, false, true);
-        var point = new Point2D(1, 2);
+        Debug.Assert(similarityTransformation2D != null, nameof(similarityTransformation2D) + " != null");
 
-        Assert.Equal(2, scaling.Scaling, NumericsEqualHelper.IsAlmostEqual);
-        Assert.True(scaling.IsYScaleNegative);
-        Assert.Equal(AngularMeasure.Zero, scaling.Rotation, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(Vector2D.Zero, scaling.Translation, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(new Point2D(2, -4), scaling.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
+        var transformation = similarityTransformation2D.Scale(2, false, true);
+
+        Assert.Equal(new Point2D(transformed.X * 2, -transformed.Y * 2), transformation.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
-    [Fact(DisplayName = "测试 X 轴方向翻转的缩放变换。")]
-    public void ScaleWithXScaleNegativeTest()
+    [Theory(DisplayName = "测试 X 轴方向翻转的缩放变换。")]
+    [MemberData(nameof(TestData))]
+    public void ScaleWithXScaleNegativeTest(SimilarityTransformation2D similarityTransformation2D, Point2D point, Point2D transformed)
     {
-        var scaling = SimilarityTransformation2D.Identity.Scale(2, true, false);
-        var point = new Point2D(1, 2);
+        Debug.Assert(similarityTransformation2D != null, nameof(similarityTransformation2D) + " != null");
 
-        Assert.Equal(2, scaling.Scaling, NumericsEqualHelper.IsAlmostEqual);
-        Assert.True(scaling.IsYScaleNegative);
-        Assert.Equal(AngularMeasure.Pi, scaling.Rotation, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(Vector2D.Zero, scaling.Translation, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(new Point2D(-2, 4), scaling.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
+        var transformation = similarityTransformation2D.Scale(2, true, false);
+
+        Assert.Equal(new Point2D(-transformed.X * 2, transformed.Y * 2), transformation.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
-    [Fact(DisplayName = "测试 X 轴和 Y 轴方向同时翻转的缩放变换。")]
-    public void ScaleWithXYScaleNegativeTest()
+    [Theory(DisplayName = "测试 X 轴和 Y 轴方向同时翻转的缩放变换。")]
+    [MemberData(nameof(TestData))]
+    public void ScaleWithXYScaleNegativeTest(SimilarityTransformation2D similarityTransformation2D, Point2D point, Point2D transformed)
     {
-        var scaling = SimilarityTransformation2D.Identity.Scale(2, true, true);
-        var point = new Point2D(1, 2);
+        Debug.Assert(similarityTransformation2D != null, nameof(similarityTransformation2D) + " != null");
 
-        Assert.Equal(2, scaling.Scaling, NumericsEqualHelper.IsAlmostEqual);
-        Assert.False(scaling.IsYScaleNegative);
-        Assert.Equal(AngularMeasure.Pi, scaling.Rotation, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(Vector2D.Zero, scaling.Translation, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(new Point2D(-2, -4), scaling.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
+        var transformation = similarityTransformation2D.Scale(2, true, true);
+
+        Assert.Equal(new Point2D(-transformed.X * 2, -transformed.Y * 2), transformation.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
-
-    [Fact(DisplayName = "测试旋转变换。")]
-    public void RotateTest()
+    [Theory(DisplayName = "测试旋转变换。")]
+    [MemberData(nameof(TestData))]
+    public void RotateTest(SimilarityTransformation2D similarityTransformation2D, Point2D point, Point2D transformed)
     {
-        var rotation = new SimilarityTransformation2D(1, false, AngularMeasure.FromDegree(90), Vector2D.Zero);
-        var point = new Point2D(1, 2);
+        Debug.Assert(similarityTransformation2D != null, nameof(similarityTransformation2D) + " != null");
 
-        Assert.Equal(1, rotation.Scaling, NumericsEqualHelper.IsAlmostEqual);
-        Assert.False(rotation.IsYScaleNegative);
-        Assert.Equal(AngularMeasure.FromDegree(90), rotation.Rotation, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(Vector2D.Zero, rotation.Translation, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(new Point2D(-2, 1), rotation.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
+        var transformation = similarityTransformation2D.Rotate(AngularMeasure.Degree90);
+
+        Assert.Equal(new Point2D(-transformed.Y, transformed.X), transformation.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
-    [Fact(DisplayName = "测试平移变换。")]
-    public void TranslateTest()
+    [Theory(DisplayName = "测试平移变换。")]
+    [MemberData(nameof(TestData))]
+    public void TranslateTest(SimilarityTransformation2D similarityTransformation2D, Point2D point, Point2D transformed)
     {
-        var translation = new SimilarityTransformation2D(1, false, AngularMeasure.Zero, new Vector2D(1, 2));
-        var point = new Point2D(1, 2);
+        Debug.Assert(similarityTransformation2D != null, nameof(similarityTransformation2D) + " != null");
 
-        Assert.Equal(1, translation.Scaling, NumericsEqualHelper.IsAlmostEqual);
-        Assert.False(translation.IsYScaleNegative);
-        Assert.Equal(AngularMeasure.Zero, translation.Rotation, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(new Vector2D(1, 2), translation.Translation, NumericsEqualHelper.IsAlmostEqual);
-        Assert.Equal(new Point2D(2, 4), translation.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
+        var transformation = similarityTransformation2D.Translate(new Vector2D(1, 2));
+
+        Assert.Equal(transformed + new Vector2D(1, 2), transformation.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
     }
 
     [Fact(DisplayName = "测试通过 ISimilarityTransformable2D 接口进行变换。")]
