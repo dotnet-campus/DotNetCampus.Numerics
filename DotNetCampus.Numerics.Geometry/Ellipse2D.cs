@@ -1,4 +1,4 @@
-using DotNetCampus.Numerics.Equations;
+using DotNetCampus.Numerics.Functions;
 using DotNetCampus.Numerics.Matrix;
 
 namespace DotNetCampus.Numerics.Geometry;
@@ -113,9 +113,10 @@ public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>
         var m = inverseTranspose * inverse;
 
         // 计算特征值，以及特征值对应的特征向量
-        var eigenEquation = new QuadraticEquation(1, -(m.M11 + m.M22), m.Determinant);
-        var eigenValue1 = eigenEquation.Root1;
-        var eigenValue2 = eigenEquation.Root2;
+        var eigenEquation = new QuadraticFunction<double>(1, -(m.M11 + m.M22), m.Determinant);
+        var eigenValues = eigenEquation.GetRoots();
+        var eigenValue1 = eigenValues[0];
+        var eigenValue2 = eigenValues[1];
         var eigenVector2 = new Vector2D(m.M12, eigenValue2 - m.M11);
 
         // 特征值分别是长轴和短轴的平方的倒数，所以获取特征值平方根的倒数即可得到长轴和短轴

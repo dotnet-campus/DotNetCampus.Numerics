@@ -93,6 +93,24 @@ public class IntervalTest
         Assert.Equal(expected, interval2.IsProperSubsetOf(interval));
         Assert.Equal(expected, interval.IsProperSupersetOf(interval2));
     }
+    
+    [Theory(DisplayName = "区间交集测试。")]
+    [InlineData(0, 1, 0, 1, 0, 1)]
+    [InlineData(0, 1, 0, 0.5, 0, 0.5)]
+    [InlineData(0, 1, 0.5, 1, 0.5, 1)]
+    [InlineData(0, 1, 0.5, 0.5, 0.5, 0.5)]
+    [InlineData(0, 1, -1, 2, 0, 1)]
+    [InlineData(0, 1, 0, 2, 0, 1)]
+    [InlineData(0, 1, -1, 1, 0, 1)]
+    [InlineData(0, 1, 0, 1.1, 0, 1)]
+    public void IntersectTest(double start, double end, double start2, double end2, double start3, double end3)
+    {
+        var interval = new Interval<double>(start, end);
+        var interval2 = new Interval<double>(start2, end2);
+        var interval3 = interval.Intersect(interval2);
+        Assert.Equal(start3, interval3.Start);
+        Assert.Equal(end3, interval3.End);
+    }
 
     #endregion
 }
