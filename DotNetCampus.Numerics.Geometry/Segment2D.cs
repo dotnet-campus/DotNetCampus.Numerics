@@ -3,23 +3,21 @@ namespace DotNetCampus.Numerics.Geometry;
 /// <summary>
 /// 2 维线段。
 /// </summary>
-/// <param name="Line"></param>
-/// <param name="Length"></param>
-public readonly record struct Segment2D(Line2D Line, double Length) : IAffineTransformable2D<Segment2D>
+/// <param name="StartPoint">线段的起点。</param>
+/// <param name="EndPoint">线段的终点。</param>
+public readonly record struct Segment2D(Point2D StartPoint, Point2D EndPoint) : IAffineTransformable2D<Segment2D>
 {
     #region 静态方法
 
     /// <summary>
     /// 通过两个点创建线段。
     /// </summary>
-    /// <param name="point1">线段的起点。</param>
-    /// <param name="point2">线段的终点。</param>
+    /// <param name="startPoint">线段的起点。</param>
+    /// <param name="endPont">线段的终点。</param>
     /// <returns>创建的线段。</returns>
-    public static Segment2D Create(Point2D point1, Point2D point2)
+    public static Segment2D Create(Point2D startPoint, Point2D endPont)
     {
-        var lineVector = point2 - point1;
-        var lineVectorLength = lineVector.Length;
-        return new Segment2D(new Line2D(point1, lineVector / lineVectorLength), lineVectorLength);
+        return new Segment2D(startPoint, endPont);
     }
 
     #endregion
@@ -27,24 +25,46 @@ public readonly record struct Segment2D(Line2D Line, double Length) : IAffineTra
     #region 属性
 
     /// <summary>
-    /// 获取线段的起点。
-    /// </summary>
-    public Point2D StartPoint => Line.PointBase;
-
-    /// <summary>
-    /// 获取线段的终点。
-    /// </summary>
-    public Point2D EndPoint => StartPoint + UnitDirectionVector * Length;
-
-    /// <summary>
     /// 获取线段的向量。
     /// </summary>
-    public Vector2D DirectionVector => UnitDirectionVector * Length;
+    public Vector2D DirectionVector => EndPoint - StartPoint;
 
     /// <summary>
     /// 获取线段的单位方向向量。
     /// </summary>
-    public Vector2D UnitDirectionVector => Line.UnitDirectionVector;
+    public Vector2D UnitDirectionVector => DirectionVector.Normalized;
+
+    /// <summary>
+    /// 获取以线段起点为 <see cref="Line2D.PointBase" />，以线段方向向量为方向向量的直线。
+    /// </summary>
+    public Line2D Line => new(StartPoint, DirectionVector);
+
+    /// <summary>
+    /// 获取线段的长度。
+    /// </summary>
+    public double Length => DirectionVector.Length;
+
+    #endregion
+
+    #region 构造函数
+
+    /// <summary>
+    /// 以直线的 <see cref="Line2D.PointBase" /> 作为起始点，与直线相同的方向向量，创建指定长度的线段。
+    /// </summary>
+    /// <param name="Line">线段所在的直线。</param>
+    /// <param name="Length">线段的长度。</param>
+    public Segment2D(Line2D Line, double Length) : this(Line.PointBase, Line.GetPoint(Length))
+    {
+    }
+
+    /// <summary>
+    /// 以直线指定区间截取一个线段。截取区间对应的点通过 <see cref="Line2D.GetPoint(double)" /> 获取。
+    /// </summary>
+    /// <param name="Line">线段所在的直线。</param>
+    /// <param name="interval">截取的区间。</param>
+    public Segment2D(Line2D Line, Interval<double> interval) : this(Line.GetPoint(interval.Start), Line.GetPoint(interval.End))
+    {
+    }
 
     #endregion
 
@@ -59,19 +79,21 @@ public readonly record struct Segment2D(Line2D Line, double Length) : IAffineTra
     {
         var det = UnitDirectionVector.Det(other.UnitDirectionVector);
         if (det.IsAlmostZero())
+        {
             return null;
+        }
 
         var vector = other.StartPoint - StartPoint;
         var position = vector.Det(other.UnitDirectionVector) / det;
         var radio = position / Length;
         var radio2 = vector.Det(UnitDirectionVector) / det / other.Length;
         if (!radio.IsInZeroToOne() || !radio2.IsInZeroToOne())
+        {
             return null;
+        }
 
         return Line.GetPoint(position);
     }
-
-    #endregion
 
     /// <inheritdoc />
     public Segment2D Transform(AffineTransformation2D transformation)
@@ -79,4 +101,6 @@ public readonly record struct Segment2D(Line2D Line, double Length) : IAffineTra
         ArgumentNullException.ThrowIfNull(transformation);
         return new Segment2D(Line.Transform(transformation), Length);
     }
+
+    #endregion
 }

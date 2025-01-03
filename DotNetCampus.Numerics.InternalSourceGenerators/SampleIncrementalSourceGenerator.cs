@@ -13,8 +13,8 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
     #region 静态变量
 
     private const int MaxDimension = 4;
-    private static readonly ImmutableArray<string> AxisNames = ImmutableArray.Create("X", "Y", "Z", "W");
-    private static readonly ImmutableArray<NumberType> NumberTypes = [new NumberType("float", "F", "MathF.Sqrt"), new NumberType("double", "D", "Math.Sqrt")];
+    private static readonly ImmutableArray<string> AxisNames = ["X", "Y", "Z", "W"];
+    private static readonly ImmutableArray<NumberType> NumberTypes = [new("float", "F"), new("double", "D")];
 
     #endregion
 
@@ -56,8 +56,9 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
 
                 "public static int Dimension => " + dimension + ";",
                 $"public static {typeName} Zero => new({string.Join(", ", parameters.Select(_ => "0"))});",
-                $"public {numberType.Name} Length => {numberType.SqrtMethod}(LengthSquared);",
-                $"public {numberType.Name} LengthSquared => {string.Join("+ ", parameters.Select(p => $"{p} * {p}"))};",
+                $"private static {typeName} One => new(1, {string.Join(", ", parameters.Skip(1).Select(_ => "0"))});",
+                $"public {numberType.Name} Length => LengthSquared.Sqrt();",
+                $"public {numberType.Name} LengthSquared => {string.Join(" + ", parameters.Select(p => $"{p} * {p}"))};",
                 $"public {typeName} Normalized => this / Length;",
                 new CodeCombination(
                 [
@@ -102,7 +103,6 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
 
     private static CodeBase GetMatrixCode(string typeName, int rowDimension, int columnDimension, NumberType numberType, string transposeTypeName)
     {
-        var sqrtMethod = numberType.SqrtMethod;
         var rowVectorType = $"Vector{columnDimension}{numberType.Suffix}";
         var columnVectorType = $"Vector{rowDimension}{numberType.Suffix}";
 
@@ -163,7 +163,7 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
                     $"public {transposeTypeName} Transpose => {transposeTypeName}.CreateFromColumnVectors({string.Join(", ", RangeSelect(rowDimension, i => $"Row{i + 1}"))});",
 
                     // Frobenius范数
-                    $"public {numberType.Name} FrobeniusNorm => {sqrtMethod}({string.Join(" + ", RangeSelect(rowDimension, i => $"Row{i + 1}.LengthSquared"))});",
+                    $"public {numberType.Name} FrobeniusNorm => ({string.Join(" + ", RangeSelect(rowDimension, i => $"Row{i + 1}.LengthSquared"))}).Sqrt();",
 
                     $"public override string ToString() => $\"({string.Join(", ", RangeSelect(rowDimension, i => $"{{Row{i + 1}}}"))})\";",
 
@@ -238,7 +238,7 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
 
     #region 内部类
 
-    private sealed record NumberType(string Name, string Suffix, string SqrtMethod);
+    private sealed record NumberType(string Name, string Suffix);
 
     #endregion
 }
