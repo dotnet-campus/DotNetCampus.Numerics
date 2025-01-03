@@ -145,5 +145,24 @@ public static class IntervalExtensions
         return other.IsSubsetOf(interval);
     }
 
+    /// <summary>
+    /// 取两个区间的交集。
+    /// </summary>
+    /// <param name="interval"></param>
+    /// <param name="other"></param>
+    /// <typeparam name="TNum"></typeparam>
+    /// <returns></returns>
+    public static Interval<TNum> Intersect<TNum>(this Interval<TNum> interval, Interval<TNum> other)
+        where TNum : unmanaged, IFloatingPoint<TNum>
+    {
+        if (interval.IsEmpty || other.IsEmpty)
+            return new Interval<TNum>(TNum.Zero, TNum.Zero);
+
+        var start = interval.Start > other.Start ? interval.Start : other.Start;
+        var end = interval.End < other.End ? interval.End : other.End;
+
+        return start > end ? new Interval<TNum>(TNum.Zero, TNum.Zero) : new Interval<TNum>(start, end);
+    }
+
     #endregion
 }
