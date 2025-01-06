@@ -41,5 +41,17 @@ public readonly partial record struct Vector2D
         return AngularMeasure.FromRadian(Math.Atan2(Det(other), Dot(other)));
     }
 
+    /// <summary>
+    /// 将向量旋转指定的角度。
+    /// </summary>
+    /// <param name="angle">旋转角度。</param>
+    /// <returns>旋转后的向量。</returns>
+    public Vector2D Rotate(AngularMeasure angle)
+    {
+        var cos = Math.Cos(angle.Radian);
+        var sin = Math.Sin(angle.Radian);
+        return new Vector2D(X * cos - Y * sin, X * sin + Y * cos);
+    }
+
     #endregion
 }

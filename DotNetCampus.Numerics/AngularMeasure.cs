@@ -140,6 +140,17 @@ public readonly record struct AngularMeasure : IComparable<AngularMeasure>
         return Math.Tan(Radian);
     }
 
+    /// <summary>
+    /// 是否几乎是 π/2 的整数倍角。
+    /// </summary>
+    /// <returns></returns>
+    public bool IsAlmostIntegerMultipleOfHalfPi()
+    {
+        var multiple = Radian / (Math.PI / 2);
+        var rounded = Math.Round(multiple);
+        return (multiple - rounded).IsAlmostZero(Math.Tau);
+    }
+
     /// <inheritdoc />
     public override string ToString()
     {

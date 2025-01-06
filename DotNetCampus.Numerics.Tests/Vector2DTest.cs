@@ -62,6 +62,25 @@ public class Vector2DTest
         Assert.Equal(expected, angle.Radian);
     }
 
+    [Theory(DisplayName = "测试向量的旋转。")]
+    [InlineData(1, 0, Math.PI)]
+    [InlineData(1, 0, Math.PI / 2)]
+    [InlineData(1, 0, Math.PI / 4)]
+    [InlineData(1, 0, -Math.PI / 2)]
+    [InlineData(-1, 0, Math.PI)]
+    [InlineData(-1, 1, Math.PI / 4)]
+    [InlineData(-1, 1, -Math.PI / 4)]
+    [InlineData(-1, 1, 1)]
+    [InlineData(-1, 1, 2)]
+    public void RotateTest(double x, double y, double angle)
+    {
+        var v = new Vector2D(x, y);
+        var expected = AngularMeasure.FromRadian(angle);
+        var rotated = v.Rotate(expected);
+        var actual = v.AngleTo(rotated);
+        Assert.Equal(expected.Normalized, actual.Normalized, NumericsEqualHelper.IsAlmostEqual);
+    }
+
     [Theory(DisplayName = "测试向量的字符串。")]
     [InlineData(1, 2, "(1, 2)")]
     [InlineData(3, 4, "(3, 4)")]
