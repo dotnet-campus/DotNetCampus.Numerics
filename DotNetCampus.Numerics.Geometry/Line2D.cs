@@ -3,9 +3,7 @@ namespace DotNetCampus.Numerics.Geometry;
 /// <summary>
 /// 2 维直线。
 /// </summary>
-/// <param name="PointBase"></param>
-/// <param name="UnitDirectionVector"></param>
-public readonly record struct Line2D(Point2D PointBase, Vector2D UnitDirectionVector) : IAffineTransformable2D<Line2D>
+public readonly record struct Line2D : IAffineTransformable2D<Line2D>
 {
     #region 静态方法
 
@@ -17,26 +15,40 @@ public readonly record struct Line2D(Point2D PointBase, Vector2D UnitDirectionVe
     /// <returns>创建的直线。</returns>
     public static Line2D Create(Point2D point1, Point2D point2)
     {
-        return new Line2D(point1, (point2 - point1).Normalized);
+        return new Line2D(point1, point2 - point1);
     }
-
-    #endregion
-
-    #region 私有字段
-
-    private readonly Vector2D _unitDirectionVector = UnitDirectionVector.Normalized;
 
     #endregion
 
     #region 属性
 
     /// <summary>
-    /// 单位方向向量。
+    /// 单位方向向量。两个相同的直线的单位方向向量相同或相反。
     /// </summary>
     public Vector2D UnitDirectionVector
     {
-        get => _unitDirectionVector;
-        init => _unitDirectionVector = value.Normalized;
+        get;
+        init => field = value.Normalized;
+    }
+
+    /// <summary>
+    /// 直线上的一个点，会作为计算投影位置等值的参考位置。
+    /// </summary>
+    public Point2D PointBase { get; init; }
+
+    #endregion
+
+    #region 构造函数
+
+    /// <summary>
+    /// 2 维直线。
+    /// </summary>
+    /// <param name="pointBase">直线上的一个点，会作为计算投影位置等值的参考位置。</param>
+    /// <param name="directionVector">方向向量。</param>
+    public Line2D(Point2D pointBase, Vector2D directionVector)
+    {
+        PointBase = pointBase;
+        UnitDirectionVector = directionVector.Normalized;
     }
 
     #endregion
@@ -84,7 +96,9 @@ public readonly record struct Line2D(Point2D PointBase, Vector2D UnitDirectionVe
     {
         var det = UnitDirectionVector.Det(other.UnitDirectionVector);
         if (det.IsAlmostZero())
+        {
             return null;
+        }
 
         var vector = other.PointBase - PointBase;
         var position = vector.Det(other.UnitDirectionVector) / det;
