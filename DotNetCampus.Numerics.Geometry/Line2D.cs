@@ -43,12 +43,12 @@ public readonly record struct Line2D : IAffineTransformable2D<Line2D>
     /// <summary>
     /// 2 维直线。
     /// </summary>
-    /// <param name="PointBase">直线上的一个点，会作为计算投影位置等值的参考位置。</param>
-    /// <param name="UnitDirectionVector">单位方向向量。两个相同的直线的单位方向向量相同或相反。</param>
-    public Line2D(Point2D PointBase, Vector2D UnitDirectionVector)
+    /// <param name="pointBase">直线上的一个点，会作为计算投影位置等值的参考位置。</param>
+    /// <param name="directionVector">方向向量。</param>
+    public Line2D(Point2D pointBase, Vector2D directionVector)
     {
-        this.PointBase = PointBase;
-        this.UnitDirectionVector = UnitDirectionVector.Normalized;
+        PointBase = pointBase;
+        UnitDirectionVector = directionVector.Normalized;
     }
 
     #endregion
