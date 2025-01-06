@@ -164,5 +164,24 @@ public class AngularMeasureTest
         Assert.Equal(expected, angle.Normalized.Radian, NumericsEqualHelper.IsAlmostEqual);
     }
 
+    [Theory(DisplayName = "测试角是否几乎是 π/2 的整数倍角。")]
+    [InlineData(0, true)]
+    [InlineData(1e-13, true)]
+    [InlineData(-1e-13, true)]
+    [InlineData(1e-3, false)]
+    [InlineData(-1e-3, false)]
+    [InlineData(Math.PI / 2, true)]
+    [InlineData(Math.PI / 2 + 1e-13, true)]
+    [InlineData(Math.PI / 2 - 1e-13, true)]
+    [InlineData(Math.PI / 2 + 1e-3, false)]
+    [InlineData(Math.PI / 2 - 1e-3, false)]
+    [InlineData(Math.PI, true)]
+    [InlineData(Math.PI * 3 / 2, true)]
+    public void IsAlmostIntegerMultipleOfHalfPiTest(double radian, bool expected)
+    {
+        var angle = AngularMeasure.FromRadian(radian);
+        Assert.Equal(expected, angle.IsAlmostIntegerMultipleOfHalfPi());
+    }
+
     #endregion
 }
