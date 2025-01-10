@@ -1,3 +1,5 @@
+using System.Runtime.Intrinsics.Arm;
+
 namespace DotNetCampus.Numerics;
 
 /// <summary>
@@ -84,6 +86,7 @@ public static class FloatingPointNumberExtensions
     /// <returns>四舍五入到整数。</returns>
     public static int RoundingHalfAwayFromZero(this double value)
     {
+
         return (int)Math.Round(value, MidpointRounding.AwayFromZero);
     }
 
@@ -95,6 +98,26 @@ public static class FloatingPointNumberExtensions
     public static int RoundingHalfAwayFromZero(this float value)
     {
         return (int)MathF.Round(value, MidpointRounding.AwayFromZero);
+    }
+
+    /// <summary>
+    /// 对浮点数进行五舍六入。
+    /// </summary>
+    /// <param name="value">要进行五舍六入的浮点数。</param>
+    /// <returns>五舍六入到整数。</returns>
+    public static int RoundingHalfToZero(this double value)
+    {
+        return (int)Math.Truncate(value - Math.CopySign(0.5, value));
+    }
+
+    /// <summary>
+    /// 对浮点数进行五舍六入。
+    /// </summary>
+    /// <param name="value">要进行五舍六入的浮点数。</param>
+    /// <returns>五舍六入到整数。</returns>
+    public static int RoundingHalfToZero(this float value)
+    {
+        return (int)MathF.Truncate(value - MathF.CopySign(0.5f, value));
     }
 
     /// <summary>

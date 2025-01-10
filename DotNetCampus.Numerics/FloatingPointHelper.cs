@@ -66,5 +66,24 @@ internal static class FloatingPointHelper
         throw new NotSupportedException();
     }
 
+    public static TNum Clamp<TNum>(this TNum value, TNum min, TNum max)
+        where TNum : unmanaged, IFloatingPoint<TNum>
+    {
+        if (typeof(TNum) == typeof(float))
+            return Unsafe.BitCast<float, TNum>(Math.Clamp(Unsafe.BitCast<TNum, float>(value), Unsafe.BitCast<TNum, float>(min), Unsafe.BitCast<TNum, float>(max)));
+
+        if (typeof(TNum) == typeof(double))
+            return Unsafe.BitCast<double, TNum>(Math.Clamp(Unsafe.BitCast<TNum, double>(value), Unsafe.BitCast<TNum, double>(min), Unsafe.BitCast<TNum, double>(max)));
+
+        if (typeof(TNum) == typeof(NFloat))
+            return Unsafe.BitCast<NFloat, TNum>(NFloat.Clamp(Unsafe.BitCast<TNum, NFloat>(value), Unsafe.BitCast<TNum, NFloat>(min), Unsafe.BitCast<TNum, NFloat>(max)));
+
+        return value <= min
+            ? min
+            : value >= max
+                ? max
+                : value;
+    }
+
     #endregion
 }
