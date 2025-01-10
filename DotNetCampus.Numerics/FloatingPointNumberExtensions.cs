@@ -107,7 +107,7 @@ public static class FloatingPointNumberExtensions
     /// <returns>五舍六入到整数。</returns>
     public static int RoundingHalfToZero(this double value)
     {
-        return (int)Math.Truncate(value + Math.CopySign(0.5, value));
+        return (int)Math.Truncate(value - Math.CopySign(0.5, value));
     }
 
     /// <summary>
@@ -117,7 +117,7 @@ public static class FloatingPointNumberExtensions
     /// <returns>五舍六入到整数。</returns>
     public static int RoundingHalfToZero(this float value)
     {
-        return (int)MathF.Truncate(value + MathF.CopySign(0.5f, value));
+        return (int)MathF.Truncate(value - MathF.CopySign(0.5f, value));
     }
 
     /// <summary>
