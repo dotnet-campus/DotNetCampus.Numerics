@@ -67,6 +67,16 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
         return Start <= value && value <= End;
     }
 
+    /// <summary>
+    /// 将目标值限制在区间内。
+    /// </summary>
+    /// <param name="value">需要限制的值。</param>
+    /// <returns>限制后的值。</returns>
+    public TNum Clamp(ref TNum value)
+    {
+        return value.Clamp(Start, End);
+    }
+
     /// <inheritdoc />
     public override string ToString()
     {
