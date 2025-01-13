@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace DotNetCampus.Numerics;
@@ -78,6 +79,7 @@ public static class FloatingPointNumberExtensions
     /// <param name="value">要进行舍入的浮点数。</param>
     /// <returns>最接近的整数。</returns>
     [Obsolete("使用 RoundInt 方法替代。")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static int Round(this double value)
     {
         return (int)Math.Round(value);
@@ -92,6 +94,7 @@ public static class FloatingPointNumberExtensions
     /// <param name="value">要进行舍入的浮点数。</param>
     /// <returns>最接近的整数。</returns>
     [Obsolete("使用 RoundInt 方法替代。")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static int Round(this float value)
     {
         return (int)MathF.Round(value);
@@ -103,6 +106,7 @@ public static class FloatingPointNumberExtensions
     /// <param name="value">要进行四舍五入的浮点数。</param>
     /// <returns>四舍五入到整数。</returns>
     [Obsolete("使用 RoundInt 方法替代。")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static int RoundingHalfAwayFromZero(this double value)
     {
         return (int)Math.Round(value, MidpointRounding.AwayFromZero);
@@ -114,6 +118,7 @@ public static class FloatingPointNumberExtensions
     /// <param name="value">要进行四舍五入的浮点数。</param>
     /// <returns>四舍五入到整数。</returns>
     [Obsolete("使用 RoundInt 方法替代。")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static int RoundingHalfAwayFromZero(this float value)
     {
         return (int)MathF.Round(value, MidpointRounding.AwayFromZero);
@@ -125,6 +130,7 @@ public static class FloatingPointNumberExtensions
     /// <param name="value">要进行五舍六入的浮点数。</param>
     /// <returns>五舍六入到整数。</returns>
     [Obsolete("使用 RoundInt 方法替代。")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static int RoundingHalfToZero(this double value)
     {
         return RoundInt(value, RoundMode.HalfToZero);
@@ -136,6 +142,7 @@ public static class FloatingPointNumberExtensions
     /// <param name="value">要进行五舍六入的浮点数。</param>
     /// <returns>五舍六入到整数。</returns>
     [Obsolete("使用 RoundInt 方法替代。")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static int RoundingHalfToZero(this float value)
     {
         return RoundInt(value, RoundMode.HalfToZero);
@@ -147,6 +154,7 @@ public static class FloatingPointNumberExtensions
     /// <param name="value">要进行向下取整的浮点数。</param>
     /// <returns>小于或等于指定浮点数的最大整数。</returns>
     [Obsolete("使用 RoundInt 方法替代。")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static int Floor(this double value)
     {
         return (int)Math.Floor(value);
@@ -158,6 +166,7 @@ public static class FloatingPointNumberExtensions
     /// <param name="value">要进行向下取整的浮点数。</param>
     /// <returns>小于或等于指定浮点数的最大整数。</returns>
     [Obsolete("使用 RoundInt 方法替代。")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static int Floor(this float value)
     {
         return (int)MathF.Floor(value);
@@ -169,6 +178,7 @@ public static class FloatingPointNumberExtensions
     /// <param name="value">要进行向上取整的浮点数。</param>
     /// <returns>大于或等于指定浮点数的最小整数。</returns>
     [Obsolete("使用 RoundInt 方法替代。")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static int Ceiling(this double value)
     {
         return (int)Math.Ceiling(value);
@@ -180,6 +190,7 @@ public static class FloatingPointNumberExtensions
     /// <param name="value">要进行向上取整的浮点数。</param>
     /// <returns>大于或等于指定浮点数的最小整数。</returns>
     [Obsolete("使用 RoundInt 方法替代。")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static int Ceiling(this float value)
     {
         return (int)MathF.Ceiling(value);
