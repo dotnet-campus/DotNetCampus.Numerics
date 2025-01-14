@@ -34,6 +34,29 @@ public class SimilarityTransformation2DTest
         { new SimilarityTransformation2D(2, true, AngularMeasure.FromDegree(90), new Vector2D(1, 2)), new Point2D(3, 4), new Point2D(9, 8) },
     };
 
+    public static readonly TheoryData<AngularMeasure, Point2D> RotateAtTestData = new()
+    {
+        { AngularMeasure.FromDegree(0), new Point2D(0, 0) },
+        { AngularMeasure.FromDegree(90), new Point2D(0, 0) },
+        { AngularMeasure.FromDegree(0), new Point2D(2, 5) },
+        { AngularMeasure.FromDegree(90), new Point2D(1, 2) },
+        { AngularMeasure.FromDegree(90), new Point2D(3, 4) },
+        { AngularMeasure.FromDegree(15), new Point2D(5, 6) },
+        { AngularMeasure.FromDegree(123456), new Point2D(7, 8) },
+    };
+
+    public static readonly TheoryData<double, Point2D> ScaleAtTestData = new()
+    {
+        { 1, new Point2D(0, 0) },
+        { 1651357, new Point2D(0, 0) },
+        { 1, new Point2D(156, 811) },
+        { 2, new Point2D(1, 2) },
+        { 2.4, new Point2D(1, 2) },
+        { 2, new Point2D(3, 4) },
+        { 3, new Point2D(5, 6) },
+        { 4, new Point2D(7, 8) },
+    };
+
     #endregion
 
     #region 成员方法
@@ -212,6 +235,67 @@ public class SimilarityTransformation2DTest
 
         Assert.Equal(expected, newTransformation.Transform(point), GeometryNumericsEqualHelper.IsAlmostEqual);
     }
+
+    [Theory(DisplayName = "测试绕指定点旋转方法与平移旋转平移方法的等价性。")]
+    [MemberData(nameof(RotateAtTestData))]
+    public void RotateAtTest(AngularMeasure rotation, Point2D point)
+    {
+        var actual = SimilarityTransformation2D.Identity.RotateAt(rotation, point);
+        var expected = SimilarityTransformation2D.Identity.Translate(-point.ToVector())
+            .Rotate(rotation)
+            .Translate(point.ToVector());
+
+        Assert.Equal(expected.Rotation, actual.Rotation, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.Translation, actual.Translation, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.Scaling, actual.Scaling, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.IsYScaleNegative, actual.IsYScaleNegative);
+    }
+
+    [Theory(DisplayName = "测试在指定点缩放方法与平移缩放平移方法的等价性。")]
+    [MemberData(nameof(ScaleAtTestData))]
+    public void ScaleAtTest(double scaling, Point2D point)
+    {
+        var actual = SimilarityTransformation2D.Identity.ScaleAt(scaling, point);
+        var expected = SimilarityTransformation2D.Identity.Translate(-point.ToVector())
+            .Scale(scaling)
+            .Translate(point.ToVector());
+
+        Assert.Equal(expected.Rotation, actual.Rotation, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.Translation, actual.Translation, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.Scaling, actual.Scaling, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.IsYScaleNegative, actual.IsYScaleNegative);
+
+        actual = SimilarityTransformation2D.Identity.ScaleAt(scaling, point, false, true);
+        expected = SimilarityTransformation2D.Identity.Translate(-point.ToVector())
+            .Scale(scaling, false, true)
+            .Translate(point.ToVector());
+
+        Assert.Equal(expected.Rotation, actual.Rotation, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.Translation, actual.Translation, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.Scaling, actual.Scaling, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.IsYScaleNegative, actual.IsYScaleNegative);
+
+        actual = SimilarityTransformation2D.Identity.ScaleAt(scaling, point, true, false);
+        expected = SimilarityTransformation2D.Identity.Translate(-point.ToVector())
+            .Scale(scaling, true, false)
+            .Translate(point.ToVector());
+
+        Assert.Equal(expected.Rotation, actual.Rotation, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.Translation, actual.Translation, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.Scaling, actual.Scaling, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.IsYScaleNegative, actual.IsYScaleNegative);
+
+        actual = SimilarityTransformation2D.Identity.ScaleAt(scaling, point, true, true);
+        expected = SimilarityTransformation2D.Identity.Translate(-point.ToVector())
+            .Scale(scaling, true, true)
+            .Translate(point.ToVector());
+
+        Assert.Equal(expected.Rotation, actual.Rotation, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.Translation, actual.Translation, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.Scaling, actual.Scaling, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(expected.IsYScaleNegative, actual.IsYScaleNegative);
+    }
+
 
     #endregion
 }
