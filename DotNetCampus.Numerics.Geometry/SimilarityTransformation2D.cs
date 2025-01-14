@@ -233,6 +233,71 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
             transformation.Transform(Translation) + transformation.Translation);
     }
 
+    /// <summary>
+    /// 将相似变换在指定的点进行旋转。
+    /// </summary>
+    /// <param name="rotation">旋转角度。</param>
+    /// <param name="center">旋转中心。</param>
+    /// <returns>旋转后的相似变换。</returns>
+    public SimilarityTransformation2D RotateAt(AngularMeasure rotation, Point2D center)
+    {
+        var cos = rotation.Cos();
+        var sin = rotation.Sin();
+        var translationX = Translation.X - center.X;
+        var translationY = Translation.Y - center.Y;
+        return this with
+        {
+            Rotation = (Rotation + rotation).Normalized,
+            Translation = new Vector2D(
+                cos * translationX - sin * translationY + center.X,
+                sin * translationX + cos * translationY + center.Y),
+        };
+    }
+
+    /// <summary>
+    /// 将相似变换在指定的点进行缩放。
+    /// </summary>
+    /// <param name="scale">缩放倍数。必须是正数。</param>
+    /// <param name="center">缩放中心。</param>
+    /// <returns>缩放后的相似变换。</returns>
+    public SimilarityTransformation2D ScaleAt(double scale, Point2D center)
+    {
+        var centerVector = center.ToVector();
+        return this with
+        {
+            Scaling = Scaling * scale.CheckPositive(),
+            Translation = centerVector + (Translation - centerVector) * scale,
+        };
+    }
+
+    /// <summary>
+    /// 将相似变换在指定的点进行缩放。
+    /// </summary>
+    /// <param name="scale">缩放倍数。必须是正数。</param>
+    /// <param name="center">缩放中心。</param>
+    /// <param name="isXScaleNegative">X 轴方向是否翻转。</param>
+    /// <param name="isYScaleNegative">Y 轴方向是否翻转。</param>
+    /// <returns>缩放后的相似变换。</returns>
+    public SimilarityTransformation2D ScaleAt(double scale, Point2D center, bool isXScaleNegative, bool isYScaleNegative)
+    {
+        var centerVector = center.ToVector();
+        var translation = Translation - centerVector;
+        return this with
+        {
+            Scaling = Scaling * scale.CheckPositive(),
+            IsYScaleNegative = IsYScaleNegative ^ isXScaleNegative ^ isYScaleNegative,
+            Rotation = (isXScaleNegative, isYScaleNegative) switch
+            {
+                (true, true) => (AngularMeasure.Pi + Rotation).Normalized,
+                (true, false) => (AngularMeasure.Pi - Rotation).Normalized,
+                (false, true) => (AngularMeasure.Tau - Rotation).Normalized,
+                _ => Rotation,
+            },
+            Translation = centerVector +
+                          scale * new Vector2D(isXScaleNegative ? -translation.X : translation.X, isYScaleNegative ? -translation.Y : translation.Y),
+        };
+    }
+
     #endregion
 }
 
