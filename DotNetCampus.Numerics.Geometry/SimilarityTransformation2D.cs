@@ -229,7 +229,7 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
         return new SimilarityTransformation2D(
             Scaling * transformation.Scaling,
             IsYScaleNegative ^ transformation.IsYScaleNegative,
-            yScaleFactor * Rotation + transformation.Rotation,
+            (yScaleFactor * Rotation + transformation.Rotation).Normalized,
             transformation.Transform(Translation) + transformation.Translation);
     }
 
