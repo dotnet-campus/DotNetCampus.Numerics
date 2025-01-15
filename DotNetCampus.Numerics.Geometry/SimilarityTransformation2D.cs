@@ -43,7 +43,11 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     /// <summary>
     /// 旋转角度。
     /// </summary>
-    public AngularMeasure Rotation { get; init; } = Rotation;
+    public AngularMeasure Rotation
+    {
+        get;
+        init => field = value.Normalized;
+    } = Rotation.Normalized;
 
     /// <summary>
     /// 平移量。
@@ -107,19 +111,17 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     /// <exception cref="ArgumentOutOfRangeException">缩放倍数不是正数。</exception>
     public SimilarityTransformation2D Scale(double scale, bool isXScaleNegative, bool isYScaleNegative)
     {
-        return this with
-        {
-            Scaling = Scaling * scale.CheckPositive(),
-            IsYScaleNegative = IsYScaleNegative ^ isXScaleNegative ^ isYScaleNegative,
-            Rotation = (isXScaleNegative, isYScaleNegative) switch
+        return new SimilarityTransformation2D(
+            Scaling * scale.CheckPositive(),
+            IsYScaleNegative ^ isXScaleNegative ^ isYScaleNegative,
+            (isXScaleNegative, isYScaleNegative) switch
             {
-                (true, true) => (AngularMeasure.Pi + Rotation).Normalized,
-                (true, false) => (AngularMeasure.Pi - Rotation).Normalized,
-                (false, true) => (AngularMeasure.Tau - Rotation).Normalized,
+                (true, true) => AngularMeasure.Pi + Rotation,
+                (true, false) => AngularMeasure.Pi - Rotation,
+                (false, true) => AngularMeasure.Tau - Rotation,
                 _ => Rotation,
             },
-            Translation = scale * new Vector2D(isXScaleNegative ? -Translation.X : Translation.X, isYScaleNegative ? -Translation.Y : Translation.Y),
-        };
+            scale * new Vector2D(isXScaleNegative ? -Translation.X : Translation.X, isYScaleNegative ? -Translation.Y : Translation.Y));
     }
 
     /// <summary>
@@ -129,14 +131,10 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     /// <returns>旋转后的相似变换。</returns>
     public SimilarityTransformation2D Rotate(AngularMeasure rotation)
     {
-        var cos = rotation.Cos();
-        var sin = rotation.Sin();
         return this with
         {
             Rotation = (Rotation + rotation).Normalized,
-            Translation = new Vector2D(
-                cos * Translation.X - sin * Translation.Y,
-                sin * Translation.X + cos * Translation.Y),
+            Translation = Translation.Rotate(rotation),
         };
     }
 
@@ -167,18 +165,8 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     /// <returns>变换后的向量。</returns>
     public Vector2D Transform(Vector2D vector)
     {
-        var sin = Rotation.Sin();
-        var cos = Rotation.Cos();
-
-        return IsYScaleNegative
-            ? new Vector2D(
-                Scaling * (cos * vector.X + sin * vector.Y),
-                Scaling * (sin * vector.X - cos * vector.Y)
-            )
-            : new Vector2D(
-                Scaling * (cos * vector.X - sin * vector.Y),
-                Scaling * (sin * vector.X + cos * vector.Y)
-            );
+        var scaling = new Scaling2D(Scaling, IsYScaleNegative ? -Scaling : Scaling);
+        return (vector * scaling).Rotate(Rotation);
     }
 
     /// <summary>
@@ -199,18 +187,13 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     /// <returns>逆变换。</returns>
     public SimilarityTransformation2D Inverse()
     {
-        var sin = Rotation.Sin();
-        var cos = Rotation.Cos();
-        var yScaleFactor = IsYScaleNegative ? -1 : 1;
-        return this with
-        {
-            Scaling = 1 / Scaling,
-            Rotation = (yScaleFactor * -Rotation).Normalized,
-            IsYScaleNegative = IsYScaleNegative,
-            Translation = new Vector2D(
-                -(cos * Translation.X + sin * Translation.Y) / Scaling,
-                yScaleFactor * (sin * Translation.X - cos * Translation.Y) / Scaling),
-        };
+        var scaling = 1 / Scaling;
+        return new SimilarityTransformation2D(
+            scaling,
+            IsYScaleNegative,
+            IsYScaleNegative ? Rotation : -Rotation,
+            -Translation.Rotate(-Rotation) * Scaling2D.Create(scaling, IsYScaleNegative ? -scaling : scaling)
+        );
     }
 
     /// <summary>
@@ -241,16 +224,11 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     /// <returns>旋转后的相似变换。</returns>
     public SimilarityTransformation2D RotateAt(AngularMeasure rotation, Point2D center)
     {
-        var cos = rotation.Cos();
-        var sin = rotation.Sin();
-        var translationX = Translation.X - center.X;
-        var translationY = Translation.Y - center.Y;
+        var centerVector = center.ToVector();
         return this with
         {
-            Rotation = (Rotation + rotation).Normalized,
-            Translation = new Vector2D(
-                cos * translationX - sin * translationY + center.X,
-                sin * translationX + cos * translationY + center.Y),
+            Rotation = Rotation + rotation,
+            Translation = (Translation - centerVector).Rotate(rotation) + centerVector,
         };
     }
 
@@ -282,20 +260,17 @@ public record SimilarityTransformation2D(double Scaling, bool IsYScaleNegative, 
     {
         var centerVector = center.ToVector();
         var translation = Translation - centerVector;
-        return this with
-        {
-            Scaling = Scaling * scale.CheckPositive(),
-            IsYScaleNegative = IsYScaleNegative ^ isXScaleNegative ^ isYScaleNegative,
-            Rotation = (isXScaleNegative, isYScaleNegative) switch
+        return new SimilarityTransformation2D(
+            Scaling * scale.CheckPositive(),
+            IsYScaleNegative ^ isXScaleNegative ^ isYScaleNegative,
+            (isXScaleNegative, isYScaleNegative) switch
             {
-                (true, true) => (AngularMeasure.Pi + Rotation).Normalized,
-                (true, false) => (AngularMeasure.Pi - Rotation).Normalized,
-                (false, true) => (AngularMeasure.Tau - Rotation).Normalized,
+                (true, true) => AngularMeasure.Pi + Rotation,
+                (true, false) => AngularMeasure.Pi - Rotation,
+                (false, true) => AngularMeasure.Tau - Rotation,
                 _ => Rotation,
             },
-            Translation = centerVector +
-                          scale * new Vector2D(isXScaleNegative ? -translation.X : translation.X, isYScaleNegative ? -translation.Y : translation.Y),
-        };
+            centerVector + scale * new Vector2D(isXScaleNegative ? -translation.X : translation.X, isYScaleNegative ? -translation.Y : translation.Y));
     }
 
     #endregion

@@ -48,8 +48,7 @@ public readonly partial record struct Vector2D
     /// <returns>旋转后的向量。</returns>
     public Vector2D Rotate(AngularMeasure angle)
     {
-        var cos = Math.Cos(angle.Radian);
-        var sin = Math.Sin(angle.Radian);
+        var (sin, cos) = angle.SinCos();
         return new Vector2D(X * cos - Y * sin, X * sin + Y * cos);
     }
 
