@@ -40,4 +40,18 @@ public readonly record struct Scaling2D(double ScaleX, double ScaleY)
     }
 
     #endregion
+
+    #region 运算符重载
+
+    /// <summary>
+    /// 隐式将 double 转换为等比例缩放。
+    /// </summary>
+    /// <param name="scale">缩放比例。</param>
+    /// <returns>缩放。</returns>
+    public static implicit operator Scaling2D(double scale)
+    {
+        return Create(scale);
+    }
+
+    #endregion
 }

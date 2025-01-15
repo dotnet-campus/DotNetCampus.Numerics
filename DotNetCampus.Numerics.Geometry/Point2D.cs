@@ -72,6 +72,25 @@ public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vect
         return new Vector2D(X, Y);
     }
 
+    /// <inheritdoc />
+    public Point2D ScaleTransform(Scaling2D scaling)
+    {
+        return new Point2D(X * scaling.ScaleX, Y * scaling.ScaleY);
+    }
+
+    /// <inheritdoc cref="IAffineTransformable2D{TOut}.RotateTransform" />
+    public Point2D RotateTransform(AngularMeasure rotation)
+    {
+        var (sin, cos) = rotation.SinCos();
+        return new Point2D(X * cos - Y * sin, X * sin + Y * cos);
+    }
+
+    /// <inheritdoc cref="IAffineTransformable2D{T}.TranslateTransform" />
+    public Point2D TranslateTransform(Vector2D translation)
+    {
+        return this + translation;
+    }
+
     #endregion
 
     #region 运算符重载
