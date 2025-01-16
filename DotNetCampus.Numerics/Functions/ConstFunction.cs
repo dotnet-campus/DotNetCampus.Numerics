@@ -52,5 +52,11 @@ public readonly record struct ConstFunction<TNum>(TNum Value) : IFunction<TNum>
         return new Interval<TNum>(Value, Value);
     }
 
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return $"f(x) = {Value}";
+    }
+
     #endregion
 }

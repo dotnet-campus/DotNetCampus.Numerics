@@ -24,7 +24,9 @@ public readonly record struct LinearFunction<TNum>(TNum A, TNum B) : IFunction<T
         get
         {
             if (A == TNum.Zero)
+            {
                 throw new InvalidOperationException("一次方程没有根或者有无数根。");
+            }
 
             return -B / A;
         }
@@ -65,6 +67,12 @@ public readonly record struct LinearFunction<TNum>(TNum A, TNum B) : IFunction<T
     public Interval<TNum> GetValueRange(Interval<TNum> interval)
     {
         return new Interval<TNum>(GetMin(interval), GetMax(interval));
+    }
+
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return $"f(x) = {A}x + {B}";
     }
 
     #endregion

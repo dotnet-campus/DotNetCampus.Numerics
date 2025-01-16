@@ -41,12 +41,16 @@ public readonly record struct CubicFunction<TNum>(TNum A, TNum B, TNum C, TNum D
 
         var max = TNum.Max(Evaluate(interval.Start), Evaluate(interval.End));
         if (extremumPoints.Length == 0)
+        {
             return max;
+        }
 
         foreach (var extremumPoint in extremumPoints)
         {
             if (interval.Contains(extremumPoint))
+            {
                 max = TNum.Max(max, Evaluate(extremumPoint));
+            }
         }
 
         return max;
@@ -60,12 +64,16 @@ public readonly record struct CubicFunction<TNum>(TNum A, TNum B, TNum C, TNum D
 
         var min = TNum.Min(Evaluate(interval.Start), Evaluate(interval.End));
         if (extremumPoints.Length == 0)
+        {
             return min;
+        }
 
         foreach (var extremumPoint in extremumPoints)
         {
             if (interval.Contains(extremumPoint))
+            {
                 min = TNum.Min(min, Evaluate(extremumPoint));
+            }
         }
 
         return min;
@@ -80,7 +88,9 @@ public readonly record struct CubicFunction<TNum>(TNum A, TNum B, TNum C, TNum D
         var max = TNum.Max(Evaluate(interval.Start), Evaluate(interval.End));
         var min = TNum.Min(Evaluate(interval.Start), Evaluate(interval.End));
         if (extremumPoints.Length == 0)
+        {
             return new Interval<TNum>(min, max);
+        }
 
         foreach (var extremumPoint in extremumPoints)
         {
@@ -93,6 +103,12 @@ public readonly record struct CubicFunction<TNum>(TNum A, TNum B, TNum C, TNum D
         }
 
         return new Interval<TNum>(min, max);
+    }
+
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return $"f(x) = {A}x^3 + {B}x^2 + {C}x + {D}";
     }
 
     #endregion

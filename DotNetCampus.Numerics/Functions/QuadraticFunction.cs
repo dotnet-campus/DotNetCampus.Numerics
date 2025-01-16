@@ -31,11 +31,15 @@ public readonly record struct QuadraticFunction<TNum>(TNum A, TNum B, TNum C) : 
     {
         var delta = Discriminant;
         if (delta < TNum.Zero)
+        {
             return ImmutableArray<TNum>.Empty;
+        }
 
         var a2 = A.Multiply(2);
         if (delta == TNum.Zero)
+        {
             return [-B / a2];
+        }
 
         var sqrtDelta = delta.Sqrt();
         return [(-B + sqrtDelta) / a2, (-B - sqrtDelta) / a2];
@@ -52,11 +56,15 @@ public readonly record struct QuadraticFunction<TNum>(TNum A, TNum B, TNum C) : 
     {
         // 如果 a 为零，则为一次函数。
         if (A == TNum.Zero)
+        {
             return new LinearFunction<TNum>(B, C).GetMax(interval);
+        }
 
         // 如果 a 大于 0，则函数在端点处取得最大值。
         if (A > TNum.Zero)
+        {
             return Evaluate(interval.Start) > Evaluate(interval.End) ? Evaluate(interval.Start) : Evaluate(interval.End);
+        }
 
         // 如果 a 小于 0，则函数在顶点处取得最大值，或者在接近顶点的地方取得最大值。
         var vertexX = -B / A.Multiply(2);
@@ -72,11 +80,15 @@ public readonly record struct QuadraticFunction<TNum>(TNum A, TNum B, TNum C) : 
     {
         // 如果 a 为零，则为一次函数。
         if (A == TNum.Zero)
+        {
             return new LinearFunction<TNum>(B, C).GetMin(interval);
+        }
 
         // 如果 a 小于 0，则函数在端点处取得最小值。
         if (A < TNum.Zero)
+        {
             return Evaluate(interval.Start) < Evaluate(interval.End) ? Evaluate(interval.Start) : Evaluate(interval.End);
+        }
 
         // 如果 a 大于 0，则函数在顶点处取得最小值，或者在接近顶点的地方取得最小值。
         var vertexX = -B / A.Multiply(2);
@@ -91,7 +103,9 @@ public readonly record struct QuadraticFunction<TNum>(TNum A, TNum B, TNum C) : 
     public Interval<TNum> GetValueRange(Interval<TNum> interval)
     {
         if (A == TNum.Zero)
+        {
             return new LinearFunction<TNum>(B, C).GetValueRange(interval);
+        }
 
         var vertexX = -B / A.Multiply(2);
         if (A > TNum.Zero)
@@ -114,6 +128,12 @@ public readonly record struct QuadraticFunction<TNum>(TNum A, TNum B, TNum C) : 
                     : vertexX);
             return new Interval<TNum>(min, max);
         }
+    }
+
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return $"f(x) = {A}x^2 + {B}x + {C}";
     }
 
     #endregion
