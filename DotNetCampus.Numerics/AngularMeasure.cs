@@ -76,6 +76,17 @@ public readonly record struct AngularMeasure : IComparable<AngularMeasure>
         return new AngularMeasure(radian);
     }
 
+    /// <summary>
+    /// 从正弦和余弦值创建角。
+    /// </summary>
+    /// <param name="sin">正弦值。</param>
+    /// <param name="cos">余弦值。</param>
+    /// <returns></returns>
+    public static AngularMeasure FromSinCos(double sin, double cos)
+    {
+        return new AngularMeasure(Math.Atan2(sin, cos));
+    }
+
     #endregion
 
     #region 属性
@@ -141,6 +152,15 @@ public readonly record struct AngularMeasure : IComparable<AngularMeasure>
     }
 
     /// <summary>
+    /// 返回角正弦和余弦值。
+    /// </summary>
+    /// <returns>角正弦和余弦值的元组。</returns>
+    public (double Sin, double Cos) SinCos()
+    {
+        return Math.SinCos(Radian);
+    }
+
+    /// <summary>
     /// 是否几乎是 π/2 的整数倍角。
     /// </summary>
     /// <returns></returns>
@@ -167,7 +187,7 @@ public readonly record struct AngularMeasure : IComparable<AngularMeasure>
 
     #region 运算符重载
 
-    #pragma warning disable CS1591
+#pragma warning disable CS1591
 
     public static AngularMeasure operator +(AngularMeasure measure1, AngularMeasure measure2)
     {
@@ -224,7 +244,7 @@ public readonly record struct AngularMeasure : IComparable<AngularMeasure>
         return measure1.Radian >= measure2.Radian;
     }
 
-    #pragma warning restore CS1591
+#pragma warning restore CS1591
 
     #endregion
 }

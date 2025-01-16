@@ -20,7 +20,9 @@ public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vect
     {
         ArgumentNullException.ThrowIfNull(points);
         if (points.Count == 0)
+        {
             throw new ArgumentException("The point list cannot be empty.");
+        }
 
         var x = 0.0;
         var y = 0.0;
@@ -48,7 +50,8 @@ public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vect
     }
 
     /// <inheritdoc />
-    public static Point2D WeightedSum(double weight1, Point2D point1, double weight2, Point2D point2, double weight3, Point2D point3, double weight4, Point2D point4)
+    public static Point2D WeightedSum(double weight1, Point2D point1, double weight2, Point2D point2, double weight3, Point2D point3, double weight4,
+        Point2D point4)
     {
         return new Point2D(
             weight1 * point1.X + weight2 * point2.X + weight3 * point3.X + weight4 * point4.X,
@@ -67,9 +70,35 @@ public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vect
     }
 
     /// <inheritdoc />
+    public Point2D Transform(SimilarityTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+        return transformation.Transform(this);
+    }
+
+    /// <inheritdoc />
     public Vector2D ToVector()
     {
         return new Vector2D(X, Y);
+    }
+
+    /// <inheritdoc />
+    public Point2D ScaleTransform(Scaling2D scaling)
+    {
+        return new Point2D(X * scaling.ScaleX, Y * scaling.ScaleY);
+    }
+
+    /// <inheritdoc cref="IAffineTransformable2D{TOut}.RotateTransform" />
+    public Point2D RotateTransform(AngularMeasure rotation)
+    {
+        var (sin, cos) = rotation.SinCos();
+        return new Point2D(X * cos - Y * sin, X * sin + Y * cos);
+    }
+
+    /// <inheritdoc cref="IAffineTransformable2D{T}.TranslateTransform" />
+    public Point2D TranslateTransform(Vector2D translation)
+    {
+        return this + translation;
     }
 
     #endregion

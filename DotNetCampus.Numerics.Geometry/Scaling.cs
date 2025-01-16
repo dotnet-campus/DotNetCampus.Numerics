@@ -1,3 +1,5 @@
+using System.Diagnostics.Contracts;
+
 namespace DotNetCampus.Numerics.Geometry;
 
 /// <summary>
@@ -37,6 +39,42 @@ public readonly record struct Scaling2D(double ScaleX, double ScaleY)
     public static Scaling2D Create(double scale)
     {
         return new Scaling2D(scale, scale);
+    }
+
+    #endregion
+
+    #region 运算符重载
+
+    /// <summary>
+    /// 隐式将 double 转换为等比例缩放。
+    /// </summary>
+    /// <param name="scale">缩放比例。</param>
+    /// <returns>缩放。</returns>
+    public static implicit operator Scaling2D(double scale)
+    {
+        return Create(scale);
+    }
+
+    /// <summary>
+    /// 将向量进行缩放。
+    /// </summary>
+    /// <param name="scaling"></param>
+    /// <param name="vector"></param>
+    /// <returns></returns>
+    public static Vector2D operator * (Scaling2D scaling, Vector2D vector)
+    {
+        return new Vector2D(vector.X * scaling.ScaleX, vector.Y * scaling.ScaleY);
+    }
+
+    /// <summary>
+    /// 将向量进行缩放。
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <param name="scaling"></param>
+    /// <returns></returns>
+    public static Vector2D operator *(Vector2D vector, Scaling2D scaling)
+    {
+        return scaling * vector;
     }
 
     #endregion
