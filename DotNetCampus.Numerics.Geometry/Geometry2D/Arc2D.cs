@@ -8,7 +8,7 @@ namespace DotNetCampus.Numerics.Geometry;
 /// <param name="Circle">圆弧对应的圆。</param>
 /// <param name="StartAngle">开始角。</param>
 /// <param name="AngleSize">圆心角。</param>
-public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, AngularMeasure AngleSize) : IGeometry2D
+public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, AngularMeasure AngleSize) : IGeometry2D, ISimilarityTransformable2D<Arc2D>
 {
     #region 属性
 
@@ -41,7 +41,9 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
     {
         var intersections = Circle.Intersection(line, index);
         if (intersections == null)
+        {
             return null;
+        }
 
         var intersection = intersections.Value;
         var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
@@ -58,7 +60,9 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
     {
         var intersections = Circle.Intersection(segment.Line, index);
         if (intersections == null)
+        {
             return null;
+        }
 
         var intersection = intersections.Value;
         var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
@@ -77,7 +81,9 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
     {
         var intersections = Circle.Intersection(circle, index);
         if (intersections == null)
+        {
             return null;
+        }
 
         var intersection = intersections.Value;
         var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
@@ -94,7 +100,9 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
     {
         var intersections = Circle.Intersection(other.Circle, index);
         if (intersections == null)
+        {
             return null;
+        }
 
         var intersection = intersections.Value;
         var angleRadio = ((intersection - Circle.Center).Angle - StartAngle).Normalized / AngleSize;
@@ -121,6 +129,12 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
         return BoundingBox2D.Create(
             new Point2D(cos.GetMin(range), sin.GetMin(range)),
             new Point2D(cos.GetMax(range), sin.GetMax(range)));
+    }
+
+    /// <inheritdoc />
+    public Arc2D Transform(SimilarityTransformation2D transformation)
+    {
+        return new Arc2D(Circle.Transform(transformation), StartAngle + transformation.Rotation, AngleSize);
     }
 
     #endregion
