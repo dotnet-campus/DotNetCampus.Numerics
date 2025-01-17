@@ -60,7 +60,7 @@ internal static class TrigonometricFunctionHelper
     public static TNum GetMinValueForSin<TNum>(Interval<TNum> interval)
         where TNum : unmanaged, IFloatingPoint<TNum>, ITrigonometricFunctions<TNum>
     {
-        return -GetMaxValueForSin(interval + TNum.Pi / (TNum.One + TNum.One));
+        return -GetMaxValueForCos(interval + TNum.Pi / (TNum.One + TNum.One));
     }
 
     #endregion
