@@ -5,7 +5,8 @@ namespace DotNetCampus.Numerics.Geometry;
 /// </summary>
 /// <param name="Center">圆心。</param>
 /// <param name="Radius">圆半径。</param>
-public readonly record struct Circle2D(Point2D Center, double Radius) : ISimilarityTransformable2D<Circle2D>, IAffineTransformable2D<Ellipse2D>
+public readonly record struct Circle2D(Point2D Center, double Radius)
+    : ISimilarityTransformable2D<Circle2D>, IAffineTransformable2D<Ellipse2D>, IGeometry2D
 {
     #region 成员方法
 
@@ -96,6 +97,16 @@ public readonly record struct Circle2D(Point2D Center, double Radius) : ISimilar
         return AngularMeasure.FromRadian(Math.Atan2(point.Y - Center.Y, point.X - Center.X));
     }
 
+    /// <inheritdoc />
+    public BoundingBox2D GetBoundingBox()
+    {
+        return BoundingBox2D.Create(
+            new Point2D(Center.X - Radius, Center.Y - Radius),
+            new Point2D(Center.X + Radius, Center.Y + Radius));
+    }
+
+    #endregion
+
     #region Transforms
 
     /// <inheritdoc />
@@ -129,8 +140,6 @@ public readonly record struct Circle2D(Point2D Center, double Radius) : ISimilar
         ArgumentNullException.ThrowIfNull(transformation);
         return new Ellipse2D(this).Transform(transformation);
     }
-
-    #endregion
 
     #endregion
 }

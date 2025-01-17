@@ -1,9 +1,9 @@
-namespace DotNetCampus.Numerics.Geometry;
+﻿namespace DotNetCampus.Numerics.Geometry;
 
 /// <summary>
-/// 曲线接口。
+/// 2 维几何接口。
 /// </summary>
-public interface ICurve
+public interface IGeometry2D
 {
     /// <summary>
     /// 获取曲线的包围盒。

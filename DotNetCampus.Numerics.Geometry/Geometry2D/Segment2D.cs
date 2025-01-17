@@ -5,7 +5,7 @@ namespace DotNetCampus.Numerics.Geometry;
 /// </summary>
 /// <param name="StartPoint">线段的起点。</param>
 /// <param name="EndPoint">线段的终点。</param>
-public readonly record struct Segment2D(Point2D StartPoint, Point2D EndPoint) : IAffineTransformable2D<Segment2D>
+public readonly record struct Segment2D(Point2D StartPoint, Point2D EndPoint) : IAffineTransformable2D<Segment2D>, IGeometry2D
 {
     #region 静态方法
 
@@ -100,6 +100,12 @@ public readonly record struct Segment2D(Point2D StartPoint, Point2D EndPoint) : 
     {
         ArgumentNullException.ThrowIfNull(transformation);
         return new Segment2D(Line.Transform(transformation), Length);
+    }
+
+    /// <inheritdoc />
+    public BoundingBox2D GetBoundingBox()
+    {
+        return BoundingBox2D.Create(StartPoint, EndPoint);
     }
 
     #endregion

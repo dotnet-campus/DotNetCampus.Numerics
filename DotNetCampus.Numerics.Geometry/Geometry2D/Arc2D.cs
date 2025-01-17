@@ -1,3 +1,5 @@
+using DotNetCampus.Numerics.Functions;
+
 namespace DotNetCampus.Numerics.Geometry;
 
 /// <summary>
@@ -6,7 +8,7 @@ namespace DotNetCampus.Numerics.Geometry;
 /// <param name="Circle">圆弧对应的圆。</param>
 /// <param name="StartAngle">开始角。</param>
 /// <param name="AngleSize">圆心角。</param>
-public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, AngularMeasure AngleSize)
+public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, AngularMeasure AngleSize) : IGeometry2D
 {
     #region 属性
 
@@ -108,6 +110,17 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
     public AngularMeasure GetAngle(Point2D point)
     {
         return ((point - Circle.Center).Angle - StartAngle).Normalized;
+    }
+
+    /// <inheritdoc />
+    public BoundingBox2D GetBoundingBox()
+    {
+        var cos = new CosFunction<double>(Circle.Radius, Circle.Center.X, 1, 0);
+        var sin = new SinFunction<double>(Circle.Radius, Circle.Center.Y, 1, 0);
+        var range = new Interval<double>(StartAngle.Radian, EndAngle.Radian);
+        return BoundingBox2D.Create(
+            new Point2D(cos.GetMin(range), sin.GetMin(range)),
+            new Point2D(cos.GetMax(range), sin.GetMax(range)));
     }
 
     #endregion

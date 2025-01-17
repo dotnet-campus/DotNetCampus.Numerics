@@ -6,7 +6,7 @@ namespace DotNetCampus.Numerics.Geometry;
 /// <summary>
 /// 椭圆。
 /// </summary>
-public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>
+public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>, IGeometry2D
 {
     #region 私有字段
 
@@ -125,6 +125,15 @@ public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>
         // 旋转是半长轴和 x 轴的夹角，所以获取特征向量的角度即可得到旋转角
         var rotate = eigenVector2.Angle;
         return new Ellipse2D(center, a, b, rotate);
+    }
+
+    /// <inheritdoc />
+    public BoundingBox2D GetBoundingBox()
+    {
+        var (m11, m12, m21, m22, offsetX, offsetY) = AffineTransformation2D.CreateScaling(new Scaling2D(A, B)).Rotate(Angle).Translate(Center.ToVector());
+        var maxX = Math.Sqrt(m11 * m11 + m12 * m12);
+        var maxY = Math.Sqrt(m21 * m21 + m22 * m22);
+        return BoundingBox2D.Create(-maxX + offsetX, -maxY + offsetY, maxX + offsetX, maxY + offsetY);
     }
 
     #endregion
