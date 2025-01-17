@@ -66,6 +66,7 @@ internal static class FloatingPointHelper
         throw new NotSupportedException();
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TNum Clamp<TNum>(this TNum value, TNum min, TNum max)
         where TNum : unmanaged, IFloatingPoint<TNum>
     {

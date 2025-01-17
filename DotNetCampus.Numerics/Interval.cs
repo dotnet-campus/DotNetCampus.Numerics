@@ -13,6 +13,15 @@ namespace DotNetCampus.Numerics;
 public readonly record struct Interval<TNum>(TNum Start, TNum End)
     where TNum : unmanaged, IFloatingPoint<TNum>
 {
+    #region 静态变量
+
+    /// <summary>
+    /// 空区间。
+    /// </summary>
+    public static Interval<TNum> Empty => new(TNum.Zero, TNum.Zero);
+
+    #endregion
+
     #region 静态方法
 
     /// <summary>
@@ -84,6 +93,58 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     }
 
     #endregion
+
+    #region 运算符重载
+
+    /// <summary>
+    /// 将区间进行缩放。
+    /// </summary>
+    public static Interval<TNum> operator *(Interval<TNum> interval, TNum value)
+    {
+        return interval.IsEmpty ? new Interval<TNum>(TNum.Zero, TNum.Zero) : Create(interval.Start * value, interval.End * value);
+    }
+
+    /// <summary>
+    /// 将区间进行缩放。
+    /// </summary>
+    public static Interval<TNum> operator *(TNum value, Interval<TNum> interval)
+    {
+        return interval * value;
+    }
+
+    /// <summary>
+    /// 将区间进行偏移。
+    /// </summary>
+    public static Interval<TNum> operator +(Interval<TNum> interval, TNum value)
+    {
+        return new Interval<TNum>(interval.Start + value, interval.End + value);
+    }
+
+    /// <summary>
+    /// 将区间进行偏移。
+    /// </summary>
+    public static Interval<TNum> operator +(TNum value, Interval<TNum> interval)
+    {
+        return interval + value;
+    }
+
+    /// <summary>
+    /// 将区间进行偏移。
+    /// </summary>
+    public static Interval<TNum> operator -(Interval<TNum> interval, TNum value)
+    {
+        return new Interval<TNum>(interval.Start - value, interval.End - value);
+    }
+
+    /// <summary>
+    /// 将区间进行偏移。
+    /// </summary>
+    public static Interval<TNum> operator -(TNum value, Interval<TNum> interval)
+    {
+        return new Interval<TNum>(value - interval.End, value - interval.Start);
+    }
+
+    #endregion
 }
 
 /// <summary>
@@ -103,10 +164,14 @@ public static class IntervalExtensions
         where TNum : unmanaged, IFloatingPoint<TNum>
     {
         if (other.IsEmpty)
+        {
             return false;
+        }
 
         if (interval.IsEmpty)
+        {
             return true;
+        }
 
         return interval.Start >= other.Start
                && interval.End <= other.End
@@ -123,10 +188,14 @@ public static class IntervalExtensions
         where TNum : unmanaged, IFloatingPoint<TNum>
     {
         if (interval.IsEmpty)
+        {
             return true;
+        }
 
         if (other.IsEmpty)
+        {
             return false;
+        }
 
         return interval.Start >= other.Start && interval.End <= other.End;
     }
@@ -166,7 +235,9 @@ public static class IntervalExtensions
         where TNum : unmanaged, IFloatingPoint<TNum>
     {
         if (interval.IsEmpty || other.IsEmpty)
+        {
             return new Interval<TNum>(TNum.Zero, TNum.Zero);
+        }
 
         var start = interval.Start > other.Start ? interval.Start : other.Start;
         var end = interval.End < other.End ? interval.End : other.End;
