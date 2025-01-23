@@ -8,9 +8,21 @@ namespace DotNetCampus.Numerics.Geometry;
 /// </summary>
 public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>, IGeometry2D
 {
-    #region 私有字段
+    #region 静态方法
 
-    private readonly AngularMeasure _angle;
+    /// <summary>
+    /// 获取特征向量对应的角度。
+    /// </summary>
+    /// <param name="m"></param>
+    /// <param name="eigenValue"></param>
+    /// <returns></returns>
+    private static AngularMeasure GetEigenVectorAngle(Matrix2X2D m, double eigenValue)
+    {
+        var eigenVector1 = new Vector2D(eigenValue - m.M22, m.M21);
+        var eigenVector2 = new Vector2D(m.M12, eigenValue - m.M11);
+        // 数学上两个向量都是对的，但是因为存在某个向量为 0 的情况，所以这里取长度较大的向量
+        return eigenVector1.LengthSquared > eigenVector2.LengthSquared ? eigenVector1.Angle : eigenVector2.Angle;
+    }
 
     #endregion
 
@@ -46,8 +58,8 @@ public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>, IGe
     /// </summary>
     public AngularMeasure Angle
     {
-        get => _angle;
-        init => _angle = value.Normalized switch
+        get;
+        init => field = value.Normalized switch
         {
             { Radian: > Math.PI * 3 / 2 } angle => angle - AngularMeasure.Tau,
             { Radian: > Math.PI / 2 } angle => angle - AngularMeasure.Pi,
@@ -80,8 +92,13 @@ public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>, IGe
     public Ellipse2D(Point2D Center, double A, double B, AngularMeasure Angle)
     {
         this.Center = Center;
-        this.A = Math.Max(A, B);
-        this.B = Math.Min(A, B);
+        if (A < B)
+        {
+            (A, B) = (B, A);
+            Angle += AngularMeasure.HalfPi;
+        }
+        this.A = A;
+        this.B = B;
         this.Angle = Angle;
     }
 
@@ -116,15 +133,14 @@ public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>, IGe
         var eigenEquation = new QuadraticFunction<double>(1, -(m.M11 + m.M22), m.Determinant);
         var eigenValues = eigenEquation.GetRoots();
         var eigenValue1 = eigenValues[0];
-        var eigenValue2 = eigenValues[1];
-        var eigenVector2 = new Vector2D(m.M12, eigenValue2 - m.M11);
+        var eigenValue2 = eigenValues[^1];
+        var eigenVectorAngle2 = GetEigenVectorAngle(m, eigenValue2);
 
         // 特征值分别是长轴和短轴的平方的倒数，所以获取特征值平方根的倒数即可得到长轴和短轴
         var b = Math.ReciprocalSqrtEstimate(eigenValue1);
         var a = Math.ReciprocalSqrtEstimate(eigenValue2);
         // 旋转是半长轴和 x 轴的夹角，所以获取特征向量的角度即可得到旋转角
-        var rotate = eigenVector2.Angle;
-        return new Ellipse2D(center, a, b, rotate);
+        return new Ellipse2D(center, a, b, eigenVectorAngle2);
     }
 
     /// <inheritdoc />
