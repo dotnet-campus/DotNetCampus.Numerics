@@ -86,5 +86,56 @@ internal static class FloatingPointHelper
                 : value;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Abs<TNum>(this TNum a)
+        where TNum : unmanaged, IFloatingPoint<TNum>
+    {
+        if (typeof(TNum) == typeof(float))
+            return Unsafe.BitCast<float, TNum>(MathF.Abs(Unsafe.BitCast<TNum, float>(a)));
+
+        if (typeof(TNum) == typeof(double))
+            return Unsafe.BitCast<double, TNum>(Math.Abs(Unsafe.BitCast<TNum, double>(a)));
+
+        if (typeof(TNum) == typeof(NFloat))
+            return Unsafe.BitCast<NFloat, TNum>(NFloat.Abs(Unsafe.BitCast<TNum, NFloat>(a)));
+
+        return a > TNum.Zero ? a : -a;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsAlmostEqual<TNum>(this TNum a, TNum b, TNum normalizationFactor)
+        where TNum : unmanaged, IFloatingPoint<TNum>
+    {
+        if (typeof(TNum) == typeof(float))
+            return NumericsEqualHelper.IsCloseEqual(Unsafe.BitCast<TNum, float>(a), Unsafe.BitCast<TNum, float>(b),
+                Unsafe.BitCast<TNum, float>(normalizationFactor), NumericsEqualHelper.NearlyToleranceF);
+
+        if (typeof(TNum) == typeof(double))
+            return NumericsEqualHelper.IsCloseEqual(Unsafe.BitCast<TNum, double>(a), Unsafe.BitCast<TNum, double>(b),
+                Unsafe.BitCast<TNum, double>(normalizationFactor), NumericsEqualHelper.AlmostTolerance);
+
+        if (typeof(TNum) == typeof(NFloat))
+            return NumericsEqualHelper.IsCloseEqual(Unsafe.BitCast<TNum, NFloat>(a), Unsafe.BitCast<TNum, NFloat>(b),
+                Unsafe.BitCast<TNum, NFloat>(normalizationFactor), NumericsEqualHelper.NearlyTolerance);
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsAlmostZero<TNum>(this TNum a, TNum normalizationFactor)
+        where TNum : unmanaged, IFloatingPoint<TNum>
+    {
+        if (typeof(TNum) == typeof(float))
+            return Unsafe.BitCast<TNum, float>(a).IsCloseZero(NumericsEqualHelper.NearlyToleranceF, Unsafe.BitCast<TNum, float>(normalizationFactor));
+
+        if (typeof(TNum) == typeof(double))
+            return Unsafe.BitCast<TNum, double>(a).IsCloseZero(NumericsEqualHelper.AlmostTolerance, Unsafe.BitCast<TNum, double>(normalizationFactor));
+
+        if (typeof(TNum) == typeof(NFloat))
+            return NumericsEqualHelper.IsCloseZero(Unsafe.BitCast<TNum, NFloat>(a), NumericsEqualHelper.NearlyTolerance, Unsafe.BitCast<TNum, NFloat>(normalizationFactor));
+
+        throw new NotSupportedException();
+    }
+
     #endregion
 }
