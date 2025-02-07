@@ -81,7 +81,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// </summary>
     /// <param name="value">需要限制的值。</param>
     /// <returns>限制后的值。</returns>
-    public TNum Clamp(ref TNum value)
+    public TNum Clamp(TNum value)
     {
         return value.Clamp(Start, End);
     }
