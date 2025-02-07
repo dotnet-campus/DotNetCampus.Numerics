@@ -30,19 +30,23 @@ public readonly record struct QuadraticFunction<TNum>(TNum A, TNum B, TNum C) : 
     public ImmutableArray<TNum> GetRoots()
     {
         var delta = Discriminant;
-        if (delta < TNum.Zero)
-        {
-            return ImmutableArray<TNum>.Empty;
-        }
 
-        var a2 = A.Multiply(2);
-        if (delta == TNum.Zero)
+        if (delta.IsAlmostZero(C))
         {
+            var a2 = A.Multiply(2);
             return [-B / a2];
         }
 
-        var sqrtDelta = delta.Sqrt();
-        return [(-B + sqrtDelta) / a2, (-B - sqrtDelta) / a2];
+        else if (delta < TNum.Zero)
+        {
+            return ImmutableArray<TNum>.Empty;
+        }
+        else
+        {
+            var a2 = A.Multiply(2);
+            var sqrtDelta = delta.Sqrt();
+            return [(-B + sqrtDelta) / a2, (-B - sqrtDelta) / a2];
+        }
     }
 
     /// <inheritdoc />
