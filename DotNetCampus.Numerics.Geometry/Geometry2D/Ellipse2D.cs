@@ -123,12 +123,7 @@ public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>, IGe
 
         // 从仿射变换矩阵中获取线性变换矩阵，不考虑中心点平移
         var matrix = new Matrix2X2D(newTransform.M11, newTransform.M12, newTransform.M21, newTransform.M22);
-
-        // 获取椭圆的方程 X^T * M * X = 1 中的 M 矩阵
-        var inverse = matrix.Invert();
-        var inverseTranspose = inverse.Transpose;
-        var m = inverseTranspose * inverse;
-
+        var m = matrix * matrix.Transpose;
         // 计算特征值，以及特征值对应的特征向量
         var eigenEquation = new QuadraticFunction<double>(1, -(m.M11 + m.M22), m.Determinant);
         var eigenValues = eigenEquation.GetRoots();
@@ -136,9 +131,9 @@ public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>, IGe
         var eigenValue2 = eigenValues[^1];
         var eigenVectorAngle2 = GetEigenVectorAngle(m, eigenValue2);
 
-        // 特征值分别是长轴和短轴的平方的倒数，所以获取特征值平方根的倒数即可得到长轴和短轴
-        var b = Math.ReciprocalSqrtEstimate(eigenValue1);
-        var a = Math.ReciprocalSqrtEstimate(eigenValue2);
+        // 特征值分别是长轴和短轴的平方，所以获取特征值平方根即可得到长轴和短轴
+        var a = Math.Sqrt(eigenValue2);
+        var b = Math.Sqrt(eigenValue1);
         // 旋转是半长轴和 x 轴的夹角，所以获取特征向量的角度即可得到旋转角
         return new Ellipse2D(center, a, b, eigenVectorAngle2);
     }

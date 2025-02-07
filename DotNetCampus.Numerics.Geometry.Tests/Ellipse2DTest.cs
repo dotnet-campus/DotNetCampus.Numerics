@@ -7,6 +7,8 @@ namespace DotNetCampus.Numerics.Geometry.Tests;
 [TestSubject(typeof(Ellipse2D))]
 public class Ellipse2DTest
 {
+    #region 成员方法
+
     [Fact(DisplayName = "测试椭圆的创建。")]
     public void CreateTest()
     {
@@ -54,4 +56,22 @@ public class Ellipse2DTest
         Assert.True(ellipse.AxisEndpointB.X.IsAlmostZero());
         Assert.Equal(4, ellipse.AxisEndpointB.Y, NumericsEqualHelper.IsAlmostEqual);
     }
+
+    [Fact(DisplayName = "测试椭圆一段缩放为 0 后的轴端点。")]
+    public void AxisEndpointScaleToZeroTest()
+    {
+        var ellipse = new Ellipse2D(new Point2D(), 5, 3, AngularMeasure.Zero);
+        var transformation = AffineTransformation2D.Identity
+            .Scale(new Scaling2D(0, 3))
+            .Rotate(AngularMeasure.FromDegree(30));
+        var transformedEllipse = ellipse.Transform(transformation);
+
+        Assert.Equal(0, transformedEllipse.Center.X);
+        Assert.Equal(0, transformedEllipse.Center.Y);
+        Assert.Equal(9, transformedEllipse.A, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(0, transformedEllipse.B, NumericsEqualHelper.IsAlmostEqual);
+        Assert.Equal(AngularMeasure.FromDegree(-60), transformedEllipse.Angle, NumericsEqualHelper.IsAlmostEqual);
+    }
+
+    #endregion
 }
