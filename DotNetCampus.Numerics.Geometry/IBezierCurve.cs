@@ -5,7 +5,7 @@ namespace DotNetCampus.Numerics.Geometry;
 /// <summary>
 /// 贝塞尔曲线接口。
 /// </summary>
-public interface IBezierCurve<TPoint, TVector, TNum>
+public interface IBezierCurve<TPoint, TVector, TNum> : IGeometry2D
     where TPoint : unmanaged, IPoint<TPoint, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
     where TNum : unmanaged, IFloatingPoint<TNum>
