@@ -1,5 +1,3 @@
-using System.Diagnostics.Contracts;
-
 namespace DotNetCampus.Numerics.Geometry;
 
 /// <summary>
@@ -75,6 +73,28 @@ public readonly record struct Scaling2D(double ScaleX, double ScaleY)
     public static Vector2D operator *(Vector2D vector, Scaling2D scaling)
     {
         return scaling * vector;
+    }
+
+    /// <summary>
+    /// 将两个缩放进行相乘，新缩放的缩放值等于各方向缩放值的乘积。
+    /// </summary>
+    /// <param name="left">乘数。</param>
+    /// <param name="right">乘数。</param>
+    /// <returns>相乘后的缩放。</returns>
+    public static Scaling2D operator *(Scaling2D left, Scaling2D right)
+    {
+        return new Scaling2D(left.ScaleX * right.ScaleX, left.ScaleY * right.ScaleY);
+    }
+
+    /// <summary>
+    /// 将两个缩放进行相除，新缩放的缩放值等于各方向缩放值的商。
+    /// </summary>
+    /// <param name="left">被除数。</param>
+    /// <param name="right">除数。</param>
+    /// <returns>相除后的缩放。</returns>
+    public static Scaling2D operator /(Scaling2D left, Scaling2D right)
+    {
+        return new Scaling2D(left.ScaleX / right.ScaleX, left.ScaleY / right.ScaleY);
     }
 
     #endregion
