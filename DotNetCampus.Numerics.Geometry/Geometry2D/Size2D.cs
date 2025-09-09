@@ -35,7 +35,7 @@ public readonly record struct Size2D(double Width, double Height)
     /// 计算两个大小的缩放比例。
     /// </summary>
     /// <param name="left">要缩放到的目标大小。</param>
-    /// <param name="right">>要进行缩放的原始大小。</param>
+    /// <param name="right">要进行缩放的原始大小。</param>
     /// <returns><paramref name="right" /> 缩放到 <paramref name="left" /> 所需的缩放比例。</returns>
     public static Scaling2D operator /(Size2D left, Size2D right)
     {
