@@ -97,6 +97,7 @@ public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>, IGe
             (A, B) = (B, A);
             Angle += AngularMeasure.HalfPi;
         }
+
         this.A = A;
         this.B = B;
         this.Angle = Angle;
@@ -105,6 +106,19 @@ public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>, IGe
     #endregion
 
     #region 成员方法
+
+    /// <inheritdoc />
+    public BoundingBox2D GetBoundingBox()
+    {
+        var (m11, m12, m21, m22, offsetX, offsetY) = AffineTransformation2D.CreateScaling(new Scaling2D(A, B)).Rotate(Angle).Translate(Center.ToVector());
+        var maxX = Math.Sqrt(m11 * m11 + m12 * m12);
+        var maxY = Math.Sqrt(m21 * m21 + m22 * m22);
+        return BoundingBox2D.Create(-maxX + offsetX, -maxY + offsetY, maxX + offsetX, maxY + offsetY);
+    }
+
+    #endregion
+
+    #region Transforms
 
     /// <inheritdoc />
     public Ellipse2D Transform(AffineTransformation2D transformation)
@@ -139,12 +153,40 @@ public readonly record struct Ellipse2D : IAffineTransformable2D<Ellipse2D>, IGe
     }
 
     /// <inheritdoc />
-    public BoundingBox2D GetBoundingBox()
+    public Ellipse2D ScaleTransform(Scaling2D scaling)
     {
-        var (m11, m12, m21, m22, offsetX, offsetY) = AffineTransformation2D.CreateScaling(new Scaling2D(A, B)).Rotate(Angle).Translate(Center.ToVector());
-        var maxX = Math.Sqrt(m11 * m11 + m12 * m12);
-        var maxY = Math.Sqrt(m21 * m21 + m22 * m22);
-        return BoundingBox2D.Create(-maxX + offsetX, -maxY + offsetY, maxX + offsetX, maxY + offsetY);
+        return Transform(AffineTransformation2D.CreateScaling(scaling));
+    }
+
+    /// <inheritdoc />
+    public Ellipse2D Transform(SimilarityTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+
+        var newCenter = Center.Transform(transformation);
+        var newA = A * transformation.Scaling;
+        var newB = B * transformation.Scaling;
+        var newAngle = Angle + transformation.Rotation;
+
+        return new Ellipse2D(newCenter, newA, newB, newAngle);
+    }
+
+    /// <inheritdoc />
+    public Ellipse2D ScaleTransform(double scaling)
+    {
+        return new Ellipse2D(Center.ScaleTransform(scaling), A * scaling, B * scaling, Angle);
+    }
+
+    /// <inheritdoc />
+    public Ellipse2D RotateTransform(AngularMeasure rotation)
+    {
+        return new Ellipse2D(Center.RotateTransform(rotation), A, B, Angle + rotation);
+    }
+
+    /// <inheritdoc />
+    public Ellipse2D TranslateTransform(Vector2D translation)
+    {
+        return new Ellipse2D(Center.TranslateTransform(translation), A, B, Angle);
     }
 
     #endregion

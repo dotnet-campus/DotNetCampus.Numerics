@@ -110,6 +110,19 @@ public readonly record struct Circle2D(Point2D Center, double Radius)
     #region Transforms
 
     /// <inheritdoc />
+    public Ellipse2D Transform(AffineTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+        return new Ellipse2D(this).Transform(transformation);
+    }
+
+    /// <inheritdoc />
+    public Ellipse2D ScaleTransform(Scaling2D scaling)
+    {
+        return new Ellipse2D(this).ScaleTransform(scaling);
+    }
+
+    /// <inheritdoc />
     public Circle2D Transform(SimilarityTransformation2D transformation)
     {
         ArgumentNullException.ThrowIfNull(transformation);
@@ -125,20 +138,33 @@ public readonly record struct Circle2D(Point2D Center, double Radius)
     /// <inheritdoc />
     public Circle2D RotateTransform(AngularMeasure rotation)
     {
-        return new Circle2D(Center.RotateTransform(rotation), Radius);
+        return this with { Center = Center.RotateTransform(rotation) };
     }
 
     /// <inheritdoc />
     public Circle2D TranslateTransform(Vector2D translation)
     {
-        return new Circle2D(Center.TranslateTransform(translation), Radius);
+        return this with { Center = Center.TranslateTransform(translation) };
     }
 
-    /// <inheritdoc />
-    public Ellipse2D Transform(AffineTransformation2D transformation)
+    Ellipse2D ISimilarityTransformable2D<Ellipse2D>.Transform(SimilarityTransformation2D transformation)
     {
-        ArgumentNullException.ThrowIfNull(transformation);
-        return new Ellipse2D(this).Transform(transformation);
+        return new Ellipse2D(Transform(transformation));
+    }
+
+    Ellipse2D ISimilarityTransformable2D<Ellipse2D>.RotateTransform(AngularMeasure rotation)
+    {
+        return new Ellipse2D(RotateTransform(rotation));
+    }
+
+    Ellipse2D ISimilarityTransformable2D<Ellipse2D>.TranslateTransform(Vector2D translation)
+    {
+        return new Ellipse2D(TranslateTransform(translation));
+    }
+
+    Ellipse2D ISimilarityTransformable2D<Ellipse2D>.ScaleTransform(double scaling)
+    {
+        return new Ellipse2D(ScaleTransform(scaling));
     }
 
     #endregion

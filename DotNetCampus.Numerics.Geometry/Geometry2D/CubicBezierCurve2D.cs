@@ -46,7 +46,48 @@ public record CubicBezierCurve2D(Point2D Start, Point2D Control1, Point2D Contro
     }
 
     /// <inheritdoc />
+    public BoundingBox2D GetBoundingBox()
+    {
+        // x(t) = (1 - t)^3 * x0 + 3 * (1 - t)^2 * t * x1 + 3 * (1 - t) * t^2 * x2 + t^3 * x3 = (-x0 + 3 * x1 - 3 * x2 + x3) * t^3 + 3 * (x0 - 2 * x1 + x2) * t^2 + 3 * (x1 - x0) * t + x0
+        // y(t) = (1 - t)^3 * y0 + 3 * (1 - t)^2 * t * y1 + 3 * (1 - t) * t^2 * y2 + t^3 * y3 = (-y0 + 3 * y1 - 3 * y2 + y3) * t^3 + 3 * (y0 - 2 * y1 + y2) * t^2 + 3 * (y1 - y0) * t + y0
+        var xFunction = new CubicFunction<double>(-Start.X + 3 * Control1.X - 3 * Control2.X + End.X, 3 * (Start.X - 2 * Control1.X + Control2.X),
+            3 * (Control1.X - Start.X), Start.X);
+        var yFunction = new CubicFunction<double>(-Start.Y + 3 * Control1.Y - 3 * Control2.Y + End.Y, 3 * (Start.Y - 2 * Control1.Y + Control2.Y),
+            3 * (Control1.Y - Start.Y), Start.Y);
+        var valueRange = Interval<double>.Create(0, 1);
+        var xRange = xFunction.GetValueRange(valueRange);
+        var yRange = yFunction.GetValueRange(valueRange);
+        return BoundingBox2D.Create(xRange.Start, yRange.Start, xRange.End, yRange.End);
+    }
+
+    #endregion
+
+    #region Transforms
+
+    /// <inheritdoc />
     public CubicBezierCurve2D Transform(AffineTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+
+        return new CubicBezierCurve2D(
+            Start.Transform(transformation),
+            Control1.Transform(transformation),
+            Control2.Transform(transformation),
+            End.Transform(transformation));
+    }
+
+    /// <inheritdoc />
+    public CubicBezierCurve2D ScaleTransform(Scaling2D scaling)
+    {
+        return new CubicBezierCurve2D(
+            Start.ScaleTransform(scaling),
+            Control1.ScaleTransform(scaling),
+            Control2.ScaleTransform(scaling),
+            End.ScaleTransform(scaling));
+    }
+
+    /// <inheritdoc />
+    public CubicBezierCurve2D Transform(SimilarityTransformation2D transformation)
     {
         ArgumentNullException.ThrowIfNull(transformation);
 
@@ -58,16 +99,33 @@ public record CubicBezierCurve2D(Point2D Start, Point2D Control1, Point2D Contro
     }
 
     /// <inheritdoc />
-    public BoundingBox2D GetBoundingBox()
+    public CubicBezierCurve2D ScaleTransform(double scaling)
     {
-        // x(t) = (1 - t)^3 * x0 + 3 * (1 - t)^2 * t * x1 + 3 * (1 - t) * t^2 * x2 + t^3 * x3 = (-x0 + 3 * x1 - 3 * x2 + x3) * t^3 + 3 * (x0 - 2 * x1 + x2) * t^2 + 3 * (x1 - x0) * t + x0
-        // y(t) = (1 - t)^3 * y0 + 3 * (1 - t)^2 * t * y1 + 3 * (1 - t) * t^2 * y2 + t^3 * y3 = (-y0 + 3 * y1 - 3 * y2 + y3) * t^3 + 3 * (y0 - 2 * y1 + y2) * t^2 + 3 * (y1 - y0) * t + y0
-        var xFunction = new CubicFunction<double>(-Start.X + 3 * Control1.X - 3 * Control2.X + End.X, 3 * (Start.X - 2 * Control1.X + Control2.X), 3 * (Control1.X - Start.X), Start.X);
-        var yFunction = new CubicFunction<double>(-Start.Y + 3 * Control1.Y - 3 * Control2.Y + End.Y, 3 * (Start.Y - 2 * Control1.Y + Control2.Y), 3 * (Control1.Y - Start.Y), Start.Y);
-        var valueRange = Interval<double>.Create(0, 1);
-        var xRange = xFunction.GetValueRange(valueRange);
-        var yRange = yFunction.GetValueRange(valueRange);
-        return BoundingBox2D.Create(xRange.Start, yRange.Start, xRange.End, yRange.End);
+        return new CubicBezierCurve2D(
+            Start.ScaleTransform(scaling),
+            Control1.ScaleTransform(scaling),
+            Control2.ScaleTransform(scaling),
+            End.ScaleTransform(scaling));
+    }
+
+    /// <inheritdoc />
+    public CubicBezierCurve2D RotateTransform(AngularMeasure rotation)
+    {
+        return new CubicBezierCurve2D(
+            Start.RotateTransform(rotation),
+            Control1.RotateTransform(rotation),
+            Control2.RotateTransform(rotation),
+            End.RotateTransform(rotation));
+    }
+
+    /// <inheritdoc />
+    public CubicBezierCurve2D TranslateTransform(Vector2D translation)
+    {
+        return new CubicBezierCurve2D(
+            Start.TranslateTransform(translation),
+            Control1.TranslateTransform(translation),
+            Control2.TranslateTransform(translation),
+            End.TranslateTransform(translation));
     }
 
     #endregion

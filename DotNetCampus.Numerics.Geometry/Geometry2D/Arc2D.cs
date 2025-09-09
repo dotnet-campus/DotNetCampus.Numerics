@@ -70,7 +70,6 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
         return angleRadio.IsInZeroToOne() && lengthRadio.IsInZeroToOne() ? intersection : null;
     }
 
-
     /// <summary>
     /// 计算圆弧与圆的交点。
     /// </summary>
@@ -131,10 +130,32 @@ public readonly record struct Arc2D(Circle2D Circle, AngularMeasure StartAngle, 
             new Point2D(cos.GetMax(range), sin.GetMax(range)));
     }
 
+    #endregion
+
+    #region Transforms
+
     /// <inheritdoc />
     public Arc2D Transform(SimilarityTransformation2D transformation)
     {
         return new Arc2D(Circle.Transform(transformation), StartAngle + transformation.Rotation, AngleSize);
+    }
+
+    /// <inheritdoc />
+    public Arc2D ScaleTransform(double scaling)
+    {
+        return new Arc2D(Circle.ScaleTransform(scaling), StartAngle, AngleSize);
+    }
+
+    /// <inheritdoc />
+    public Arc2D RotateTransform(AngularMeasure rotation)
+    {
+        return new Arc2D(Circle.RotateTransform(rotation), StartAngle + rotation, AngleSize);
+    }
+
+    /// <inheritdoc />
+    public Arc2D TranslateTransform(Vector2D translation)
+    {
+        return new Arc2D(Circle.TranslateTransform(translation), StartAngle, AngleSize);
     }
 
     #endregion

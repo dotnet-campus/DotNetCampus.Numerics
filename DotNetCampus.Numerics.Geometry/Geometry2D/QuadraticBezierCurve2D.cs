@@ -44,19 +44,6 @@ public record QuadraticBezierCurve2D(Point2D Start, Point2D Control, Point2D End
     }
 
     /// <inheritdoc />
-    public QuadraticBezierCurve2D Transform(AffineTransformation2D transformation)
-    {
-        ArgumentNullException.ThrowIfNull(transformation);
-
-        return new QuadraticBezierCurve2D(
-            transformation.Transform(Start),
-            transformation.Transform(Control),
-            transformation.Transform(End));
-    }
-
-    #endregion
-
-    /// <inheritdoc />
     public BoundingBox2D GetBoundingBox()
     {
         // x(t) = (1 - t)² * x0 + 2 * (1 - t) * t * x1 + t² * x2 = (x0 - 2 * x1 + x2) * t² + 2 * (x1 - x0) * t + x0
@@ -68,4 +55,68 @@ public record QuadraticBezierCurve2D(Point2D Start, Point2D Control, Point2D End
         var yRange = yFunction.GetValueRange(valueRange);
         return BoundingBox2D.Create(xRange.Start, yRange.Start, xRange.End, yRange.End);
     }
+
+    #endregion
+
+    #region Transforms
+
+    /// <inheritdoc />
+    public QuadraticBezierCurve2D Transform(AffineTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+
+        return new QuadraticBezierCurve2D(
+            Start.Transform(transformation),
+            Control.Transform(transformation),
+            End.Transform(transformation));
+    }
+
+    /// <inheritdoc />
+    public QuadraticBezierCurve2D ScaleTransform(Scaling2D scaling)
+    {
+        return new QuadraticBezierCurve2D(
+            Start.ScaleTransform(scaling),
+            Control.ScaleTransform(scaling),
+            End.ScaleTransform(scaling));
+    }
+
+    /// <inheritdoc />
+    public QuadraticBezierCurve2D Transform(SimilarityTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+
+        return new QuadraticBezierCurve2D(
+            transformation.Transform(Start),
+            transformation.Transform(Control),
+            transformation.Transform(End));
+    }
+
+    /// <inheritdoc />
+    public QuadraticBezierCurve2D ScaleTransform(double scaling)
+    {
+        return new QuadraticBezierCurve2D(
+            Start.ScaleTransform(scaling),
+            Control.ScaleTransform(scaling),
+            End.ScaleTransform(scaling));
+    }
+
+    /// <inheritdoc />
+    public QuadraticBezierCurve2D RotateTransform(AngularMeasure rotation)
+    {
+        return new QuadraticBezierCurve2D(
+            Start.RotateTransform(rotation),
+            Control.RotateTransform(rotation),
+            End.RotateTransform(rotation));
+    }
+
+    /// <inheritdoc />
+    public QuadraticBezierCurve2D TranslateTransform(Vector2D translation)
+    {
+        return new QuadraticBezierCurve2D(
+            Start.TranslateTransform(translation),
+            Control.TranslateTransform(translation),
+            End.TranslateTransform(translation));
+    }
+
+    #endregion
 }

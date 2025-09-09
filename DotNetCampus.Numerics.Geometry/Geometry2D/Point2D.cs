@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace DotNetCampus.Numerics.Geometry;
 
 /// <summary>
@@ -63,42 +65,10 @@ public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vect
     #region 成员方法
 
     /// <inheritdoc />
-    public Point2D Transform(AffineTransformation2D transformation)
-    {
-        ArgumentNullException.ThrowIfNull(transformation);
-        return transformation.Transform(this);
-    }
-
-    /// <inheritdoc />
-    public Point2D Transform(SimilarityTransformation2D transformation)
-    {
-        ArgumentNullException.ThrowIfNull(transformation);
-        return transformation.Transform(this);
-    }
-
-    /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Vector2D ToVector()
     {
         return new Vector2D(X, Y);
-    }
-
-    /// <inheritdoc />
-    public Point2D ScaleTransform(Scaling2D scaling)
-    {
-        return new Point2D(X * scaling.ScaleX, Y * scaling.ScaleY);
-    }
-
-    /// <inheritdoc cref="IAffineTransformable2D{TOut}.RotateTransform" />
-    public Point2D RotateTransform(AngularMeasure rotation)
-    {
-        var (sin, cos) = rotation.SinCos();
-        return new Point2D(X * cos - Y * sin, X * sin + Y * cos);
-    }
-
-    /// <inheritdoc cref="IAffineTransformable2D{T}.TranslateTransform" />
-    public Point2D TranslateTransform(Vector2D translation)
-    {
-        return this + translation;
     }
 
     #endregion
@@ -106,57 +76,115 @@ public readonly record struct Point2D(double X, double Y) : IPoint<Point2D, Vect
     #region 运算符重载
 
     /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Point2D operator +(Point2D point, Vector2D vector)
     {
         return new Point2D(point.X + vector.X, point.Y + vector.Y);
     }
 
     /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Point2D operator +(Vector2D vector, Point2D point)
     {
         return new Point2D(point.X + vector.X, point.Y + vector.Y);
     }
 
     /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D operator -(Point2D point1, Point2D point2)
     {
         return new Vector2D(point1.X - point2.X, point1.Y - point2.Y);
     }
 
     /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Point2D operator -(Point2D point, Vector2D vector)
     {
         return new Point2D(point.X - vector.X, point.Y - vector.Y);
     }
 
     /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Point2D operator *(Point2D point, double scalar)
     {
         return new Point2D(point.X * scalar, point.Y * scalar);
     }
 
     /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Point2D operator *(double scalar, Point2D point)
     {
         return new Point2D(point.X * scalar, point.Y * scalar);
     }
 
     /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Point2D operator /(Point2D point, double scalar)
     {
         return new Point2D(point.X / scalar, point.Y / scalar);
     }
 
     /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator Vector2D(Point2D point)
     {
         return new Vector2D(point.X, point.Y);
     }
 
     /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator Point2D(Vector2D vector)
     {
         return new Point2D(vector.X, vector.Y);
+    }
+
+    #endregion
+
+    #region Transforms
+
+    /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Point2D Transform(AffineTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+        return transformation.Transform(this);
+    }
+
+    /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Point2D ScaleTransform(Scaling2D scaling)
+    {
+        return new Point2D(X * scaling.ScaleX, Y * scaling.ScaleY);
+    }
+
+    /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Point2D Transform(SimilarityTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+        return transformation.Transform(this);
+    }
+
+    /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Point2D ScaleTransform(double scaling)
+    {
+        return new Point2D(X * scaling, Y * scaling);
+    }
+
+    /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Point2D RotateTransform(AngularMeasure rotation)
+    {
+        var (sin, cos) = rotation.SinCos();
+        return new Point2D(X * cos - Y * sin, X * sin + Y * cos);
+    }
+
+    /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Point2D TranslateTransform(Vector2D translation)
+    {
+        return this + translation;
     }
 
     #endregion
