@@ -48,8 +48,8 @@ public record QuadraticBezierCurve2D(Point2D Start, Point2D Control, Point2D End
     {
         // x(t) = (1 - t)² * x0 + 2 * (1 - t) * t * x1 + t² * x2 = (x0 - 2 * x1 + x2) * t² + 2 * (x1 - x0) * t + x0
         // y(t) = (1 - t)² * y0 + 2 * (1 - t) * t * y1 + t² * y2 = (y0 - 2 * y1 + y2) * t² + 2 * (y1 - y0) * t + y0
-        var xFunction = new QuadraticFunction<double>(Start.X - 2 * Control.X + End.X, 2 * (Control.X - Start.X), End.X - 2 * Control.X + Start.X);
-        var yFunction = new QuadraticFunction<double>(Start.Y - 2 * Control.Y + End.Y, 2 * (Control.Y - Start.Y), End.Y - 2 * Control.Y + Start.Y);
+        var xFunction = new QuadraticFunction<double>(Start.X - 2 * Control.X + End.X, 2 * (Control.X - Start.X), Start.X);
+        var yFunction = new QuadraticFunction<double>(Start.Y - 2 * Control.Y + End.Y, 2 * (Control.Y - Start.Y), Start.Y);
         var valueRange = Interval<double>.Create(0, 1);
         var xRange = xFunction.GetValueRange(valueRange);
         var yRange = yFunction.GetValueRange(valueRange);
