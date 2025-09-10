@@ -105,11 +105,55 @@ public readonly record struct Line2D : IAffineTransformable2D<Line2D>
         return GetPoint(position);
     }
 
+    #endregion
+
+    #region Transforms
+
     /// <inheritdoc />
     public Line2D Transform(AffineTransformation2D transformation)
     {
         var point1 = PointBase.Transform(transformation);
         var point2 = (PointBase + UnitDirectionVector).Transform(transformation);
+        return Create(point1, point2);
+    }
+
+    /// <inheritdoc />
+    public Line2D ScaleTransform(Scaling2D scaling)
+    {
+        var point1 = PointBase.ScaleTransform(scaling);
+        var point2 = (PointBase + UnitDirectionVector).ScaleTransform(scaling);
+        return Create(point1, point2);
+    }
+
+    /// <inheritdoc />
+    public Line2D Transform(SimilarityTransformation2D transformation)
+    {
+        var point1 = PointBase.Transform(transformation);
+        var point2 = (PointBase + UnitDirectionVector).Transform(transformation);
+        return Create(point1, point2);
+    }
+
+    /// <inheritdoc />
+    public Line2D ScaleTransform(double scaling)
+    {
+        var point1 = PointBase.ScaleTransform(scaling);
+        var point2 = (PointBase + UnitDirectionVector).ScaleTransform(scaling);
+        return Create(point1, point2);
+    }
+
+    /// <inheritdoc />
+    public Line2D RotateTransform(AngularMeasure rotation)
+    {
+        var point1 = PointBase.RotateTransform(rotation);
+        var point2 = (PointBase + UnitDirectionVector).RotateTransform(rotation);
+        return Create(point1, point2);
+    }
+
+    /// <inheritdoc />
+    public Line2D TranslateTransform(Vector2D translation)
+    {
+        var point1 = PointBase.TranslateTransform(translation);
+        var point2 = (PointBase + UnitDirectionVector).TranslateTransform(translation);
         return Create(point1, point2);
     }
 

@@ -20,30 +20,21 @@ public interface ISimilarityTransformable2D<out T>
     /// </summary>
     /// <param name="scaling">缩放比例。</param>
     /// <returns>变换后的对象。</returns>
-    T ScaleTransform(double scaling)
-    {
-        return Transform(new SimilarityTransformation2D(scaling, AngularMeasure.Zero, Vector2D.Zero));
-    }
+    T ScaleTransform(double scaling);
 
     /// <summary>
     /// 进行旋转变换。旋转中心为原点。
     /// </summary>
     /// <param name="rotation">旋转角度。</param>
     /// <returns>变换后的对象。</returns>
-    T RotateTransform(AngularMeasure rotation)
-    {
-        return Transform(new SimilarityTransformation2D(1, rotation, Vector2D.Zero));
-    }
+    T RotateTransform(AngularMeasure rotation);
 
     /// <summary>
     /// 进行平移变换。
     /// </summary>
     /// <param name="translation">平移向量。</param>
     /// <returns>变换后的对象。</returns>
-    T TranslateTransform(Vector2D translation)
-    {
-        return Transform(new SimilarityTransformation2D(1, AngularMeasure.Zero, translation));
-    }
+    T TranslateTransform(Vector2D translation);
 
     #endregion
 }

@@ -96,16 +96,51 @@ public readonly record struct Segment2D(Point2D StartPoint, Point2D EndPoint) : 
     }
 
     /// <inheritdoc />
-    public Segment2D Transform(AffineTransformation2D transformation)
-    {
-        ArgumentNullException.ThrowIfNull(transformation);
-        return new Segment2D(Line.Transform(transformation), Length);
-    }
-
-    /// <inheritdoc />
     public BoundingBox2D GetBoundingBox()
     {
         return BoundingBox2D.Create(StartPoint, EndPoint);
+    }
+
+    #endregion
+
+    #region Transforms
+
+    /// <inheritdoc />
+    public Segment2D Transform(AffineTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+        return new Segment2D(StartPoint.Transform(transformation), EndPoint.Transform(transformation));
+    }
+
+    /// <inheritdoc />
+    public Segment2D ScaleTransform(Scaling2D scaling)
+    {
+        return new Segment2D(StartPoint.ScaleTransform(scaling), EndPoint.ScaleTransform(scaling));
+    }
+
+    /// <inheritdoc />
+    public Segment2D Transform(SimilarityTransformation2D transformation)
+    {
+        ArgumentNullException.ThrowIfNull(transformation);
+        return new Segment2D(StartPoint.Transform(transformation), EndPoint.Transform(transformation));
+    }
+
+    /// <inheritdoc />
+    public Segment2D ScaleTransform(double scaling)
+    {
+        return new Segment2D(StartPoint.ScaleTransform(scaling), EndPoint.ScaleTransform(scaling));
+    }
+
+    /// <inheritdoc />
+    public Segment2D RotateTransform(AngularMeasure rotation)
+    {
+        return new Segment2D(StartPoint.RotateTransform(rotation), EndPoint.RotateTransform(rotation));
+    }
+
+    /// <inheritdoc />
+    public Segment2D TranslateTransform(Vector2D translation)
+    {
+        return new Segment2D(StartPoint.TranslateTransform(translation), EndPoint.TranslateTransform(translation));
     }
 
     #endregion
