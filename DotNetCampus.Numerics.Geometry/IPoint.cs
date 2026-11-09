@@ -1,5 +1,3 @@
-using System.Numerics;
-
 namespace DotNetCampus.Numerics.Geometry;
 
 #pragma warning disable CA1000 // 不要在泛型类型中声明静态成员。这里是为了定义接口的抽象静态成员。
@@ -13,7 +11,7 @@ namespace DotNetCampus.Numerics.Geometry;
 public interface IPoint<TSelf, TVector, TNum>
     where TSelf : unmanaged, IPoint<TSelf, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
 {
     /// <summary>
     /// 获取两个点的中点。

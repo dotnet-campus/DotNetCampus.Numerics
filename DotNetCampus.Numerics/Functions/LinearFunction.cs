@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Numerics;
 
 namespace DotNetCampus.Numerics.Functions;
 
@@ -7,7 +6,7 @@ namespace DotNetCampus.Numerics.Functions;
 /// 一次方程 <c>f(x) = ax + b</c>，其中 a 不应该为零。
 /// </summary>
 public readonly record struct LinearFunction<TNum>(TNum A, TNum B) : IFunction<TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
 {
     #region 属性
 
@@ -23,12 +22,12 @@ public readonly record struct LinearFunction<TNum>(TNum A, TNum B) : IFunction<T
     {
         get
         {
-            if (A == TNum.Zero)
+            if (A.IsEqual(default))
             {
                 throw new InvalidOperationException("一次方程没有根或者有无数根。");
             }
 
-            return -B / A;
+            return B.Negate().Divide(A);
         }
     }
 
@@ -42,25 +41,25 @@ public readonly record struct LinearFunction<TNum>(TNum A, TNum B) : IFunction<T
     /// <inheritdoc />
     public ImmutableArray<TNum> GetRoots()
     {
-        return A == TNum.Zero ? ImmutableArray<TNum>.Empty : [-B / A];
+        return A.IsEqual(default) ? ImmutableArray<TNum>.Empty : ImmutableArray.Create(B.Negate().Divide(A));
     }
 
     /// <inheritdoc />
     public TNum Evaluate(TNum x)
     {
-        return A * x + B;
+        return A.Multiply(x).Add(B);
     }
 
     /// <inheritdoc />
     public TNum GetMax(Interval<TNum> interval)
     {
-        return A > TNum.Zero ? Evaluate(interval.End) : Evaluate(interval.Start);
+        return A.GreaterThan(default) ? Evaluate(interval.End) : Evaluate(interval.Start);
     }
 
     /// <inheritdoc />
     public TNum GetMin(Interval<TNum> interval)
     {
-        return A > TNum.Zero ? Evaluate(interval.Start) : Evaluate(interval.End);
+        return A.GreaterThan(default) ? Evaluate(interval.Start) : Evaluate(interval.End);
     }
 
     /// <inheritdoc />

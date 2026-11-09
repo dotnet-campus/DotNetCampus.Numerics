@@ -1,6 +1,4 @@
-﻿using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace DotNetCampus.Numerics;
 
@@ -11,128 +9,350 @@ internal static class FloatingPointHelper
 {
     #region 静态方法
 
+    /// <summary>
+    /// 按位重解释。两个类型的大小必须相同。
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TNum Multiply<TNum>(this TNum a, int b)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+    public static TTo BitCast<TFrom, TTo>(TFrom value)
+        where TFrom : unmanaged
+        where TTo : unmanaged
+    {
+        if (Unsafe.SizeOf<TFrom>() != Unsafe.SizeOf<TTo>())
+            throw new NotSupportedException();
+
+        return Unsafe.As<TFrom, TTo>(ref value);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum One<TNum>()
+        where TNum : unmanaged
     {
         if (typeof(TNum) == typeof(float))
-            return Unsafe.BitCast<float, TNum>(Unsafe.BitCast<TNum, float>(a) * b);
+            return BitCast<float, TNum>(1f);
 
         if (typeof(TNum) == typeof(double))
-            return Unsafe.BitCast<double, TNum>(Unsafe.BitCast<TNum, double>(a) * b);
+            return BitCast<double, TNum>(1d);
 
-        if (typeof(TNum) == typeof(NFloat))
-            return Unsafe.BitCast<NFloat, TNum>(Unsafe.BitCast<TNum, NFloat>(a) * b);
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Pi<TNum>()
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(MathF.PI);
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(Math.PI);
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Tau<TNum>()
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(MathF.Tau);
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(Math.Tau);
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Add<TNum>(this TNum a, TNum b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(BitCast<TNum, float>(a) + BitCast<TNum, float>(b));
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(BitCast<TNum, double>(a) + BitCast<TNum, double>(b));
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Subtract<TNum>(this TNum a, TNum b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(BitCast<TNum, float>(a) - BitCast<TNum, float>(b));
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(BitCast<TNum, double>(a) - BitCast<TNum, double>(b));
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Multiply<TNum>(this TNum a, int b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(BitCast<TNum, float>(a) * b);
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(BitCast<TNum, double>(a) * b);
 
         throw new NotSupportedException();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TNum Multiply<TNum>(this int a, TNum b)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         return b.Multiply(a);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TNum Divide<TNum>(this TNum a, int b)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+    public static TNum Multiply<TNum>(this TNum a, TNum b)
+        where TNum : unmanaged
     {
         if (typeof(TNum) == typeof(float))
-            return Unsafe.BitCast<float, TNum>(Unsafe.BitCast<TNum, float>(a) / b);
+            return BitCast<float, TNum>(BitCast<TNum, float>(a) * BitCast<TNum, float>(b));
 
         if (typeof(TNum) == typeof(double))
-            return Unsafe.BitCast<double, TNum>(Unsafe.BitCast<TNum, double>(a) / b);
+            return BitCast<double, TNum>(BitCast<TNum, double>(a) * BitCast<TNum, double>(b));
 
-        if (typeof(TNum) == typeof(NFloat))
-            return Unsafe.BitCast<NFloat, TNum>(Unsafe.BitCast<TNum, NFloat>(a) / b);
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Divide<TNum>(this TNum a, int b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(BitCast<TNum, float>(a) / b);
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(BitCast<TNum, double>(a) / b);
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Divide<TNum>(this TNum a, TNum b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(BitCast<TNum, float>(a) / BitCast<TNum, float>(b));
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(BitCast<TNum, double>(a) / BitCast<TNum, double>(b));
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Remainder<TNum>(this TNum a, TNum b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(BitCast<TNum, float>(a) % BitCast<TNum, float>(b));
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(BitCast<TNum, double>(a) % BitCast<TNum, double>(b));
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Negate<TNum>(this TNum a)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(-BitCast<TNum, float>(a));
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(-BitCast<TNum, double>(a));
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsEqual<TNum>(this TNum a, TNum b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<TNum, float>(a) == BitCast<TNum, float>(b);
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<TNum, double>(a) == BitCast<TNum, double>(b);
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool GreaterThan<TNum>(this TNum a, TNum b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<TNum, float>(a) > BitCast<TNum, float>(b);
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<TNum, double>(a) > BitCast<TNum, double>(b);
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool LessThan<TNum>(this TNum a, TNum b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<TNum, float>(a) < BitCast<TNum, float>(b);
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<TNum, double>(a) < BitCast<TNum, double>(b);
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool GreaterThanOrEqual<TNum>(this TNum a, TNum b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<TNum, float>(a) >= BitCast<TNum, float>(b);
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<TNum, double>(a) >= BitCast<TNum, double>(b);
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool LessThanOrEqual<TNum>(this TNum a, TNum b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<TNum, float>(a) <= BitCast<TNum, float>(b);
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<TNum, double>(a) <= BitCast<TNum, double>(b);
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Sin<TNum>(this TNum a)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(MathF.Sin(BitCast<TNum, float>(a)));
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(Math.Sin(BitCast<TNum, double>(a)));
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Cos<TNum>(this TNum a)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(MathF.Cos(BitCast<TNum, float>(a)));
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(Math.Cos(BitCast<TNum, double>(a)));
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Min<TNum>(TNum a, TNum b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(MathF.Min(BitCast<TNum, float>(a), BitCast<TNum, float>(b)));
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(Math.Min(BitCast<TNum, double>(a), BitCast<TNum, double>(b)));
+
+        throw new NotSupportedException();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TNum Max<TNum>(TNum a, TNum b)
+        where TNum : unmanaged
+    {
+        if (typeof(TNum) == typeof(float))
+            return BitCast<float, TNum>(MathF.Max(BitCast<TNum, float>(a), BitCast<TNum, float>(b)));
+
+        if (typeof(TNum) == typeof(double))
+            return BitCast<double, TNum>(Math.Max(BitCast<TNum, double>(a), BitCast<TNum, double>(b)));
 
         throw new NotSupportedException();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TNum Sqrt<TNum>(this TNum a)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         if (typeof(TNum) == typeof(float))
-            return Unsafe.BitCast<float, TNum>(MathF.Sqrt(Unsafe.BitCast<TNum, float>(a)));
+            return BitCast<float, TNum>(MathF.Sqrt(BitCast<TNum, float>(a)));
 
         if (typeof(TNum) == typeof(double))
-            return Unsafe.BitCast<double, TNum>(Math.Sqrt(Unsafe.BitCast<TNum, double>(a)));
-
-        if (typeof(TNum) == typeof(NFloat))
-            return Unsafe.BitCast<NFloat, TNum>(NFloat.Sqrt(Unsafe.BitCast<TNum, NFloat>(a)));
+            return BitCast<double, TNum>(Math.Sqrt(BitCast<TNum, double>(a)));
 
         throw new NotSupportedException();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TNum Clamp<TNum>(this TNum value, TNum min, TNum max)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         if (typeof(TNum) == typeof(float))
-            return Unsafe.BitCast<float, TNum>(Math.Clamp(Unsafe.BitCast<TNum, float>(value), Unsafe.BitCast<TNum, float>(min), Unsafe.BitCast<TNum, float>(max)));
+            return BitCast<float, TNum>(Math.Clamp(BitCast<TNum, float>(value), BitCast<TNum, float>(min), BitCast<TNum, float>(max)));
 
         if (typeof(TNum) == typeof(double))
-            return Unsafe.BitCast<double, TNum>(Math.Clamp(Unsafe.BitCast<TNum, double>(value), Unsafe.BitCast<TNum, double>(min), Unsafe.BitCast<TNum, double>(max)));
+            return BitCast<double, TNum>(Math.Clamp(BitCast<TNum, double>(value), BitCast<TNum, double>(min), BitCast<TNum, double>(max)));
 
-        if (typeof(TNum) == typeof(NFloat))
-            return Unsafe.BitCast<NFloat, TNum>(NFloat.Clamp(Unsafe.BitCast<TNum, NFloat>(value), Unsafe.BitCast<TNum, NFloat>(min), Unsafe.BitCast<TNum, NFloat>(max)));
-
-        return value <= min
-            ? min
-            : value >= max
-                ? max
-                : value;
+        throw new NotSupportedException();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TNum Abs<TNum>(this TNum a)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         if (typeof(TNum) == typeof(float))
-            return Unsafe.BitCast<float, TNum>(MathF.Abs(Unsafe.BitCast<TNum, float>(a)));
+            return BitCast<float, TNum>(MathF.Abs(BitCast<TNum, float>(a)));
 
         if (typeof(TNum) == typeof(double))
-            return Unsafe.BitCast<double, TNum>(Math.Abs(Unsafe.BitCast<TNum, double>(a)));
+            return BitCast<double, TNum>(Math.Abs(BitCast<TNum, double>(a)));
 
-        if (typeof(TNum) == typeof(NFloat))
-            return Unsafe.BitCast<NFloat, TNum>(NFloat.Abs(Unsafe.BitCast<TNum, NFloat>(a)));
-
-        return a > TNum.Zero ? a : -a;
+        throw new NotSupportedException();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostEqual<TNum>(this TNum a, TNum b, TNum normalizationFactor)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         if (typeof(TNum) == typeof(float))
-            return NumericsEqualHelper.IsCloseEqual(Unsafe.BitCast<TNum, float>(a), Unsafe.BitCast<TNum, float>(b),
-                Unsafe.BitCast<TNum, float>(normalizationFactor), NumericsEqualHelper.NearlyToleranceF);
+            return NumericsEqualHelper.IsCloseEqual(BitCast<TNum, float>(a), BitCast<TNum, float>(b),
+                BitCast<TNum, float>(normalizationFactor), NumericsEqualHelper.NearlyToleranceF);
 
         if (typeof(TNum) == typeof(double))
-            return NumericsEqualHelper.IsCloseEqual(Unsafe.BitCast<TNum, double>(a), Unsafe.BitCast<TNum, double>(b),
-                Unsafe.BitCast<TNum, double>(normalizationFactor), NumericsEqualHelper.AlmostTolerance);
-
-        if (typeof(TNum) == typeof(NFloat))
-            return NumericsEqualHelper.IsCloseEqual(Unsafe.BitCast<TNum, NFloat>(a), Unsafe.BitCast<TNum, NFloat>(b),
-                Unsafe.BitCast<TNum, NFloat>(normalizationFactor), NumericsEqualHelper.NearlyTolerance);
+            return NumericsEqualHelper.IsCloseEqual(BitCast<TNum, double>(a), BitCast<TNum, double>(b),
+                BitCast<TNum, double>(normalizationFactor), NumericsEqualHelper.AlmostTolerance);
 
         throw new NotSupportedException();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAlmostZero<TNum>(this TNum a, TNum normalizationFactor)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         if (typeof(TNum) == typeof(float))
-            return Unsafe.BitCast<TNum, float>(a).IsCloseZero(NumericsEqualHelper.NearlyToleranceF, Unsafe.BitCast<TNum, float>(normalizationFactor));
+            return BitCast<TNum, float>(a).IsCloseZero(NumericsEqualHelper.NearlyToleranceF, BitCast<TNum, float>(normalizationFactor));
 
         if (typeof(TNum) == typeof(double))
-            return Unsafe.BitCast<TNum, double>(a).IsCloseZero(NumericsEqualHelper.AlmostTolerance, Unsafe.BitCast<TNum, double>(normalizationFactor));
-
-        if (typeof(TNum) == typeof(NFloat))
-            return NumericsEqualHelper.IsCloseZero(Unsafe.BitCast<TNum, NFloat>(a), NumericsEqualHelper.NearlyTolerance, Unsafe.BitCast<TNum, NFloat>(normalizationFactor));
+            return BitCast<TNum, double>(a).IsCloseZero(NumericsEqualHelper.AlmostTolerance, BitCast<TNum, double>(normalizationFactor));
 
         throw new NotSupportedException();
     }

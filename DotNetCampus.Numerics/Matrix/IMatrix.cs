@@ -1,5 +1,3 @@
-using System.Numerics;
-
 namespace DotNetCampus.Numerics.Matrix;
 
 #pragma warning disable CA1000 // 不要在泛型类型中声明静态成员。这里是为了定义接口的抽象静态成员。
@@ -13,19 +11,25 @@ namespace DotNetCampus.Numerics.Matrix;
 public interface IMatrix<TRow, TColumn, TNum>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
 {
     #region 静态变量
 
     /// <summary>
     /// 矩阵行数。
     /// </summary>
-    static virtual int RowCount => TColumn.Dimension;
+    /// <remarks>
+    /// 由具体矩阵类型实现。
+    /// </remarks>
+    static abstract int RowCount { get; }
 
     /// <summary>
     /// 矩阵列数。
     /// </summary>
-    static virtual int ColumnCount => TRow.Dimension;
+    /// <remarks>
+    /// 由具体矩阵类型实现。
+    /// </remarks>
+    static abstract int ColumnCount { get; }
 
     #endregion
 
@@ -77,11 +81,11 @@ public interface IMatrix<TRow, TColumn, TNum>
 /// <typeparam name="TRow">每行的向量。</typeparam>
 /// <typeparam name="TColumn">每一列的向量。</typeparam>
 /// <typeparam name="TNum">矩阵元素的类型。</typeparam>
-public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TNum>, IEqualityOperators<TSelf, TSelf, bool>
+public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TNum>
     where TSelf : IMatrix<TSelf, TRow, TColumn, TNum>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
 {
     #region 静态变量
 
@@ -110,6 +114,10 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum> : IMatrix<TRow, TColumn, TN
 
     public static abstract TSelf operator -(TSelf matrix);
 
+    public static abstract bool operator ==(TSelf matrix1, TSelf matrix2);
+
+    public static abstract bool operator !=(TSelf matrix1, TSelf matrix2);
+
 #pragma warning restore CS1591
 }
 
@@ -125,7 +133,7 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose> : IMatrix<TSelf
     where TSelf : IMatrix<TSelf, TRow, TColumn, TNum, TTranspose>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
     where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum>
 {
     #region 属性
@@ -150,7 +158,7 @@ public interface IMatrix<TSelf, TRow, TColumn, TNum, TTranspose> : IMatrix<TSelf
 public interface ISquareMatrix<TSelf, TVector, TNum> : IMatrix<TSelf, TVector, TVector, TNum, TSelf>
     where TSelf : ISquareMatrix<TSelf, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
 {
     #region 静态变量
 

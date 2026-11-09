@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Immutable;
-using System.Numerics;
 using System.Reflection;
 using JetBrains.Annotations;
 using DotNetCampus.Numerics.Matrix;
@@ -13,8 +12,7 @@ public class MatrixTest
 {
     #region 静态变量
 
-    private static readonly ImmutableArray<Type> MatrixTypes =
-    [
+    private static readonly ImmutableArray<Type> MatrixTypes = ImmutableArray.Create(
         typeof(Matrix2X2D),
         typeof(Matrix2X3D),
         typeof(Matrix2X4D),
@@ -32,8 +30,7 @@ public class MatrixTest
         typeof(Matrix3X4F),
         typeof(Matrix4X2F),
         typeof(Matrix4X3F),
-        typeof(Matrix4X4F),
-    ];
+        typeof(Matrix4X4F));
 
     #endregion
 
@@ -65,7 +62,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test((a, b) =>
@@ -74,7 +71,7 @@ public class MatrixTest
             for (var i = 0; i < TMatrix.RowCount; i++)
             {
                 for (var j = 0; j < TMatrix.ColumnCount; j++)
-                    Assert.Equal(a[i, j] + b[i, j], actual[i, j]);
+                    Assert.Equal(a[i, j].Add(b[i, j]), actual[i, j]);
             }
         });
     }
@@ -89,7 +86,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test((a, b) =>
@@ -98,7 +95,7 @@ public class MatrixTest
             for (var i = 0; i < TMatrix.RowCount; i++)
             {
                 for (var j = 0; j < TMatrix.ColumnCount; j++)
-                    Assert.Equal(a[i, j] - b[i, j], actual[i, j]);
+                    Assert.Equal(a[i, j].Subtract(b[i, j]), actual[i, j]);
             }
         });
     }
@@ -113,7 +110,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test((a, b) =>
@@ -125,7 +122,7 @@ public class MatrixTest
                 {
                     TNum sum = default;
                     for (var i = 0; i < TColumn.Dimension; i++)
-                        sum += a[i] * b[i, column];
+                        sum = sum.Add(a[i].Multiply(b[i, column]));
                     Assert.Equal(sum, actual[column]);
                 }
 
@@ -144,7 +141,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test((a, b) =>
@@ -156,7 +153,7 @@ public class MatrixTest
                 {
                     TNum sum = default;
                     for (var i = 0; i < TRow.Dimension; i++)
-                        sum += a[row, i] * b[i];
+                        sum = sum.Add(a[row, i].Multiply(b[i]));
                     Assert.Equal(sum, actual[row]);
                 }
 
@@ -175,7 +172,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test((a, b) =>
@@ -184,14 +181,14 @@ public class MatrixTest
             for (var i = 0; i < TMatrix.RowCount; i++)
             {
                 for (var j = 0; j < TMatrix.ColumnCount; j++)
-                    Assert.Equal(a[i, j] * b, actual[i, j]);
+                    Assert.Equal(a[i, j].Multiply(b), actual[i, j]);
             }
 
             actual = b * a;
             for (var i = 0; i < TMatrix.RowCount; i++)
             {
                 for (var j = 0; j < TMatrix.ColumnCount; j++)
-                    Assert.Equal(b * a[i, j], actual[i, j]);
+                    Assert.Equal(b.Multiply(a[i, j]), actual[i, j]);
             }
         });
     }
@@ -206,7 +203,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test((a, b) =>
@@ -215,7 +212,7 @@ public class MatrixTest
             for (var i = 0; i < TMatrix.RowCount; i++)
             {
                 for (var j = 0; j < TMatrix.ColumnCount; j++)
-                    Assert.Equal(a[i, j] / b, actual[i, j]);
+                    Assert.Equal(a[i, j].Divide(b), actual[i, j]);
             }
         });
     }
@@ -230,7 +227,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test(a =>
@@ -254,7 +251,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test(m =>
@@ -264,10 +261,10 @@ public class MatrixTest
             for (var i = 0; i < TMatrix.RowCount; i++)
             {
                 for (var j = 0; j < TMatrix.ColumnCount; j++)
-                    sum += m[i, j] * m[i, j];
+                    sum = sum.Add(m[i, j].Multiply(m[i, j]));
             }
 
-            NumAssert.CloseEqual(sum, actual * actual);
+            NumAssert.CloseEqual(sum, actual.Multiply(actual));
         });
     }
 
@@ -281,7 +278,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test(m =>
@@ -290,7 +287,7 @@ public class MatrixTest
             for (var i = 0; i < TMatrix.RowCount; i++)
             {
                 for (var j = 0; j < TMatrix.ColumnCount; j++)
-                    Assert.Equal(-m[i, j], actual[i, j]);
+                    Assert.Equal(m[i, j].Negate(), actual[i, j]);
             }
         });
     }
@@ -305,7 +302,7 @@ public class MatrixTest
         where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
         where TRow : unmanaged, IVector<TRow, TNum>
         where TColumn : unmanaged, IVector<TColumn, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
         where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
     {
         MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>.Test(m =>

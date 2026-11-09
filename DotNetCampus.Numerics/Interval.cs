@@ -1,5 +1,3 @@
-using System.Numerics;
-
 namespace DotNetCampus.Numerics;
 
 /// <summary>
@@ -11,14 +9,14 @@ namespace DotNetCampus.Numerics;
 /// <param name="Start">区间的左端点。</param>
 /// <param name="End">区间的右端点。</param>
 public readonly record struct Interval<TNum>(TNum Start, TNum End)
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
 {
     #region 静态变量
 
     /// <summary>
     /// 空区间。
     /// </summary>
-    public static Interval<TNum> Empty => new(TNum.Zero, TNum.Zero);
+    public static Interval<TNum> Empty => new(default, default);
 
     #endregion
 
@@ -32,7 +30,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// <returns></returns>
     public static Interval<TNum> Create(TNum a, TNum b)
     {
-        return a > b ? new Interval<TNum>(b, a) : new Interval<TNum>(a, b);
+        return a.GreaterThan(b) ? new Interval<TNum>(b, a) : new Interval<TNum>(a, b);
     }
 
     #endregion
@@ -46,7 +44,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// 未使用构造函数创建的区间是空集。
     /// 区间起点大于等于终点的区间是空集。
     /// </remarks>
-    private readonly bool _isNotEmpty = Start <= End;
+    private readonly bool _isNotEmpty = Start.LessThanOrEqual(End);
 
     #endregion
 
@@ -60,7 +58,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// <summary>
     /// 区间长度。
     /// </summary>
-    public TNum Length => Start >= End ? TNum.Zero : End - Start;
+    public TNum Length => Start.GreaterThanOrEqual(End) ? default : End.Subtract(Start);
 
     #endregion
 
@@ -73,7 +71,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// <returns></returns>
     public bool Contains(TNum value)
     {
-        return Start <= value && value <= End;
+        return Start.LessThanOrEqual(value) && value.LessThanOrEqual(End);
     }
 
     /// <summary>
@@ -101,7 +99,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// </summary>
     public static Interval<TNum> operator *(Interval<TNum> interval, TNum value)
     {
-        return interval.IsEmpty ? new Interval<TNum>(TNum.Zero, TNum.Zero) : Create(interval.Start * value, interval.End * value);
+        return interval.IsEmpty ? new Interval<TNum>(default, default) : Create(interval.Start.Multiply(value), interval.End.Multiply(value));
     }
 
     /// <summary>
@@ -117,7 +115,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// </summary>
     public static Interval<TNum> operator +(Interval<TNum> interval, TNum value)
     {
-        return new Interval<TNum>(interval.Start + value, interval.End + value);
+        return new Interval<TNum>(interval.Start.Add(value), interval.End.Add(value));
     }
 
     /// <summary>
@@ -133,7 +131,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// </summary>
     public static Interval<TNum> operator -(Interval<TNum> interval, TNum value)
     {
-        return new Interval<TNum>(interval.Start - value, interval.End - value);
+        return new Interval<TNum>(interval.Start.Subtract(value), interval.End.Subtract(value));
     }
 
     /// <summary>
@@ -141,7 +139,7 @@ public readonly record struct Interval<TNum>(TNum Start, TNum End)
     /// </summary>
     public static Interval<TNum> operator -(TNum value, Interval<TNum> interval)
     {
-        return new Interval<TNum>(value - interval.End, value - interval.Start);
+        return new Interval<TNum>(value.Subtract(interval.End), value.Subtract(interval.Start));
     }
 
     #endregion
@@ -161,7 +159,7 @@ public static class IntervalExtensions
     /// <param name="other"></param>
     /// <returns></returns>
     public static bool IsProperSubsetOf<TNum>(this Interval<TNum> interval, Interval<TNum> other)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         if (other.IsEmpty)
         {
@@ -173,8 +171,8 @@ public static class IntervalExtensions
             return true;
         }
 
-        return interval.Start >= other.Start
-               && interval.End <= other.End
+        return interval.Start.GreaterThanOrEqual(other.Start)
+               && interval.End.LessThanOrEqual(other.End)
                && (!interval.Start.Equals(other.Start) || !interval.End.Equals(other.End));
     }
 
@@ -185,7 +183,7 @@ public static class IntervalExtensions
     /// <param name="other"></param>
     /// <returns></returns>
     public static bool IsSubsetOf<TNum>(this Interval<TNum> interval, Interval<TNum> other)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         if (interval.IsEmpty)
         {
@@ -197,7 +195,7 @@ public static class IntervalExtensions
             return false;
         }
 
-        return interval.Start >= other.Start && interval.End <= other.End;
+        return interval.Start.GreaterThanOrEqual(other.Start) && interval.End.LessThanOrEqual(other.End);
     }
 
     /// <summary>
@@ -207,7 +205,7 @@ public static class IntervalExtensions
     /// <param name="other"></param>
     /// <returns></returns>
     public static bool IsProperSupersetOf<TNum>(this Interval<TNum> interval, Interval<TNum> other)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         return other.IsProperSubsetOf(interval);
     }
@@ -219,7 +217,7 @@ public static class IntervalExtensions
     /// <param name="other"></param>
     /// <returns></returns>
     public static bool IsSupersetOf<TNum>(this Interval<TNum> interval, Interval<TNum> other)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         return other.IsSubsetOf(interval);
     }
@@ -232,17 +230,17 @@ public static class IntervalExtensions
     /// <typeparam name="TNum"></typeparam>
     /// <returns></returns>
     public static Interval<TNum> Intersect<TNum>(this Interval<TNum> interval, Interval<TNum> other)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         if (interval.IsEmpty || other.IsEmpty)
         {
-            return new Interval<TNum>(TNum.Zero, TNum.Zero);
+            return new Interval<TNum>(default, default);
         }
 
-        var start = interval.Start > other.Start ? interval.Start : other.Start;
-        var end = interval.End < other.End ? interval.End : other.End;
+        var start = interval.Start.GreaterThan(other.Start) ? interval.Start : other.Start;
+        var end = interval.End.LessThan(other.End) ? interval.End : other.End;
 
-        return start > end ? new Interval<TNum>(TNum.Zero, TNum.Zero) : new Interval<TNum>(start, end);
+        return start.GreaterThan(end) ? new Interval<TNum>(default, default) : new Interval<TNum>(start, end);
     }
 
     #endregion

@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
 namespace DotNetCampus.Numerics.Geometry;
 
@@ -285,14 +284,12 @@ file static class ValueCheckExtensions
     /// </summary>
     /// <param name="value">参数值。</param>
     /// <param name="paramName">参数名。</param>
-    /// <typeparam name="T">参数值类型。</typeparam>
     /// <returns>参数值本身。</returns>
     /// <exception cref="ArgumentOutOfRangeException">参数值不是正数。</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T CheckPositive<T>(this T value, [CallerArgumentExpression("value")] string? paramName = null)
-        where T : INumber<T>
+    public static double CheckPositive(this double value, [CallerArgumentExpression("value")] string? paramName = null)
     {
-        if (value <= T.Zero)
+        if (value <= 0)
         {
             throw new ArgumentOutOfRangeException(paramName, value, "参数值必须是正数。");
         }

@@ -1,5 +1,3 @@
-using System.Numerics;
-
 namespace DotNetCampus.Numerics;
 
 #pragma warning disable CA1000 // 不要在泛型类型中声明静态成员。这里是为了定义接口的抽象静态成员。
@@ -9,9 +7,9 @@ namespace DotNetCampus.Numerics;
 /// </summary>
 /// <typeparam name="TSelf">实现此接口的类型。</typeparam>
 /// <typeparam name="TNum">向量元素的类型。</typeparam>
-public interface IVector<TSelf, TNum> : IEqualityOperators<TSelf, TSelf, bool>
+public interface IVector<TSelf, TNum>
     where TSelf : unmanaged, IVector<TSelf, TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
 {
     #region 静态变量
 
@@ -80,6 +78,10 @@ public interface IVector<TSelf, TNum> : IEqualityOperators<TSelf, TSelf, bool>
     public static abstract TSelf operator /(TSelf vector, TNum scalar);
 
     public static abstract TSelf operator -(TSelf vector);
+
+    public static abstract bool operator ==(TSelf vector1, TSelf vector2);
+
+    public static abstract bool operator !=(TSelf vector1, TSelf vector2);
 
 #pragma warning restore CS1591
 

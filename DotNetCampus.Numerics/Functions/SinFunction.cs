@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Numerics;
 using static DotNetCampus.Numerics.TrigonometricFunctionHelper;
 
 namespace DotNetCampus.Numerics.Functions;
@@ -8,12 +7,12 @@ namespace DotNetCampus.Numerics.Functions;
 /// 正弦函数 <c>f(x) = ScaleY * sin(NScaleX * x + NOffsetX) + OffsetY</c>。
 /// </summary>
 public readonly record struct SinFunction<TNum>(TNum ScaleY, TNum OffsetY, TNum NScaleX, TNum NOffsetX) : IFunction<TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>, ITrigonometricFunctions<TNum>
+    where TNum : unmanaged
 {
     #region 属性
 
     /// <inheritdoc cref="IFunction{TNum}.Derivative" />
-    public CosFunction<TNum> Derivative => new(-ScaleY * NScaleX, OffsetY, NScaleX, NOffsetX);
+    public CosFunction<TNum> Derivative => new(ScaleY.Negate().Multiply(NScaleX), OffsetY, NScaleX, NOffsetX);
 
     IFunction<TNum> IFunction<TNum>.Derivative => Derivative;
 
@@ -30,37 +29,37 @@ public readonly record struct SinFunction<TNum>(TNum ScaleY, TNum OffsetY, TNum 
     /// <inheritdoc />
     public TNum Evaluate(TNum x)
     {
-        return ScaleY * TNum.Sin(NScaleX * x + NOffsetX) + OffsetY;
+        return ScaleY.Multiply(NScaleX.Multiply(x).Add(NOffsetX).Sin()).Add(OffsetY);
     }
 
     /// <inheritdoc />
     public TNum GetMax(Interval<TNum> interval)
     {
-        if (ScaleY == TNum.Zero)
+        if (ScaleY.IsEqual(default))
             return NOffsetX;
 
-        if (NScaleX == TNum.Zero)
-            return ScaleY * TNum.Sin(NOffsetX) + OffsetY;
+        if (NScaleX.IsEqual(default))
+            return ScaleY.Multiply(NOffsetX.Sin()).Add(OffsetY);
 
-        if (ScaleY > TNum.Zero)
-            return ScaleY * GetMaxValueForSin(NScaleX * interval + NOffsetX) + OffsetY;
+        if (ScaleY.GreaterThan(default))
+            return ScaleY.Multiply(GetMaxValueForSin(NScaleX * interval + NOffsetX)).Add(OffsetY);
 
-        return ScaleY * GetMinValueForSin(NScaleX * interval + NOffsetX) + OffsetY;
+        return ScaleY.Multiply(GetMinValueForSin(NScaleX * interval + NOffsetX)).Add(OffsetY);
     }
 
     /// <inheritdoc />
     public TNum GetMin(Interval<TNum> interval)
     {
-        if (ScaleY == TNum.Zero)
+        if (ScaleY.IsEqual(default))
             return NOffsetX;
 
-        if (NScaleX == TNum.Zero)
-            return ScaleY * TNum.Sin(NOffsetX) + OffsetY;
+        if (NScaleX.IsEqual(default))
+            return ScaleY.Multiply(NOffsetX.Sin()).Add(OffsetY);
 
-        if (ScaleY > TNum.Zero)
-            return ScaleY * GetMinValueForSin(NScaleX * interval + NOffsetX) + OffsetY;
+        if (ScaleY.GreaterThan(default))
+            return ScaleY.Multiply(GetMinValueForSin(NScaleX * interval + NOffsetX)).Add(OffsetY);
 
-        return ScaleY * GetMaxValueForSin(NScaleX * interval + NOffsetX) + OffsetY;
+        return ScaleY.Multiply(GetMaxValueForSin(NScaleX * interval + NOffsetX)).Add(OffsetY);
     }
 
     /// <inheritdoc />
