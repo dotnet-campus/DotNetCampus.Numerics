@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Numerics;
 using Xunit;
 
 namespace DotNetCampus.Numerics.Tests;
@@ -10,7 +9,7 @@ internal static class NumAssert
     #region 静态方法
 
     public static void CloseEqual<TNum>(TNum expected, TNum actual)
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         if (typeof(TNum) == typeof(double))
         {

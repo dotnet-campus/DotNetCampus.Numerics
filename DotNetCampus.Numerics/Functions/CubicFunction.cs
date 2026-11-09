@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Numerics;
 
 namespace DotNetCampus.Numerics.Functions;
 
@@ -7,7 +6,7 @@ namespace DotNetCampus.Numerics.Functions;
 /// 三次函数 <c>f(x) = ax^3 + bx^2 + cx + d</c>，其中 a 不应该为零。
 /// </summary>
 public readonly record struct CubicFunction<TNum>(TNum A, TNum B, TNum C, TNum D) : IFunction<TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
 {
     #region 属性
 
@@ -30,7 +29,7 @@ public readonly record struct CubicFunction<TNum>(TNum A, TNum B, TNum C, TNum D
     /// <inheritdoc />
     public TNum Evaluate(TNum x)
     {
-        return ((A * x + B) * x + C) * x + D;
+        return A.Multiply(x).Add(B).Multiply(x).Add(C).Multiply(x).Add(D);
     }
 
     /// <inheritdoc />
@@ -39,7 +38,7 @@ public readonly record struct CubicFunction<TNum>(TNum A, TNum B, TNum C, TNum D
         var quadraticFunction = Derivative;
         var extremumPoints = quadraticFunction.GetRoots();
 
-        var max = TNum.Max(Evaluate(interval.Start), Evaluate(interval.End));
+        var max = FloatingPointHelper.Max(Evaluate(interval.Start), Evaluate(interval.End));
         if (extremumPoints.Length == 0)
         {
             return max;
@@ -49,7 +48,7 @@ public readonly record struct CubicFunction<TNum>(TNum A, TNum B, TNum C, TNum D
         {
             if (interval.Contains(extremumPoint))
             {
-                max = TNum.Max(max, Evaluate(extremumPoint));
+                max = FloatingPointHelper.Max(max, Evaluate(extremumPoint));
             }
         }
 
@@ -62,7 +61,7 @@ public readonly record struct CubicFunction<TNum>(TNum A, TNum B, TNum C, TNum D
         var quadraticFunction = Derivative;
         var extremumPoints = quadraticFunction.GetRoots();
 
-        var min = TNum.Min(Evaluate(interval.Start), Evaluate(interval.End));
+        var min = FloatingPointHelper.Min(Evaluate(interval.Start), Evaluate(interval.End));
         if (extremumPoints.Length == 0)
         {
             return min;
@@ -72,7 +71,7 @@ public readonly record struct CubicFunction<TNum>(TNum A, TNum B, TNum C, TNum D
         {
             if (interval.Contains(extremumPoint))
             {
-                min = TNum.Min(min, Evaluate(extremumPoint));
+                min = FloatingPointHelper.Min(min, Evaluate(extremumPoint));
             }
         }
 
@@ -85,8 +84,8 @@ public readonly record struct CubicFunction<TNum>(TNum A, TNum B, TNum C, TNum D
         var quadraticFunction = Derivative;
         var extremumPoints = quadraticFunction.GetRoots();
 
-        var max = TNum.Max(Evaluate(interval.Start), Evaluate(interval.End));
-        var min = TNum.Min(Evaluate(interval.Start), Evaluate(interval.End));
+        var max = FloatingPointHelper.Max(Evaluate(interval.Start), Evaluate(interval.End));
+        var min = FloatingPointHelper.Min(Evaluate(interval.Start), Evaluate(interval.End));
         if (extremumPoints.Length == 0)
         {
             return new Interval<TNum>(min, max);
@@ -97,8 +96,8 @@ public readonly record struct CubicFunction<TNum>(TNum A, TNum B, TNum C, TNum D
             if (interval.Contains(extremumPoint))
             {
                 var value = Evaluate(extremumPoint);
-                max = TNum.Max(max, value);
-                min = TNum.Min(min, value);
+                max = FloatingPointHelper.Max(max, value);
+                min = FloatingPointHelper.Min(min, value);
             }
         }
 

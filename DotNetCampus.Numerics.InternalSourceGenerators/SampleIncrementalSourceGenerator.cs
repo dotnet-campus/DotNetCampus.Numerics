@@ -125,6 +125,8 @@ public class SampleIncrementalSourceGenerator : IIncrementalGenerator
 
                     // 零矩阵
                     $"public static {typeName} Zero => new({string.Join(", ", RangeSelect(rowDimension, columnDimension, (_, _) => "0"))});",
+                    $"public static int RowCount => {rowDimension};",
+                    $"public static int ColumnCount => {columnDimension};",
 
                     // 行向量
                     ..RangeSelect<CodeBase>(rowDimension,

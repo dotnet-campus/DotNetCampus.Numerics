@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Numerics;
 
 namespace DotNetCampus.Numerics.Functions;
 
@@ -8,12 +7,12 @@ namespace DotNetCampus.Numerics.Functions;
 /// </summary>
 /// <param name="Value">常数值。</param>
 public readonly record struct ConstFunction<TNum>(TNum Value) : IFunction<TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
 {
     #region 属性
 
     /// <inheritdoc cref="IFunction{TNum}.Derivative" />
-    public ConstFunction<TNum> Derivative => new(TNum.Zero);
+    public ConstFunction<TNum> Derivative => new(default);
 
     /// <inheritdoc />
     IFunction<TNum> IFunction<TNum>.Derivative => Derivative;

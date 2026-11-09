@@ -157,7 +157,8 @@ public readonly record struct AngularMeasure : IComparable<AngularMeasure>
     /// <returns>角正弦和余弦值的元组。</returns>
     public (double Sin, double Cos) SinCos()
     {
-        return Math.SinCos(Radian);
+        // net6 的 Math.SinCos 与 Math.Sin、Math.Cos 的结果不一致。
+        return (Math.Sin(Radian), Math.Cos(Radian));
     }
 
     /// <summary>

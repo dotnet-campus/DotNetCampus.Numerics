@@ -19,7 +19,10 @@
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <AnalysisLevel>latest-all</AnalysisLevel>
-    <NoWarn>$(NoWarn);NU1507</NoWarn>
+    <!-- 此分支的目标框架固定为 net6.0。 -->
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <!-- .NET 6 运行时可以执行当前编译器生成的静态抽象接口成员，CA2252 仍将其视为预览功能。 -->
+    <NoWarn>$(NoWarn);NU1507;CA2252</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

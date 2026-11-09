@@ -1,4 +1,3 @@
-﻿using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace DotNetCampus.Numerics;
@@ -12,22 +11,24 @@ internal static class TrigonometricFunctionHelper
     /// </summary>
     /// <returns></returns>
     public static TNum GetMaxValueForCos<TNum>(Interval<TNum> interval)
-        where TNum : unmanaged, IFloatingPoint<TNum>, ITrigonometricFunctions<TNum>
+        where TNum : unmanaged
     {
         var length = interval.Length;
-        if (length >= TNum.Tau)
+        var tau = FloatingPointHelper.Tau<TNum>();
+        if (length.GreaterThanOrEqual(tau))
         {
-            return TNum.One;
+            return FloatingPointHelper.One<TNum>();
         }
 
-        var start = interval.Start > TNum.Zero
-            ? interval.Start % TNum.Tau
-            : TNum.Tau + interval.Start % TNum.Tau;
-        var end = start + length;
+        var start = interval.Start.GreaterThan(default)
+            ? interval.Start.Remainder(tau)
+            : tau.Add(interval.Start.Remainder(tau));
+        var end = start.Add(length);
+        var one = FloatingPointHelper.One<TNum>();
 
-        return end >= TNum.Tau
-            ? TNum.One
-            : TNum.Cos(start >= TNum.Tau - end ? end : start);
+        return end.GreaterThanOrEqual(tau)
+            ? one
+            : (start.GreaterThanOrEqual(tau.Subtract(end)) ? end : start).Cos();
     }
 
     /// <summary>
@@ -36,9 +37,9 @@ internal static class TrigonometricFunctionHelper
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TNum GetMinValueForCos<TNum>(Interval<TNum> interval)
-        where TNum : unmanaged, IFloatingPoint<TNum>, ITrigonometricFunctions<TNum>
+        where TNum : unmanaged
     {
-        return -GetMaxValueForCos(interval + TNum.Pi);
+        return GetMaxValueForCos(interval + FloatingPointHelper.Pi<TNum>()).Negate();
     }
 
     /// <summary>
@@ -47,9 +48,10 @@ internal static class TrigonometricFunctionHelper
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TNum GetMaxValueForSin<TNum>(Interval<TNum> interval)
-        where TNum : unmanaged, IFloatingPoint<TNum>, ITrigonometricFunctions<TNum>
+        where TNum : unmanaged
     {
-        return GetMaxValueForCos(interval - TNum.Pi / (TNum.One + TNum.One));
+        var halfPi = FloatingPointHelper.Pi<TNum>().Divide(FloatingPointHelper.One<TNum>().Add(FloatingPointHelper.One<TNum>()));
+        return GetMaxValueForCos(interval - halfPi);
     }
 
     /// <summary>
@@ -58,9 +60,10 @@ internal static class TrigonometricFunctionHelper
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TNum GetMinValueForSin<TNum>(Interval<TNum> interval)
-        where TNum : unmanaged, IFloatingPoint<TNum>, ITrigonometricFunctions<TNum>
+        where TNum : unmanaged
     {
-        return -GetMaxValueForCos(interval + TNum.Pi / (TNum.One + TNum.One));
+        var halfPi = FloatingPointHelper.Pi<TNum>().Divide(FloatingPointHelper.One<TNum>().Add(FloatingPointHelper.One<TNum>()));
+        return GetMaxValueForCos(interval + halfPi).Negate();
     }
 
     #endregion

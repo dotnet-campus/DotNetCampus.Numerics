@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Numerics;
 
 namespace DotNetCampus.Numerics.Functions;
 
@@ -7,7 +6,7 @@ namespace DotNetCampus.Numerics.Functions;
 /// 数学函数接口。
 /// </summary>
 public interface IFunction<TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
 {
     #region 属性
 

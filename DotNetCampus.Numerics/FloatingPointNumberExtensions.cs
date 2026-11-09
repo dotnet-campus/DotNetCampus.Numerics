@@ -213,7 +213,7 @@ public static class FloatingPointNumberExtensions
             RoundMode.HalfToZero => value > 0 ? Math.Ceiling(value - 0.5) : Math.Floor(value + 0.5),
             RoundMode.HalfUp => value > 0 ? Math.Floor(value + DoubleBitDecrementZeroDotFive) : Math.Floor(value + 0.5),
             RoundMode.HalfDown => value > 0 ? Math.Ceiling(value - 0.5) : Math.Ceiling(value - DoubleBitDecrementZeroDotFive),
-            RoundMode.DirectAwayFromZero => Math.Truncate(value + double.CopySign(DoubleBitDecrementOne, Math.Sign(value))),
+            RoundMode.DirectAwayFromZero => Math.Truncate(value + Math.CopySign(DoubleBitDecrementOne, Math.Sign(value))),
             RoundMode.DirectToZero => Math.Truncate(value),
             RoundMode.DirectUp => Math.Ceiling(value),
             RoundMode.DirectDown => Math.Floor(value),

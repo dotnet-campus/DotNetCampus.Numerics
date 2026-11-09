@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Immutable;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace DotNetCampus.Numerics.Tests;
 
 internal static class VectorFactory<TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
 {
     #region 静态变量
 
-    public static ImmutableArray<TVector> RandomVectors1 { get; } = NumFactory.RandomCreateRange([TVector.Zero], CreateRandomVector, new Random(0x79aefaa7));
-    public static ImmutableArray<TVector> RandomVectors2 { get; } = NumFactory.RandomCreateRange([TVector.Zero], CreateRandomVector, new Random(0x43d1d9d1));
+    public static ImmutableArray<TVector> RandomVectors1 { get; } = NumFactory.RandomCreateRange(new[] { TVector.Zero }, CreateRandomVector, new Random(0x79aefaa7));
+    public static ImmutableArray<TVector> RandomVectors2 { get; } = NumFactory.RandomCreateRange(new[] { TVector.Zero }, CreateRandomVector, new Random(0x43d1d9d1));
 
     #endregion
 

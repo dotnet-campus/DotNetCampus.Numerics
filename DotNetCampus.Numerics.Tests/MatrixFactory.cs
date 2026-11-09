@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Immutable;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using DotNetCampus.Numerics.Matrix;
 
@@ -10,13 +9,13 @@ internal static class MatrixFactory<TMatrix, TRow, TColumn, TNum, TTranspose>
     where TMatrix : IMatrix<TMatrix, TRow, TColumn, TNum, TTranspose>
     where TRow : unmanaged, IVector<TRow, TNum>
     where TColumn : unmanaged, IVector<TColumn, TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
     where TTranspose : IMatrix<TTranspose, TColumn, TRow, TNum, TMatrix>
 {
     #region 静态变量
 
-    public static ImmutableArray<TMatrix> RandomMatrixes1 { get; } = NumFactory.RandomCreateRange([TMatrix.Zero], CreateRandomMatrix, new Random(0x5f93c44a));
-    public static ImmutableArray<TMatrix> RandomMatrixes2 { get; } = NumFactory.RandomCreateRange([TMatrix.Zero], CreateRandomMatrix, new Random(0x7722cd05));
+    public static ImmutableArray<TMatrix> RandomMatrixes1 { get; } = NumFactory.RandomCreateRange(new[] { TMatrix.Zero }, CreateRandomMatrix, new Random(0x5f93c44a));
+    public static ImmutableArray<TMatrix> RandomMatrixes2 { get; } = NumFactory.RandomCreateRange(new[] { TMatrix.Zero }, CreateRandomMatrix, new Random(0x7722cd05));
 
     #endregion
 

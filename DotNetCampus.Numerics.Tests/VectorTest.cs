@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Immutable;
 using System.Globalization;
-using System.Numerics;
 using System.Reflection;
 using JetBrains.Annotations;
 using Xunit;
@@ -13,15 +12,13 @@ public class VectorTest
 {
     #region 静态变量
 
-    private static readonly ImmutableArray<Type[]> VectorTypes =
-    [
+    private static readonly ImmutableArray<Type[]> VectorTypes = ImmutableArray.Create<Type[]>(
         [typeof(Vector2D), typeof(double)],
         [typeof(Vector3D), typeof(double)],
         [typeof(Vector4D), typeof(double)],
         [typeof(Vector2F), typeof(float)],
         [typeof(Vector3F), typeof(float)],
-        [typeof(Vector4F), typeof(float)],
-    ];
+        [typeof(Vector4F), typeof(float)]);
 
     #endregion
 
@@ -50,13 +47,13 @@ public class VectorTest
 
     private static void AddTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         VectorFactory<TVector, TNum>.Test((a, b) =>
         {
             var actual = a + b;
             for (var i = 0; i < TVector.Dimension; i++)
-                Assert.Equal(a[i] + b[i], actual[i]);
+                Assert.Equal(a[i].Add(b[i]), actual[i]);
         });
     }
 
@@ -68,13 +65,13 @@ public class VectorTest
 
     private static void SubtractTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         VectorFactory<TVector, TNum>.Test((a, b) =>
         {
             var actual = a - b;
             for (var i = 0; i < TVector.Dimension; i++)
-                Assert.Equal(a[i] - b[i], actual[i]);
+                Assert.Equal(a[i].Subtract(b[i]), actual[i]);
         });
     }
 
@@ -86,14 +83,14 @@ public class VectorTest
 
     private static void DotTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         VectorFactory<TVector, TNum>.Test((a, b) =>
         {
             var actual = a * b;
-            var sum = TNum.Zero;
+            var sum = default(TNum);
             for (var i = 0; i < TVector.Dimension; i++)
-                sum += a[i] * b[i];
+                sum = sum.Add(a[i].Multiply(b[i]));
             Assert.Equal(sum, actual);
         });
     }
@@ -106,16 +103,16 @@ public class VectorTest
 
     private static void MultiplyTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         VectorFactory<TVector, TNum>.Test((v, n) =>
         {
             var actual = v * n;
             for (var i = 0; i < TVector.Dimension; i++)
-                Assert.Equal(v[i] * n, actual[i]);
+                Assert.Equal(v[i].Multiply(n), actual[i]);
             actual = n * v;
             for (var i = 0; i < TVector.Dimension; i++)
-                Assert.Equal(v[i] * n, actual[i]);
+                Assert.Equal(v[i].Multiply(n), actual[i]);
         });
     }
 
@@ -127,13 +124,13 @@ public class VectorTest
 
     private static void DivideTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         VectorFactory<TVector, TNum>.Test((v, n) =>
         {
             var actual = v / n;
             for (var i = 0; i < TVector.Dimension; i++)
-                Assert.Equal(v[i] / n, actual[i]);
+                Assert.Equal(v[i].Divide(n), actual[i]);
         });
     }
 
@@ -145,27 +142,27 @@ public class VectorTest
 
     private static void LengthTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         VectorFactory<TVector, TNum>.Test(v =>
         {
             var lengthSquared = v.LengthSquared;
             var length = v.Length;
 
-            var sum = TNum.Zero;
+            var sum = default(TNum);
             for (var i = 0; i < TVector.Dimension; i++)
-                sum += v[i] * v[i];
+                sum = sum.Add(v[i].Multiply(v[i]));
 
             if (typeof(TNum) == typeof(double))
             {
                 Assert.Equal(Convert.ToDouble(sum, CultureInfo.InvariantCulture), Convert.ToDouble(lengthSquared, CultureInfo.InvariantCulture));
-                Assert.Equal(Convert.ToDouble(sum, CultureInfo.InvariantCulture), Convert.ToDouble(length * length, CultureInfo.InvariantCulture),
+                Assert.Equal(Convert.ToDouble(sum, CultureInfo.InvariantCulture), Convert.ToDouble(length.Multiply(length), CultureInfo.InvariantCulture),
                     (a, b) => a.IsAlmostEqual(b));
             }
             else
             {
                 Assert.Equal(Convert.ToSingle(sum, CultureInfo.InvariantCulture), Convert.ToSingle(lengthSquared, CultureInfo.InvariantCulture));
-                Assert.Equal(Convert.ToSingle(sum, CultureInfo.InvariantCulture), Convert.ToSingle(length * length, CultureInfo.InvariantCulture),
+                Assert.Equal(Convert.ToSingle(sum, CultureInfo.InvariantCulture), Convert.ToSingle(length.Multiply(length), CultureInfo.InvariantCulture),
                     (a, b) => a.IsNearlyEqual(b));
             }
         });
@@ -179,7 +176,7 @@ public class VectorTest
 
     private static void EqualsTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
 #pragma warning disable CS1718
         // ReSharper disable ParameterOnlyUsedForPreconditionCheck.Local
@@ -208,21 +205,19 @@ public class VectorTest
 
     private static void NormalizeTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         VectorFactory<TVector, TNum>.Test(v =>
         {
             var actual = v.Normalized;
             var length = v.Length;
-            if (length is 0)
+            for (var i = 0; i < TVector.Dimension; i++)
             {
-                for (var i = 0; i < TVector.Dimension; i++)
-                    Assert.True(actual[i] is 0);
-            }
-            else
-            {
-                for (var i = 0; i < TVector.Dimension; i++)
-                    Assert.Equal(v[i] / length, actual[i]);
+                var expected = v[i].Divide(length);
+                if (expected.IsNaN())
+                    Assert.True(actual[i].IsNaN());
+                else
+                    Assert.Equal(expected, actual[i]);
             }
         });
     }
@@ -235,13 +230,13 @@ public class VectorTest
 
     private static void UnaryNegationTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         VectorFactory<TVector, TNum>.Test(v =>
         {
             var actual = -v;
             for (var i = 0; i < TVector.Dimension; i++)
-                Assert.Equal(-v[i], actual[i]);
+                Assert.Equal(v[i].Negate(), actual[i]);
         });
     }
 
@@ -253,7 +248,7 @@ public class VectorTest
 
     private static void IndexOutRangeTestGeneric<TVector, TNum>()
         where TVector : unmanaged, IVector<TVector, TNum>
-        where TNum : unmanaged, IFloatingPoint<TNum>
+        where TNum : unmanaged
     {
         var v = new TVector();
         Assert.Throws<ArgumentOutOfRangeException>(() => v[-1]);

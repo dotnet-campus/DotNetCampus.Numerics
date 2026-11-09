@@ -1,5 +1,3 @@
-using System.Numerics;
-
 namespace DotNetCampus.Numerics.Geometry;
 
 /// <summary>
@@ -8,7 +6,7 @@ namespace DotNetCampus.Numerics.Geometry;
 public interface IBezierCurve<TPoint, TVector, TNum> : IGeometry2D
     where TPoint : unmanaged, IPoint<TPoint, TVector, TNum>
     where TVector : unmanaged, IVector<TVector, TNum>
-    where TNum : unmanaged, IFloatingPoint<TNum>
+    where TNum : unmanaged
 {
     #region 成员方法
 
